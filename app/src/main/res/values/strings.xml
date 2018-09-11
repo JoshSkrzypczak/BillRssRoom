@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">BillRssRoom</string>
+
+    <string name="bill_title">Bill Title</string>
+    <string name="bill_description">Bill Description</string>
+    <string name="publication_date">Publication Date</string>
+    <string name="empty_list_message">No Recent Bill Activity</string>
+    <string name="loading_bills">Loading bills...</string>
 </resources>
