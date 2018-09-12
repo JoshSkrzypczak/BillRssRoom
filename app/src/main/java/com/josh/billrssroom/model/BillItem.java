@@ -1,5 +1,9 @@
 package com.josh.billrssroom.model;
 
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.text.Html;
 import android.text.format.DateFormat;
@@ -18,19 +22,38 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Root(name = "item", strict = false)
+@Entity(tableName = "favorites")
 public class BillItem {
 
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "guid")
     @Element(name = "guid")
     private String guid;
+    @ColumnInfo(name = "pubDate")
     @Element(name = "pubDate")
     private String pubDate;
+    @ColumnInfo(name = "title")
     @Element(name = "title")
     private String title;
+    @ColumnInfo(name = "description")
     @Element(name = "description")
     private String description;
+    @ColumnInfo(name = "link")
     @Element(name = "link")
     private String link;
 
+    public BillItem(int id, String guid, String pubDate, String title, String description, String link) {
+        this.id = id;
+        this.guid = guid;
+        this.pubDate = pubDate;
+        this.title = title;
+        this.description = description;
+        this.link = link;
+    }
+
+    @Ignore
     public BillItem(@Element(name = "guid") String guid,
                     @Element(name = "pubDate") String pubDate,
                     @Element(name = "title") String title,
@@ -41,6 +64,10 @@ public class BillItem {
         this.title = title;
         this.description = description;
         this.link = link;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getGuid() {
@@ -61,6 +88,26 @@ public class BillItem {
 
     public String getLink() {
         return link;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getFormattedDate(){

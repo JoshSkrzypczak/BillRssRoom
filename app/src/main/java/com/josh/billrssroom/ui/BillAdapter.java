@@ -15,7 +15,9 @@ import com.josh.billrssroom.model.BillItem;
 
 import java.util.List;
 
-public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder> {
+public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
+
+    private static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
 
     List<BillItem> mBillItemList;
     LayoutInflater inflater;
@@ -47,15 +49,15 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return mBillItemList.get(oldItemPosition).getTitle() ==
-                            billItemList.get(newItemPosition).getTitle();
+                    return mBillItemList.get(oldItemPosition).getTitle()
+                            .equals(billItemList.get(newItemPosition).getTitle());
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     BillItem newBillItem = billItemList.get(newItemPosition);
                     BillItem oldBillItem = mBillItemList.get(oldItemPosition);
-                    return newBillItem.getTitle() == oldBillItem.getTitle();
+                    return newBillItem.getTitle().equals(oldBillItem.getTitle());
                 }
             });
             mBillItemList = billItemList;
@@ -77,25 +79,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
     public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
         final BillItem item = mBillItemList.get(position);
         holder.binding.setBill(mBillItemList.get(position));
+
         holder.binding.executePendingBindings();
-
-        holder.binding.billTitle.setText(item.getTitle());
-        holder.binding.billPubDate.setText(item.getFormattedDate());
-        holder.binding.billDescription.setText(item.getFormattedDescription());
-
-//        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
-//        format.setTimeZone(TimeZone.getTimeZone("EST"));
-//        try {
-//            Date parsedDated = format.parse(item.getPubDate());
-//            TimeZone tz = TimeZone.getTimeZone("America/Detroit");
-//            SimpleDateFormat destinationFormat =
-//                    new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a", Locale.US);
-//            destinationFormat.setTimeZone(tz);
-//            String result = destinationFormat.format(parsedDated);
-//            holder.binding.billPubDate.setText(result);
-//        } catch (ParseException e){
-//            e.printStackTrace();
-//        }
 
 //        String date = item.getPubDate();
 //        DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy hh:mm:ss z", Locale.US);
@@ -104,26 +89,8 @@ public class BillAdapter extends RecyclerView.Adapter<BillAdapter.BillViewHolder
 
     }
 
-//    private String stripHtml(String billDescription) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            return Html.fromHtml(billDescription, Html.FROM_HTML_MODE_LEGACY).toString();
-//        } else {
-//            return Html.fromHtml(billDescription).toString();
-//        }
-//    }
-
     @Override
     public int getItemCount() {
         return mBillItemList == null ? 0 : mBillItemList.size();
-    }
-
-    static class BillViewHolder extends RecyclerView.ViewHolder {
-
-        final ItemRowRssBinding binding;
-
-        public BillViewHolder(ItemRowRssBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
     }
 }

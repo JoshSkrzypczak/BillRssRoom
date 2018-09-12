@@ -1,7 +1,5 @@
 package com.josh.billrssroom.db;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -10,26 +8,26 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-import com.josh.billrssroom.AppExecutors;
 import com.josh.billrssroom.db.dao.BillDao;
-import com.josh.billrssroom.db.entity.BillEntity;
 import com.josh.billrssroom.model.BillItem;
 
 @Database(entities = {BillItem.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class FavoritesDatabase extends RoomDatabase {
+
+    private static FavoritesDatabase INSTANCE;
+
+    public static final String DATABASE_NAME = "basic-sample-db";
 
     public abstract BillDao billDao();
 
-    private static AppDatabase INSTANCE;
-
-    public static AppDatabase getDatabase(final Context context){
+    static FavoritesDatabase getDatabase(final Context context){
         if (INSTANCE == null){
-            synchronized (AppDatabase.class){
+            synchronized (FavoritesDatabase.class){
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "favorites_database")
+                            FavoritesDatabase.class, DATABASE_NAME)
                             .fallbackToDestructiveMigration()
-                            .addCallback(roomDatabaseCallback)
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
@@ -37,13 +35,13 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback(){
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback(){
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
             // If you want to keep the data through app restarts,
             // comment out the following line.
-            new PopulateDbAsync(INSTANCE).execute();
+//            new PopulateDbAsync(INSTANCE).execute();
         }
     };
 
@@ -51,17 +49,19 @@ public abstract class AppDatabase extends RoomDatabase {
      * Populate the database in the background.
      * If you want to start with more words, just add them.
      */
-    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void>{
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
-        private final BillDao dao;
+        private final BillDao mDao;
 
-        public PopulateDbAsync(AppDatabase db) {
-            dao = db.billDao();
+        PopulateDbAsync(FavoritesDatabase db) {
+            mDao = db.billDao();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
-            dao.deleteAll();
+            // Start the app with a clean database every time.
+            // Not needed if you only populate on creation.
+            mDao.deleteAll();
 
             return null;
         }

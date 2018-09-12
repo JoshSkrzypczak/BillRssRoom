@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="bill"
+            type="com.josh.billrssroom.model.BillItem" />
+
+        <variable
+            name="callback"
+            type="com.josh.billrssroom.ui.FavoriteClickCallback" />
+    </data>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="2dp">
+
+        <RelativeLayout
+            android:id="@+id/rel_top_area_fav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="?android:selectableItemBackground">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="4dp"
+                android:text="@{bill.title}"
+                android:textColor="@color/text_color_primary_dark"
+                android:textSize="24sp"
+                tools:text="@string/bill_title" />
+
+            <TextView
+                android:id="@+id/text_pubdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/text_title"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:text="@{bill.formattedDate}"
+                android:textColor="@color/text_color_primary_dark"
+                android:textSize="14sp"
+                tools:text="@string/publication_date" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@+id/text_pubdate"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="?attr/colorAccent" />
+
+            <TextView
+                android:id="@+id/text_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_pubdate"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:maxLines="15"
+                android:paddingBottom="6dp"
+                android:paddingTop="4dp"
+                android:text="@{bill.formattedDescription}"
+                android:textColor="@color/text_color_primary_dark"
+                android:textSize="14sp"
+                tools:text="@string/bill_description" />
+
+            <RelativeLayout
+                android:id="@+id/rel_bottom_area_fav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_description"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/btn_trash"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@+id/btn_share"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()-> callback.onTrashClick(bill)}"
+                    android:tint="?attr/colorAccent"
+                    app:srcCompat="@drawable/ic_delete_dark" />
+
+                <ImageButton
+                    android:id="@+id/btn_share"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()-> callback.onShareClick(bill)}"
+                    android:tint="?attr/colorAccent"
+                    app:srcCompat="@drawable/ic_share_dark" />
+
+                <ImageButton
+                    android:id="@+id/btn_browser"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="@{()-> callback.onBrowserClick(bill)}"
+                    android:tint="?attr/colorAccent"
+                    app:srcCompat="@drawable/ic_browser_dark" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>
+

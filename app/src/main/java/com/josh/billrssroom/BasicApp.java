@@ -16,7 +16,7 @@ public class BasicApp extends Application {
     }
 
     public AppDatabase getDatabase(){
-        return AppDatabase.getInstance(this, appExecutors);
+        return AppDatabase.getDatabase(this);
     }
 
     public FeedRepository getRepository(){

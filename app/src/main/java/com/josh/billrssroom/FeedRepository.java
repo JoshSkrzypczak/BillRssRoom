@@ -13,7 +13,9 @@ import com.josh.billrssroom.model.Rss;
 import com.josh.billrssroom.network.DataService;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +23,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class FeedRepository {
-    public static final String TAG = FeedRepository.class.getSimpleName();
 
     private DataService apiService;
 
@@ -34,9 +35,15 @@ public class FeedRepository {
     }
 
     public FeedRepository() {
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        httpClient.connectTimeout(10, TimeUnit.SECONDS);
+        httpClient.readTimeout(30, TimeUnit.SECONDS);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(DataService.BASE_URL)
                 .addConverterFactory(SimpleXmlConverterFactory.create())
+                .client(httpClient.build())
                 .build();
 
         apiService = retrofit.create(DataService.class);
