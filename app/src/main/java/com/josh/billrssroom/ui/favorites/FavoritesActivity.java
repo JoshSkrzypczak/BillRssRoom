@@ -1,25 +1,20 @@
-package com.josh.billrssroom.ui;
+package com.josh.billrssroom.ui.favorites;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.BillItem;
-import com.josh.billrssroom.viewmodel.FavoritesViewModel;
 
-import java.util.List;
+public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
 
-public class FavoritesActivity extends AppCompatActivity {
-
+    private static final String TAG = FavoritesActivity.class.getSimpleName();
     private FavoritesViewModel favoritesViewModel;
     private RecyclerView recyclerView;
     private FavoritesAdapter favoritesAdapter;
@@ -36,36 +31,38 @@ public class FavoritesActivity extends AppCompatActivity {
         }
 
         recyclerView = findViewById(R.id.favorites_list);
-        favoritesAdapter = new FavoritesAdapter(this, favoriteClickCallback);
+        favoritesAdapter = new FavoritesAdapter(this, this);
         recyclerView.setAdapter(favoritesAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        favoritesViewModel.getAllFavorites().observe(this, new Observer<List<BillItem>>() {
-            @Override
-            public void onChanged(@Nullable List<BillItem> billItems) {
-                favoritesAdapter.setBillEntities(billItems);
-
-                System.out.println(billItems);
-            }
+        favoritesViewModel.getAllFavorites().observe(this, billItems -> {
+            favoritesAdapter.setFavoriteItems(billItems);
         });
-
     }
-    private final FavoriteClickCallback favoriteClickCallback = new FavoriteClickCallback() {
-        @Override
-        public void onBrowserClick(BillItem billItem) {
 
+    @Override
+    public void onBrowserClick(BillItem billItem, int position) {
+    }
+
+    @Override
+    public void onShareClick(BillItem billItem, int position) {
+    }
+
+    @Override
+    public void onTrashClick(BillItem billItem, int position) {
+        favoritesViewModel.deleteSingleRecord(billItem);
+        favoritesAdapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.onBackPressed();
+                return true;
         }
-
-        @Override
-        public void onShareClick(BillItem billItem) {
-
-        }
-
-        @Override
-        public void onTrashClick(BillItem billItem) {
-
-        }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 }

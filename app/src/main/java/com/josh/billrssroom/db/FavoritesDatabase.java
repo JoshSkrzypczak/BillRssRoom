@@ -20,7 +20,7 @@ public abstract class FavoritesDatabase extends RoomDatabase {
 
     public abstract BillDao billDao();
 
-    static FavoritesDatabase getDatabase(final Context context){
+    public static FavoritesDatabase getDatabase(final Context context){
         if (INSTANCE == null){
             synchronized (FavoritesDatabase.class){
                 if (INSTANCE == null){

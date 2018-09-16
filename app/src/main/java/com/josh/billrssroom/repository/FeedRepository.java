@@ -1,16 +1,15 @@
-package com.josh.billrssroom;
+package com.josh.billrssroom.repository;
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.josh.billrssroom.db.AppDatabase;
+import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.model.BillItem;
 import com.josh.billrssroom.model.Rss;
-import com.josh.billrssroom.network.DataService;
+import com.josh.billrssroom.api.DataService;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,19 +21,23 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
+
 public class FeedRepository {
 
-    private DataService apiService;
+    private final DataService apiService;
 
-    private static class SingletonHelper {
-        private static final FeedRepository INSTANCE = new FeedRepository();
-    }
+    private static FeedRepository sInstance;
+    private final FeedDatabase feedDatabase;
+    private MediatorLiveData<List<BillItem>> observableBills;
 
-    public static FeedRepository getInstance() {
-        return SingletonHelper.INSTANCE;
-    }
 
-    public FeedRepository() {
+    public FeedRepository(final FeedDatabase feedDatabase) {
+        this.feedDatabase = feedDatabase;
+        observableBills = new MediatorLiveData<>();
+
+        observableBills.addSource(this.feedDatabase.billDao().loadBillItems(), billItems -> {
+            observableBills.postValue(billItems);
+        });
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.connectTimeout(10, TimeUnit.SECONDS);
@@ -49,13 +52,14 @@ public class FeedRepository {
         apiService = retrofit.create(DataService.class);
     }
 
-    public LiveData<List<BillItem>> getBills() {
+    public LiveData<List<BillItem>> getFeedItems() {
         final MutableLiveData<List<BillItem>> data = new MutableLiveData<>();
-
-        apiService.getBillItems().enqueue(new Callback<Rss>() {
+        apiService.getBillItemsNormally().enqueue(new Callback<Rss>() {
             @Override
             public void onResponse(@NonNull Call<Rss> call, @NonNull Response<Rss> response) {
                 data.setValue(response.body().getChannel().getBillItems());
+
+
             }
 
             @Override
@@ -64,7 +68,17 @@ public class FeedRepository {
                 Log.e("Error:: ", t.getMessage());
             }
         });
-
         return data;
+    }
+
+    public static FeedRepository getInstance(final FeedDatabase feedDatabase){
+        if (sInstance == null){
+            synchronized (FeedRepository.class){
+                if (sInstance == null){
+                    sInstance = new FeedRepository(feedDatabase);
+                }
+            }
+        }
+        return sInstance;
     }
 }

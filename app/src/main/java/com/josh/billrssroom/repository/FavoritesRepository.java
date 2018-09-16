@@ -1,4 +1,4 @@
-package com.josh.billrssroom.db;
+package com.josh.billrssroom.repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
@@ -30,8 +30,12 @@ public class FavoritesRepository {
     // You must call this on a non-UI thread or your app will crash.
     // Like this, Room ensures that you're not doing any long running operations on the main
     // thread, blocking the UI.
-    public void insert(BillItem billItem){
+    public void insertSingleRecord(BillItem billItem){
         new insertAsyncTask(billDao).execute(billItem);
+    }
+
+    public void deleteSingleFavorite(BillItem billItem){
+        new deleteAsyncTask(billDao).execute(billItem);
     }
 
     private static class insertAsyncTask extends AsyncTask<BillItem, Void, Void>{
@@ -44,7 +48,23 @@ public class FavoritesRepository {
 
         @Override
         protected Void doInBackground(BillItem... billItems) {
-            asyncTaskDao.insert(billItems[0]);
+            asyncTaskDao.insertSingleRecord(billItems[0]);
+
+            return null;
+        }
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<BillItem, Void, Void>{
+
+        private BillDao asyncTaskDao;
+
+        deleteAsyncTask(BillDao dao){
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(BillItem... billItems) {
+            asyncTaskDao.deleteSingleRecord(billItems[0]);
 
             return null;
         }

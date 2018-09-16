@@ -1,7 +1,5 @@
 package com.josh.billrssroom.db;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -12,22 +10,23 @@ import android.support.annotation.NonNull;
 
 import com.josh.billrssroom.AppExecutors;
 import com.josh.billrssroom.db.dao.BillDao;
-import com.josh.billrssroom.db.entity.BillEntity;
 import com.josh.billrssroom.model.BillItem;
 
 @Database(entities = {BillItem.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class FeedDatabase extends RoomDatabase {
+
+    public static final String DATABASE_NAME = "feed-database";
 
     public abstract BillDao billDao();
 
-    private static AppDatabase INSTANCE;
+    private static FeedDatabase INSTANCE;
 
-    public static AppDatabase getDatabase(final Context context){
+    public static FeedDatabase getDatabase(final Context context, AppExecutors appExecutors){
         if (INSTANCE == null){
-            synchronized (AppDatabase.class){
+            synchronized (FeedDatabase.class){
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "favorites_database")
+                            FeedDatabase.class, DATABASE_NAME)
                             .fallbackToDestructiveMigration()
                             .addCallback(roomDatabaseCallback)
                             .build();
@@ -37,6 +36,13 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    /**
+     * Override the onOpen method to populate the database.
+     * For this sample, we clear the database every time it is created or opened.
+     *
+     * If you want to populate the database only when the database is created for the 1st time,
+     * override RoomDatabase.Callback()#onCreate
+     */
     private static RoomDatabase.Callback roomDatabaseCallback = new RoomDatabase.Callback(){
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
@@ -55,13 +61,13 @@ public abstract class AppDatabase extends RoomDatabase {
 
         private final BillDao dao;
 
-        public PopulateDbAsync(AppDatabase db) {
+        public PopulateDbAsync(FeedDatabase db) {
             dao = db.billDao();
         }
 
         @Override
         protected Void doInBackground(final Void... params) {
-            dao.deleteAll();
+
 
             return null;
         }

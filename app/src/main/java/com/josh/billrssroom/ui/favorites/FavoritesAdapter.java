@@ -1,9 +1,8 @@
-package com.josh.billrssroom.ui;
+package com.josh.billrssroom.ui.favorites;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -16,13 +15,12 @@ import java.util.List;
 
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesViewHolder> {
 
-    private List<BillItem> billEntities;
+    private final FavoriteClickListener favoriteClickListener;
+    private List<BillItem> billItems;
 
-    @Nullable
-    private final FavoriteClickCallback favoriteClickCallback;
 
-    public FavoritesAdapter(Context context, @Nullable FavoriteClickCallback favoriteClickCallback) {
-        this.favoriteClickCallback = favoriteClickCallback;
+    public FavoritesAdapter(Context context, FavoriteClickListener favoriteClickListener) {
+        this.favoriteClickListener = favoriteClickListener;
     }
 
     @NonNull
@@ -31,26 +29,25 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesViewHolder> 
         ItemRowFavoritesBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()), R.layout.item_row_favorites,
                         parent, false);
-        binding.setCallback(favoriteClickCallback);
-        return new FavoritesViewHolder(binding);
+        return new FavoritesViewHolder(binding, favoriteClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull FavoritesViewHolder holder, int position) {
-        BillItem item = billEntities.get(position);
-        holder.binding.setBill(billEntities.get(position));
+        BillItem item = billItems.get(position);
+        holder.binding.setBill(billItems.get(position));
         holder.binding.executePendingBindings();
+
+        holder.billItem = item;
     }
 
-    public void setBillEntities(List<BillItem> billEntities) {
-        this.billEntities = billEntities;
+    public void setFavoriteItems(List<BillItem> billEntities) {
+        this.billItems = billEntities;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        if (billEntities != null)
-            return billEntities.size();
-        else return 0;
+        return billItems == null ? 0 : billItems.size();
     }
 }

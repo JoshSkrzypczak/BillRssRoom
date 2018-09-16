@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui;
+package com.josh.billrssroom.ui.feed;
 
 import android.databinding.BindingAdapter;
 import android.view.View;

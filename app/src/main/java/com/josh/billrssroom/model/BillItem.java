@@ -3,8 +3,11 @@ package com.josh.billrssroom.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.text.Html;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
@@ -22,11 +25,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Root(name = "item", strict = false)
-@Entity(tableName = "favorites")
+@Entity(tableName = "favorites", indices = {@Index(value = {"title", "description"})})
 public class BillItem {
-
-    @PrimaryKey(autoGenerate = true)
-    private int id;
 
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
@@ -34,6 +34,8 @@ public class BillItem {
     @ColumnInfo(name = "pubDate")
     @Element(name = "pubDate")
     private String pubDate;
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "title")
     @Element(name = "title")
     private String title;
@@ -43,31 +45,22 @@ public class BillItem {
     @ColumnInfo(name = "link")
     @Element(name = "link")
     private String link;
+    @Element(name = "isFavorite", required = false)
+    private Boolean isFavorite;
 
-    public BillItem(int id, String guid, String pubDate, String title, String description, String link) {
-        this.id = id;
-        this.guid = guid;
-        this.pubDate = pubDate;
-        this.title = title;
-        this.description = description;
-        this.link = link;
-    }
 
-    @Ignore
     public BillItem(@Element(name = "guid") String guid,
                     @Element(name = "pubDate") String pubDate,
                     @Element(name = "title") String title,
                     @Element(name = "description") String description,
-                    @Element(name = "link") String link){
+                    @Element(name = "link") String link,
+                    @Element(name = "isFavorite", required = false) Boolean isFavorite) {
         this.guid = guid;
         this.pubDate = pubDate;
         this.title = title;
         this.description = description;
         this.link = link;
-    }
-
-    public int getId() {
-        return id;
+        this.isFavorite = isFavorite;
     }
 
     public String getGuid() {
@@ -110,7 +103,16 @@ public class BillItem {
         this.link = link;
     }
 
-    public String getFormattedDate(){
+    public Boolean getFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        isFavorite = favorite;
+    }
+
+
+    public String getFormattedDate() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.getDefault());
         formatter.setTimeZone(TimeZone.getTimeZone("EST"));
@@ -129,7 +131,7 @@ public class BillItem {
         return destinationFormat.format(parsedDated);
     }
 
-    public String getFormattedDescription(){
+    public String getFormattedDescription() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(description, Html.FROM_HTML_MODE_LEGACY).toString();
         } else {

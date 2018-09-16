@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui;
+package com.josh.billrssroom.ui.feed;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,6 +9,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+
+import com.josh.billrssroom.R;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,7 +53,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
 
         if (preInfo instanceof FeedItemHolderInfo) {
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
-            BillViewHolder holder = (BillViewHolder) newHolder;
+            FeedViewHolder holder = (FeedViewHolder) newHolder;
 
             animateHeartButton(holder);
         }
@@ -64,7 +66,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
         }
     }
 
-    private void animateHeartButton(final BillViewHolder holder) {
+    private void animateHeartButton(final FeedViewHolder holder) {
         AnimatorSet animatorSet = new AnimatorSet();
 
         ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.binding.btnSave, "rotation", 0f, 360f);
@@ -81,12 +83,12 @@ public class FeedItemAnimator extends DefaultItemAnimator {
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                //holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+//                holder.binding.btnSave.setImageResource(R.drawable.ic_favorite_full);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                //heartAnimationsMap.remove(holder);
+//                heartAnimationsMap.remove(holder);
                 dispatchChangeFinishedIfAllAnimationsEnded(holder);
             }
         });
@@ -97,7 +99,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
         heartAnimationsMap.put(holder, animatorSet);
     }
 
-    private void dispatchChangeFinishedIfAllAnimationsEnded(BillViewHolder holder) {
+    private void dispatchChangeFinishedIfAllAnimationsEnded(FeedViewHolder holder) {
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }
