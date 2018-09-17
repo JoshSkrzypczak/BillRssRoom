@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.BillItem;
@@ -18,6 +19,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     private FavoritesViewModel favoritesViewModel;
     private RecyclerView recyclerView;
     private FavoritesAdapter favoritesAdapter;
+    private MyFavoritesAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,28 +34,38 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
         recyclerView = findViewById(R.id.favorites_list);
         favoritesAdapter = new FavoritesAdapter(this, this);
-        recyclerView.setAdapter(favoritesAdapter);
+
+        adapter = new MyFavoritesAdapter(this, this);
+
+        recyclerView.setAdapter(adapter);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         favoritesViewModel.getAllFavorites().observe(this, billItems -> {
-            favoritesAdapter.setFavoriteItems(billItems);
+//            favoritesAdapter.setFavoriteItems(billItems);
+            adapter.setBillItemList(billItems);
+
         });
+
     }
 
     @Override
     public void onBrowserClick(BillItem billItem, int position) {
+        Toast.makeText(this, "Browser Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onShareClick(BillItem billItem, int position) {
+        Toast.makeText(this, "Share Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onTrashClick(BillItem billItem, int position) {
-        favoritesViewModel.deleteSingleRecord(billItem);
-        favoritesAdapter.notifyItemRemoved(position);
+        Toast.makeText(this, "Trash Clicked", Toast.LENGTH_SHORT).show();
+//        favoritesViewModel.deleteSingleRecord(billItem);
+//        favoritesAdapter.notifyItemRemoved(position);
     }
 
     @Override

@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_description"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageButton
                     android:id="@+id/btn_trash"
