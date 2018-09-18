@@ -11,14 +11,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
 
 public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
 
     private static final String TAG = FavoritesActivity.class.getSimpleName();
     private FavoritesViewModel favoritesViewModel;
     private RecyclerView recyclerView;
-    private FavoritesAdapter favoritesAdapter;
     private MyFavoritesAdapter adapter;
 
     @Override
@@ -33,10 +33,8 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         }
 
         recyclerView = findViewById(R.id.favorites_list);
-        favoritesAdapter = new FavoritesAdapter(this, this);
 
         adapter = new MyFavoritesAdapter(this, this);
-
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -44,7 +42,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         favoritesViewModel.getAllFavorites().observe(this, billItems -> {
-//            favoritesAdapter.setFavoriteItems(billItems);
             adapter.setBillItemList(billItems);
 
         });
@@ -52,20 +49,23 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     }
 
     @Override
-    public void onBrowserClick(BillItem billItem, int position) {
+    public void onBrowserClick(BillModel billModel, int position) {
         Toast.makeText(this, "Browser Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onShareClick(BillItem billItem, int position) {
+    public void onShareClick(BillModel billModel, int position) {
         Toast.makeText(this, "Share Clicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onTrashClick(BillItem billItem, int position) {
+    public void onTrashClick(BillModel billModel, int position) {
         Toast.makeText(this, "Trash Clicked", Toast.LENGTH_SHORT).show();
-//        favoritesViewModel.deleteSingleRecord(billItem);
-//        favoritesAdapter.notifyItemRemoved(position);
+
+        favoritesViewModel.deleteSingleRecord(billModel);
+        adapter.notifyDataSetChanged();
+        adapter.notifyItemRemoved(position);
+
     }
 
     @Override

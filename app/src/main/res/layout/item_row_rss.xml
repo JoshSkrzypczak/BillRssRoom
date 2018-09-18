@@ -6,8 +6,7 @@
     <data>
         <variable
             name="bill"
-            type="com.josh.billrssroom.model.BillItem" />
-
+            type="com.josh.billrssroom.model.BillModel" />
     </data>
 
     <LinearLayout

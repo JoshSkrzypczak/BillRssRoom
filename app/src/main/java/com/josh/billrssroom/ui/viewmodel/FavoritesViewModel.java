@@ -1,12 +1,12 @@
-package com.josh.billrssroom.ui.favorites;
+package com.josh.billrssroom.ui.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
+import com.josh.billrssroom.model.BillModel;
 import com.josh.billrssroom.repository.FavoritesRepository;
-import com.josh.billrssroom.model.BillItem;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     private FavoritesRepository repository;
 
-    private LiveData<List<BillItem>> allFavorites;
+    private LiveData<List<BillModel>> allFavorites;
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
@@ -22,15 +22,15 @@ public class FavoritesViewModel extends AndroidViewModel {
         allFavorites = repository.getAllBills();
     }
 
-    public LiveData<List<BillItem>> getAllFavorites() {
+    public LiveData<List<BillModel>> getAllFavorites() {
         return allFavorites;
     }
 
-    public void insertSingleRecord(BillItem billItem){
-        repository.insertSingleRecord(billItem);
+    public void insertSingleRecord(BillModel billModel){
+        repository.insertSingleRecord(billModel);
     }
 
-    public void deleteSingleRecord(BillItem billItem){
-        repository.deleteSingleFavorite(billItem);
+    public void deleteSingleRecord(BillModel billModel){
+        repository.deleteSingleFavorite(billModel);
     }
 }

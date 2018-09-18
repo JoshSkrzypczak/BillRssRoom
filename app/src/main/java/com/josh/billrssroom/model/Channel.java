@@ -10,7 +10,7 @@ import java.util.List;
 public class Channel {
 
     @ElementList(name = "item", inline = true)
-    public List<BillItem> billItems;
+    public List<BillModel> billModels;
 
     @Element(required = false)
     private String pubDate;
@@ -33,11 +33,11 @@ public class Channel {
     @Element(required = false)
     private String webMaster;
 
-    public List<BillItem> getBillItems() {
-        return billItems;
+    public List<BillModel> getBillModels() {
+        return billModels;
     }
 
-    public void setBillItems(List<BillItem> billItems) {
-        this.billItems = billItems;
+    public void setBillModels(List<BillModel> billModels) {
+        this.billModels = billModels;
     }
 }

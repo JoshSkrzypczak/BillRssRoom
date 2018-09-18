@@ -10,13 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 
-import com.josh.billrssroom.R;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FeedItemAnimator extends DefaultItemAnimator {
+public class BillItemAnimator extends DefaultItemAnimator {
 
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
     private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(4);
@@ -53,7 +51,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
 
         if (preInfo instanceof FeedItemHolderInfo) {
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
-            FeedViewHolder holder = (FeedViewHolder) newHolder;
+            BillViewHolder holder = (BillViewHolder) newHolder;
 
             animateHeartButton(holder);
         }
@@ -66,7 +64,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
         }
     }
 
-    private void animateHeartButton(final FeedViewHolder holder) {
+    private void animateHeartButton(final BillViewHolder holder) {
         AnimatorSet animatorSet = new AnimatorSet();
 
         ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.binding.btnSave, "rotation", 0f, 360f);
@@ -99,7 +97,7 @@ public class FeedItemAnimator extends DefaultItemAnimator {
         heartAnimationsMap.put(holder, animatorSet);
     }
 
-    private void dispatchChangeFinishedIfAllAnimationsEnded(FeedViewHolder holder) {
+    private void dispatchChangeFinishedIfAllAnimationsEnded(BillViewHolder holder) {
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }

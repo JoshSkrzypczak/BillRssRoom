@@ -5,21 +5,21 @@ import android.view.View;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.databinding.ItemRowRssBinding;
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.model.BillModel;
 
 import java.lang.ref.WeakReference;
 
-public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class BillViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    private WeakReference<FeedClickListener> feedClickRef;
+    private WeakReference<BillItemClickListener> feedClickRef;
     final ItemRowRssBinding binding;
-    public BillItem billItem;
+    public BillModel billModel;
 
 
-    public FeedViewHolder(ItemRowRssBinding binding, FeedClickListener feedClickListener) {
+    public BillViewHolder(ItemRowRssBinding binding, BillItemClickListener billItemClickListener) {
         super(binding.getRoot());
         this.binding = binding;
-        feedClickRef = new WeakReference<>(feedClickListener);
+        feedClickRef = new WeakReference<>(billItemClickListener);
         binding.btnSave.setOnClickListener(this);
     }
 
@@ -27,7 +27,7 @@ public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_save:
-                feedClickRef.get().onSaveClicked(billItem, getAdapterPosition());
+                feedClickRef.get().onSaveClicked(billModel, getAdapterPosition());
                 break;
         }
     }

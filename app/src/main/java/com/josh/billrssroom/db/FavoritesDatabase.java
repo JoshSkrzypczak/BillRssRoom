@@ -9,9 +9,9 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.josh.billrssroom.db.dao.BillDao;
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.model.BillModel;
 
-@Database(entities = {BillItem.class}, version = 1)
+@Database(entities = {BillModel.class}, version = 1)
 public abstract class FavoritesDatabase extends RoomDatabase {
 
     private static FavoritesDatabase INSTANCE;

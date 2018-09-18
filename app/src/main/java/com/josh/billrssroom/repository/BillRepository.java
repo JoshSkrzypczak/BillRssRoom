@@ -6,8 +6,8 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.josh.billrssroom.db.FeedDatabase;
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.db.BillDatabase;
+import com.josh.billrssroom.model.BillModel;
 import com.josh.billrssroom.model.Rss;
 import com.josh.billrssroom.api.DataService;
 
@@ -22,20 +22,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 
-public class FeedRepository {
+public class BillRepository {
 
     private final DataService apiService;
 
-    private static FeedRepository sInstance;
-    private final FeedDatabase feedDatabase;
-    private MediatorLiveData<List<BillItem>> observableBills;
+    private static BillRepository sInstance;
+    private final BillDatabase billDatabase;
+    private MediatorLiveData<List<BillModel>> observableBills;
 
 
-    public FeedRepository(final FeedDatabase feedDatabase) {
-        this.feedDatabase = feedDatabase;
+    public BillRepository(final BillDatabase billDatabase) {
+        this.billDatabase = billDatabase;
         observableBills = new MediatorLiveData<>();
 
-        observableBills.addSource(this.feedDatabase.billDao().loadBillItems(), billItems -> {
+        observableBills.addSource(this.billDatabase.billDao().loadBillItems(), billItems -> {
             observableBills.postValue(billItems);
         });
 
@@ -52,12 +52,12 @@ public class FeedRepository {
         apiService = retrofit.create(DataService.class);
     }
 
-    public LiveData<List<BillItem>> getFeedItems() {
-        final MutableLiveData<List<BillItem>> data = new MutableLiveData<>();
+    public LiveData<List<BillModel>> getFeedItems() {
+        final MutableLiveData<List<BillModel>> data = new MutableLiveData<>();
         apiService.getBillItemsNormally().enqueue(new Callback<Rss>() {
             @Override
             public void onResponse(@NonNull Call<Rss> call, @NonNull Response<Rss> response) {
-                data.setValue(response.body().getChannel().getBillItems());
+                data.setValue(response.body().getChannel().getBillModels());
 
 
             }
@@ -71,11 +71,11 @@ public class FeedRepository {
         return data;
     }
 
-    public static FeedRepository getInstance(final FeedDatabase feedDatabase){
+    public static BillRepository getInstance(final BillDatabase billDatabase){
         if (sInstance == null){
-            synchronized (FeedRepository.class){
+            synchronized (BillRepository.class){
                 if (sInstance == null){
-                    sInstance = new FeedRepository(feedDatabase);
+                    sInstance = new BillRepository(billDatabase);
                 }
             }
         }

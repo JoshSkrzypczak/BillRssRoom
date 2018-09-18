@@ -2,8 +2,8 @@ package com.josh.billrssroom;
 
 import android.app.Application;
 
-import com.josh.billrssroom.db.FeedDatabase;
-import com.josh.billrssroom.repository.FeedRepository;
+import com.josh.billrssroom.db.BillDatabase;
+import com.josh.billrssroom.repository.BillRepository;
 
 /**
  * Android Application class. Used for accessing singletons.
@@ -19,11 +19,11 @@ public class BasicApp extends Application {
         mAppExecutors = new AppExecutors();
     }
 
-    public FeedDatabase getDatabase() {
-        return FeedDatabase.getDatabase(this, mAppExecutors);
+    public BillDatabase getDatabase() {
+        return BillDatabase.getFeedDatabase(this);
     }
 
-    public FeedRepository getRepository() {
-        return FeedRepository.getInstance(getDatabase());
+    public BillRepository getRepository() {
+        return BillRepository.getInstance(getDatabase());
     }
 }

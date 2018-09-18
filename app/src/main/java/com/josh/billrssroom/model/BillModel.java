@@ -2,31 +2,25 @@ package com.josh.billrssroom.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v7.util.DiffUtil;
 import android.text.Html;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
-
-import com.josh.billrssroom.utilities.Utils;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+
 @Root(name = "item", strict = false)
-@Entity(tableName = "favorites", indices = {@Index(value = {"title", "description"})})
-public class BillItem {
+@Entity(tableName = "items", indices = {@Index(value = {"title", "description"})})
+public class BillModel {
 
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
@@ -46,15 +40,15 @@ public class BillItem {
     @Element(name = "link")
     private String link;
     @Element(name = "isFavorite", required = false)
-    private Boolean isFavorite;
+    private boolean isFavorite;
 
 
-    public BillItem(@Element(name = "guid") String guid,
+    public BillModel(@Element(name = "guid") String guid,
                     @Element(name = "pubDate") String pubDate,
                     @Element(name = "title") String title,
                     @Element(name = "description") String description,
                     @Element(name = "link") String link,
-                    @Element(name = "isFavorite", required = false) Boolean isFavorite) {
+                    @Element(name = "isFavorite", required = false) boolean isFavorite) {
         this.guid = guid;
         this.pubDate = pubDate;
         this.title = title;
@@ -103,14 +97,13 @@ public class BillItem {
         this.link = link;
     }
 
-    public Boolean getFavorite() {
+    public boolean isFavorite() {
         return isFavorite;
     }
 
-    public void setFavorite(Boolean favorite) {
+    public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
-
 
     public String getFormattedDate() {
         SimpleDateFormat formatter =

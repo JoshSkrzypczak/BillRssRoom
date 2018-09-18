@@ -8,49 +8,36 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.josh.billrssroom.model.BillItem;
-import com.josh.billrssroom.model.Rss;
+import com.josh.billrssroom.model.BillModel;
 
 import java.util.List;
 
 @Dao
 public interface BillDao {
 
-    @Query("SELECT * FROM favorites")
-    LiveData<List<BillItem>> loadAllFavorites();
+    @Query("SELECT * FROM items")
+    LiveData<List<BillModel>> loadBillItems();
 
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertSingleRecord(BillItem billEntity);
-
-    @Delete
-    void deleteSingleRecord(BillItem billItem);
-
-    @Query("DELETE FROM favorites")
-    void deleteAll();
-
-    @Query("SELECT COUNT(*) FROM favorites")
-    int getCount();
+    @Insert
+    void insert(BillModel...models);
 
     @Update
-    void updateSingleRecord(BillItem...billItems);
+    void update(BillModel...models);
 
-    @Query("SELECT * FROM favorites LIMIT 1")
-    BillItem[] getAnyBillItem();
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertFeedItems(List<BillItem> billItems);
-
-    @Query("SELECT * FROM favorites")
-    LiveData<List<BillItem>> loadBillItems();
+    @Delete
+    void delete(BillModel...models);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void save(List<BillItem> billItems);
+    void insertSingleRecord(BillModel model);
 
+    @Delete
+    void deleteSingleRecord(BillModel model);
 
+    @Query("DELETE FROM items")
+    void deleteAll();
 
-
-
+    @Query("SELECT * FROM items")
+    LiveData<List<BillModel>> loadAllFavorites();
 
 
 }

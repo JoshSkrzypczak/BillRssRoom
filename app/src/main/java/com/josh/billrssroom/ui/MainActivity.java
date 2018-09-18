@@ -12,23 +12,23 @@ import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.databinding.ActivityMainBinding;
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.model.BillModel;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
-import com.josh.billrssroom.ui.favorites.FavoritesViewModel;
-import com.josh.billrssroom.ui.feed.FeedAdapter;
-import com.josh.billrssroom.ui.feed.FeedClickListener;
-import com.josh.billrssroom.ui.feed.FeedItemAnimator;
-import com.josh.billrssroom.ui.feed.FeedViewModel;
+import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
+import com.josh.billrssroom.ui.feed.BillAdapter;
+import com.josh.billrssroom.ui.feed.BillItemClickListener;
+import com.josh.billrssroom.ui.feed.BillItemAnimator;
+import com.josh.billrssroom.ui.viewmodel.BillViewModel;
 
-public class MainActivity extends AppCompatActivity implements FeedClickListener {
+public class MainActivity extends AppCompatActivity implements BillItemClickListener {
 
     private static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
 
     private ActivityMainBinding binding;
 
-    private FeedAdapter adapter;
+    private BillAdapter adapter;
 
-    private FeedViewModel feedViewModel;
+    private BillViewModel viewModel;
     private FavoritesViewModel favoritesViewModel;
 
 
@@ -40,23 +40,24 @@ public class MainActivity extends AppCompatActivity implements FeedClickListener
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        adapter = new FeedAdapter(this);
-        binding.billsList.setAdapter(adapter);
-        binding.billsList.setItemAnimator(new FeedItemAnimator());
+        adapter = new BillAdapter(this);
+        binding.recyclerview.setAdapter(adapter);
+        binding.recyclerview.setItemAnimator(new BillItemAnimator());
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(BillViewModel.class);
 
-        subscribeUi(feedViewModel);
+        subscribeUi(viewModel);
 
     }
 
-    private void subscribeUi(FeedViewModel viewModel) {
+    private void subscribeUi(BillViewModel viewModel) {
+
         viewModel.getAllBills().observe(this, billItems -> {
             if (billItems != null) {
                 binding.setIsLoading(false);
-                adapter.setBillItemList(billItems);
+                adapter.setBillsList(billItems);
             } else {
                 binding.setIsLoading(true);
             }
@@ -80,20 +81,20 @@ public class MainActivity extends AppCompatActivity implements FeedClickListener
     }
 
     @Override
-    public void onSaveClicked(BillItem billItem, int position) {
-        Toast.makeText(MainActivity.this, "Saved: " + billItem.getTitle(),
+    public void onSaveClicked(BillModel billModel, int position) {
+        Toast.makeText(MainActivity.this, "Saved: " + billModel.getTitle(),
                 Toast.LENGTH_SHORT).show();
 
-        favoritesViewModel.insertSingleRecord(billItem);
+        favoritesViewModel.insertSingleRecord(billModel);
 
         adapter.notifyItemChanged(position, ACTION_LIKE_BUTTON_CLICKED);
     }
 
     @Override
-    public void onShareClicked(BillItem billItem) {
+    public void onShareClicked(BillModel billModel) {
     }
 
     @Override
-    public void onBrowserClicked(BillItem billItem) {
+    public void onBrowserClicked(BillModel billModel) {
     }
 }

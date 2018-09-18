@@ -1,12 +1,12 @@
 package com.josh.billrssroom.ui.favorites;
 
-import com.josh.billrssroom.model.BillItem;
+import com.josh.billrssroom.model.BillModel;
 
 public interface FavoriteClickListener {
 
-    void onBrowserClick(BillItem billItem, int position);
+    void onBrowserClick(BillModel billModel, int position);
 
-    void onShareClick(BillItem billItem, int position);
+    void onShareClick(BillModel billModel, int position);
 
-    void onTrashClick(BillItem billItem, int position);
+    void onTrashClick(BillModel billModel, int position);
 }
