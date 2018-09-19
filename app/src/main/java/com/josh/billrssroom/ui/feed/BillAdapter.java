@@ -16,16 +16,15 @@ import java.util.List;
 public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
 
     private final BillItemClickListener billItemClickListener;
-    private List<BillModel> billModels = Collections.emptyList();
+    private List<BillModel> bills = Collections.emptyList();
 
 
     public BillAdapter(BillItemClickListener billItemClickListener) {
         this.billItemClickListener = billItemClickListener;
     }
 
-    public void setBillsList(List<BillModel> billItemsList) {
-        billModels = billItemsList;
-        notifyDataSetChanged();
+    public void setBills(List<BillModel> bills) {
+        this.bills = bills;
     }
 
     @NonNull
@@ -34,14 +33,13 @@ public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
         ItemRowRssBinding binding = DataBindingUtil
                 .inflate(LayoutInflater.from(parent.getContext()),
                         R.layout.item_row_rss, parent, false);
-
         return new BillViewHolder(binding, billItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BillViewHolder holder, int position) {
-        final BillModel item = billModels.get(position);
-        holder.binding.setBill(billModels.get(position));
+        final BillModel item = bills.get(position);
+        holder.binding.setBill(bills.get(position));
         holder.binding.executePendingBindings();
 
         holder.billModel = item;
@@ -49,6 +47,6 @@ public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
 
     @Override
     public int getItemCount() {
-        return billModels.size();
+        return bills.size();
     }
 }

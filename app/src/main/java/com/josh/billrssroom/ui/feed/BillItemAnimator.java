@@ -51,7 +51,7 @@ public class BillItemAnimator extends DefaultItemAnimator {
 
         if (preInfo instanceof FeedItemHolderInfo) {
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
-            BillViewHolder holder = (BillViewHolder) newHolder;
+            RssAdapter.RssViewHolder holder = (RssAdapter.RssViewHolder) newHolder;
 
             animateHeartButton(holder);
         }
@@ -64,18 +64,18 @@ public class BillItemAnimator extends DefaultItemAnimator {
         }
     }
 
-    private void animateHeartButton(final BillViewHolder holder) {
+    private void animateHeartButton(final RssAdapter.RssViewHolder holder) {
         AnimatorSet animatorSet = new AnimatorSet();
 
-        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.binding.btnSave, "rotation", 0f, 360f);
+        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.getBtnSave(), "rotation", 0f, 360f);
         rotationAnim.setDuration(300);
         rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
 
-        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.binding.btnSave, "scaleX", 0.2f, 1f);
+        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.getBtnSave(), "scaleX", 0.2f, 1f);
         bounceAnimX.setDuration(300);
         bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
 
-        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.binding.btnSave, "scaleY", 0.2f, 1f);
+        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.getBtnSave(), "scaleY", 0.2f, 1f);
         bounceAnimY.setDuration(300);
         bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
@@ -97,7 +97,7 @@ public class BillItemAnimator extends DefaultItemAnimator {
         heartAnimationsMap.put(holder, animatorSet);
     }
 
-    private void dispatchChangeFinishedIfAllAnimationsEnded(BillViewHolder holder) {
+    private void dispatchChangeFinishedIfAllAnimationsEnded(RssAdapter.RssViewHolder holder) {
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }

@@ -14,23 +14,23 @@ import com.josh.billrssroom.R;
 import com.josh.billrssroom.databinding.ActivityMainBinding;
 import com.josh.billrssroom.model.BillModel;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
+import com.josh.billrssroom.ui.feed.RssAdapter;
 import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
-import com.josh.billrssroom.ui.feed.BillAdapter;
 import com.josh.billrssroom.ui.feed.BillItemClickListener;
 import com.josh.billrssroom.ui.feed.BillItemAnimator;
 import com.josh.billrssroom.ui.viewmodel.BillViewModel;
+import com.josh.billrssroom.utilities.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements BillItemClickListener {
 
-    private static final String ACTION_LIKE_BUTTON_CLICKED = "action_like_button_button";
-
+    private static final String ACTION_SAVE_BTN_CLICKED = "action_save_btn";
     private ActivityMainBinding binding;
-
-    private BillAdapter adapter;
-
-    private BillViewModel viewModel;
     private FavoritesViewModel favoritesViewModel;
-
+    private BillViewModel viewModel;
+    private RssAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        adapter = new BillAdapter(this);
+        adapter = new RssAdapter(this);
         binding.recyclerview.setAdapter(adapter);
         binding.recyclerview.setItemAnimator(new BillItemAnimator());
 
@@ -49,19 +49,38 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         viewModel = ViewModelProviders.of(this).get(BillViewModel.class);
 
         subscribeUi(viewModel);
-
     }
 
     private void subscribeUi(BillViewModel viewModel) {
-
-        viewModel.getAllBills().observe(this, billItems -> {
-            if (billItems != null) {
+        viewModel.getAllBills().observe(this, items -> {
+            if (items != null){
                 binding.setIsLoading(false);
-                adapter.setBillsList(billItems);
+                adapter.setRssList(items);
             } else {
                 binding.setIsLoading(true);
             }
         });
+    }
+
+    @Override
+    public void onSaveClicked(BillModel billModel, int position) {
+        Toast.makeText(MainActivity.this, "Saved: " + billModel.getTitle(),
+                Toast.LENGTH_SHORT).show();
+
+        // TODO: 9/18/2018 Use better insertion strategy
+        favoritesViewModel.insertSingleRecord(billModel);
+
+        adapter.notifyItemChanged(position, ACTION_SAVE_BTN_CLICKED);
+    }
+
+    @Override
+    public void onShareClicked(BillModel billModel) {
+        Toast.makeText(this, "TODO: Shared!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBrowserClicked(BillModel billModel) {
+        Utils.openCustomTab(this, billModel.getLink());
     }
 
     @Override
@@ -78,23 +97,5 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSaveClicked(BillModel billModel, int position) {
-        Toast.makeText(MainActivity.this, "Saved: " + billModel.getTitle(),
-                Toast.LENGTH_SHORT).show();
-
-        favoritesViewModel.insertSingleRecord(billModel);
-
-        adapter.notifyItemChanged(position, ACTION_LIKE_BUTTON_CLICKED);
-    }
-
-    @Override
-    public void onShareClicked(BillModel billModel) {
-    }
-
-    @Override
-    public void onBrowserClicked(BillModel billModel) {
     }
 }
