@@ -39,5 +39,4 @@ public interface BillDao {
     @Query("SELECT * FROM items")
     LiveData<List<BillModel>> loadAllFavorites();
 
-
 }

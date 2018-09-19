@@ -10,5 +10,5 @@ public interface DataService {
     String BASE_URL = "http://www.legislature.mi.gov/";
 
     @GET("documents/publications/RssFeeds/billupdate.xml")
-    Call<Rss> getBillItemsNormally();
+    Call<Rss> getFeedItems();
 }

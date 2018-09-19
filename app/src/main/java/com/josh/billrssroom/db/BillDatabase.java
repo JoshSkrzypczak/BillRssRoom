@@ -26,7 +26,7 @@ public abstract class BillDatabase extends RoomDatabase {
         RoomDatabase.Builder<BillDatabase> b =
                 Room.databaseBuilder(context.getApplicationContext(), BillDatabase.class,
                         DB_NAME);
-
+        
         return b.build();
     }
 }

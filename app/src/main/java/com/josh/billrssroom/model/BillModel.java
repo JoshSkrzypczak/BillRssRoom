@@ -40,7 +40,7 @@ public class BillModel {
     @Element(name = "link")
     private String link;
     @Element(name = "isFavorite", required = false)
-    private boolean isFavorite;
+    private Boolean isFavorite;
 
 
     public BillModel(@Element(name = "guid") String guid,
@@ -48,7 +48,7 @@ public class BillModel {
                     @Element(name = "title") String title,
                     @Element(name = "description") String description,
                     @Element(name = "link") String link,
-                    @Element(name = "isFavorite", required = false) boolean isFavorite) {
+                    @Element(name = "isFavorite", required = false) Boolean isFavorite) {
         this.guid = guid;
         this.pubDate = pubDate;
         this.title = title;
@@ -97,11 +97,12 @@ public class BillModel {
         this.link = link;
     }
 
-    public boolean isFavorite() {
+
+    public Boolean getFavorite() {
         return isFavorite;
     }
 
-    public void setFavorite(boolean favorite) {
+    public void setFavorite(Boolean favorite) {
         isFavorite = favorite;
     }
 
