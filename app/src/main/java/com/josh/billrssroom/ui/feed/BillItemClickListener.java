@@ -1,12 +1,13 @@
 package com.josh.billrssroom.ui.feed;
 
-import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.model.RssResult;
 
 public interface BillItemClickListener {
 
-    void onSaveClicked(BillModel billModel, int position);
+    void onSaveClicked(FeedItem model, int position);
 
-    void onShareClicked(BillModel billModel);
+    void onShareClicked(FeedItem model);
 
-    void onBrowserClicked(BillModel billModel);
+    void onBrowserClicked(FeedItem model);
 }

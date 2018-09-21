@@ -11,12 +11,13 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
 
 public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
 
     private static final String TAG = FavoritesActivity.class.getSimpleName();
+
     private FavoritesViewModel favoritesViewModel;
     private RecyclerView recyclerView;
     private MyFavoritesAdapter adapter;
@@ -41,31 +42,30 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        favoritesViewModel.getAllFavorites().observe(this, billItems -> {
-            adapter.setBillItemList(billItems);
-
-        });
-
+//        favoritesViewModel.getAllFavorites().observe(this, items -> {
+//            if (items != null){
+//                adapter.setBillItemList(items);
+//            }
+//        });
     }
 
     @Override
-    public void onBrowserClick(BillModel billModel, int position) {
-        Toast.makeText(this, "Browser Clicked", Toast.LENGTH_SHORT).show();
+    public void onBrowserClick(FeedItem item, int position) {
+        Toast.makeText(this, "TODO! Browser: " + item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onShareClick(BillModel billModel, int position) {
-        Toast.makeText(this, "Share Clicked", Toast.LENGTH_SHORT).show();
+    public void onShareClick(FeedItem item, int position) {
+        Toast.makeText(this, "TODO! Share: " + item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onTrashClick(BillModel billModel, int position) {
-        Toast.makeText(this, "Trash Clicked", Toast.LENGTH_SHORT).show();
+    public void onTrashClick(FeedItem item, int position) {
+        Toast.makeText(this, "TODO! Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
 
-        favoritesViewModel.deleteSingleRecord(billModel);
+//        favoritesViewModel.delete(item);
         adapter.notifyDataSetChanged();
         adapter.notifyItemRemoved(position);
-
     }
 
     @Override

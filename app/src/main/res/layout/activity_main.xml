@@ -1,50 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
 
-    <data>
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <variable
-            name="isLoading"
-            type="boolean" />
-        <variable
-            name="model"
-            type="com.josh.billrssroom.model.BillModel" />
-    </data>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.design.widget.CoordinatorLayout
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:fitsSystemWindows="true">
+        android:clipToPadding="false"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp"
+        android:scrollbars="vertical"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?android:attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            app:visibleGone="@{!isLoading}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    </android.support.design.widget.CoordinatorLayout>
-</layout>
+</android.support.design.widget.CoordinatorLayout>

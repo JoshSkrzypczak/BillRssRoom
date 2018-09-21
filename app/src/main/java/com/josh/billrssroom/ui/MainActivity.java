@@ -1,50 +1,52 @@
 package com.josh.billrssroom.ui;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.databinding.ActivityMainBinding;
-import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
-import com.josh.billrssroom.ui.feed.RssAdapter;
-import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
-import com.josh.billrssroom.ui.feed.BillItemClickListener;
 import com.josh.billrssroom.ui.feed.BillItemAnimator;
+import com.josh.billrssroom.ui.feed.BillItemClickListener;
+import com.josh.billrssroom.ui.feed.RssAdapter;
 import com.josh.billrssroom.ui.viewmodel.BillViewModel;
-import com.josh.billrssroom.utilities.Utils;
+import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements BillItemClickListener {
-
+    private static final String TAG = MainActivity.class.getSimpleName();
     private static final String ACTION_SAVE_BTN_CLICKED = "action_save_btn";
-    private ActivityMainBinding binding;
     private FavoritesViewModel favoritesViewModel;
     private BillViewModel viewModel;
     private RssAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        recyclerView = findViewById(R.id.recyclerview);
         adapter = new RssAdapter(this);
-        binding.recyclerview.setAdapter(adapter);
-        binding.recyclerview.setItemAnimator(new BillItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new BillItemAnimator());
 
-        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+//        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         viewModel = ViewModelProviders.of(this).get(BillViewModel.class);
 
@@ -52,35 +54,34 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     }
 
     private void subscribeUi(BillViewModel viewModel) {
-        viewModel.getAllBills().observe(this, items -> {
-            if (items != null){
-                binding.setIsLoading(false);
-                adapter.setRssList(items);
-            } else {
-                binding.setIsLoading(true);
+        viewModel.getAllBills().observe(this, new Observer<List<FeedItem>>() {
+            @Override
+            public void onChanged(@Nullable List<FeedItem> feedItems) {
+                if (feedItems != null){
+                    adapter.setRssList(feedItems);
+                }
             }
         });
     }
 
     @Override
-    public void onSaveClicked(BillModel billModel, int position) {
-        Toast.makeText(MainActivity.this, "Saved: " + billModel.getTitle(),
+    public void onSaveClicked(FeedItem item, int position) {
+        Toast.makeText(MainActivity.this, "Saved: " + item.getTitle(),
                 Toast.LENGTH_SHORT).show();
 
-        // TODO: 9/18/2018 Use better insertion strategy
-        favoritesViewModel.insertSingleRecord(billModel);
+//        favoritesViewModel.insert(item);
 
         adapter.notifyItemChanged(position, ACTION_SAVE_BTN_CLICKED);
     }
 
     @Override
-    public void onShareClicked(BillModel billModel) {
-        Toast.makeText(this, "TODO: Shared!", Toast.LENGTH_SHORT).show();
+    public void onShareClicked(FeedItem item) {
+        Toast.makeText(this, "TODO! Shared: " + item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onBrowserClicked(BillModel billModel) {
-        Utils.openCustomTab(this, billModel.getLink());
+    public void onBrowserClicked(FeedItem item) {
+        Toast.makeText(this, "TODO! Browser: " + item.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -7,7 +7,7 @@
 
         <variable
             name="bill"
-            type="com.josh.billrssroom.model.BillModel" />
+            type="com.josh.billrssroom.model.FeedItem" />
     </data>
 
 

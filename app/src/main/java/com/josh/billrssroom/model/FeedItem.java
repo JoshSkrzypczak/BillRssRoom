@@ -2,7 +2,8 @@ package com.josh.billrssroom.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -17,93 +18,80 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-
 @Root(name = "item", strict = false)
-@Entity(tableName = "items", indices = {@Index(value = {"title", "description"})})
-public class BillModel {
+@Entity(tableName = "items")
+public class FeedItem {
 
-    @ColumnInfo(name = "guid")
-    @Element(name = "guid")
-    private String guid;
-    @ColumnInfo(name = "pubDate")
-    @Element(name = "pubDate")
-    private String pubDate;
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "title")
     @Element(name = "title")
-    private String title;
-    @ColumnInfo(name = "description")
-    @Element(name = "description")
-    private String description;
+    public String title;
     @ColumnInfo(name = "link")
     @Element(name = "link")
-    private String link;
-    @Element(name = "isFavorite", required = false)
-    private Boolean isFavorite;
+    public String link;
+    @ColumnInfo(name = "description")
+    @Element(name = "description")
+    public String description;
+    @ColumnInfo(name = "pubDate")
+    @Element(name = "pubDate")
+    public String pubDate;
+    @ColumnInfo(name = "guid")
+    @Element(name = "guid")
+    public String guid;
 
-
-    public BillModel(@Element(name = "guid") String guid,
-                    @Element(name = "pubDate") String pubDate,
-                    @Element(name = "title") String title,
-                    @Element(name = "description") String description,
-                    @Element(name = "link") String link,
-                    @Element(name = "isFavorite", required = false) Boolean isFavorite) {
-        this.guid = guid;
-        this.pubDate = pubDate;
+        public FeedItem(
+                @NonNull @Element(name = "title") String title,
+                @Element(name = "link") String link,
+                @Element(name = "description") String description,
+                @Element(name = "pubDate") String pubDate,
+                @Element(name = "guid") String guid) {
         this.title = title;
-        this.description = description;
         this.link = link;
-        this.isFavorite = isFavorite;
-    }
+        this.description = description;
+        this.pubDate = pubDate;
+        this.guid = guid;
+}
 
-    public String getGuid() {
-        return guid;
-    }
-
-    public String getPubDate() {
-        return pubDate;
-    }
-
+    @NonNull
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
+    public void setTitle(@NonNull String title) {
+        this.title = title;
     }
 
     public String getLink() {
         return link;
     }
 
-    public void setGuid(String guid) {
-        this.guid = guid;
+    public void setLink(String link) {
+        this.link = link;
     }
 
-    public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public String getPubDate() {
+        return pubDate;
     }
 
-
-    public Boolean getFavorite() {
-        return isFavorite;
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 
-    public void setFavorite(Boolean favorite) {
-        isFavorite = favorite;
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
     public String getFormattedDate() {

@@ -6,22 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.josh.billrssroom.R
-import com.josh.billrssroom.model.BillModel
+import com.josh.billrssroom.model.FeedItem
 import kotlinx.android.synthetic.main.item_row_favorites.view.*
 import java.util.*
 
 class MyFavoritesAdapter(private val activity: Activity,
                          val favoriteClickCallback: FavoriteClickListener) :
-    RecyclerView.Adapter<MyFavoritesAdapter.AnotherViewHolder>() {
+    RecyclerView.Adapter<MyFavoritesAdapter.FavoritesViewHolder>() {
 
-    private var favoritesList: List<BillModel> = Collections.emptyList()
+    private var favoritesList: List<FeedItem> = Collections.emptyList()
 
-    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): AnotherViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): FavoritesViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        return AnotherViewHolder(layoutInflater.inflate(R.layout.item_row_favorites, parent, false))
+        return FavoritesViewHolder(layoutInflater.inflate(R.layout.item_row_favorites, parent, false))
     }
 
-    override fun onBindViewHolder(holder: AnotherViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
         val items = favoritesList.get(position)
         // or? val billModel = favoritesList[position]
         // or? holder.bindTo(favoritesList[position])
@@ -29,8 +29,8 @@ class MyFavoritesAdapter(private val activity: Activity,
         holder.bindTo(items)
     }
 
-    fun setBillItemList(billItemsList: List<BillModel>) {
-        favoritesList = billItemsList
+    fun setBillItemList(billFeedItemList: List<FeedItem>) {
+        favoritesList = billFeedItemList
         notifyDataSetChanged()
     }
 
@@ -38,7 +38,7 @@ class MyFavoritesAdapter(private val activity: Activity,
         return favoritesList.size
     }
 
-    inner class AnotherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class FavoritesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val titleView = itemView.text_title
         val dateView = itemView.text_pubdate
@@ -46,9 +46,9 @@ class MyFavoritesAdapter(private val activity: Activity,
         val btnShare = itemView.btn_share
         val btnBrowser = itemView.btn_browser
         val btnTrash = itemView.btn_trash
-        var favorite: BillModel? = null
+        var favorite: FeedItem? = null
 
-        fun bindTo(favorite: BillModel){
+        fun bindTo(favorite: FeedItem){
             this.favorite = favorite
             titleView.text = favorite.title
             dateView.text = favorite.formattedDate

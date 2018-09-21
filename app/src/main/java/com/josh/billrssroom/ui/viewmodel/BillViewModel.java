@@ -7,7 +7,7 @@ import android.arch.lifecycle.MediatorLiveData;
 import android.support.annotation.NonNull;
 
 import com.josh.billrssroom.BasicApp;
-import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.model.FeedItem;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class BillViewModel extends AndroidViewModel {
 
-    private final MediatorLiveData<List<BillModel>> observableBills;
+    private final MediatorLiveData<List<FeedItem>> observableBills;
 
     public BillViewModel(@NonNull Application application) {
         super(application);
@@ -26,12 +26,12 @@ public class BillViewModel extends AndroidViewModel {
 
         observableBills.setValue(null);
 
-        LiveData<List<BillModel>> bills = ((BasicApp) application).getRepository().getFeedItems();
+        LiveData<List<FeedItem>> items = ((BasicApp) application).getRepository().getFeedItems();
 
-        observableBills.addSource(bills, observableBills::setValue);
+        observableBills.addSource(items, observableBills::setValue);
     }
 
-    public LiveData<List<BillModel>> getAllBills() {
+    public LiveData<List<FeedItem>> getAllBills() {
         return observableBills;
     }
 }

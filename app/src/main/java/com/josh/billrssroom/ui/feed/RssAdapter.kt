@@ -1,18 +1,22 @@
 package com.josh.billrssroom.ui.feed
 
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.josh.billrssroom.R
-import com.josh.billrssroom.model.BillModel
+import com.josh.billrssroom.model.FeedItem
+import com.josh.billrssroom.model.RssResult
 import kotlinx.android.synthetic.main.item_row_rss.view.*
 import java.util.*
 
 class RssAdapter(val rowClickCallback: BillItemClickListener) :
     RecyclerView.Adapter<RssAdapter.RssViewHolder>() {
 
-    private var items: List<BillModel> = Collections.emptyList()
+    private val TAG = RssAdapter::class.java.simpleName
+
+    private var items: List<FeedItem> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RssViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,8 +33,9 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
         holder.bindTo(item)
     }
 
-    fun setRssList(items: List<BillModel>){
+    fun setRssList(items: List<FeedItem>){
         this.items = items
+        notifyDataSetChanged();
     }
 
     inner class RssViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -41,14 +46,13 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
         val btnShare = itemView.btn_share
         val btnBrowser = itemView.btn_browser
         val btnSave = itemView.btn_save
-        var model: BillModel? = null
+        var model: FeedItem? = null
 
-        fun bindTo(model: BillModel) {
+        fun bindTo(model: FeedItem) {
             this.model = model
-
             titleView.text = model.title
-            dateView.text = model.formattedDate
-            descriptionView.text = model.formattedDescription
+            dateView.text = model.pubDate
+            descriptionView.text = model.description
 
             btnBrowser.setOnClickListener { rowClickCallback.onBrowserClicked(model) }
             btnShare.setOnClickListener { rowClickCallback.onShareClicked(model) }

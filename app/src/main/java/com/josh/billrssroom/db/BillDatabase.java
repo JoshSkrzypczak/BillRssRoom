@@ -6,14 +6,14 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.josh.billrssroom.db.dao.BillDao;
-import com.josh.billrssroom.model.BillModel;
+import com.josh.billrssroom.model.FeedItem;
 
-@Database(entities = {BillModel.class}, version = 1)
+@Database(entities = {FeedItem.class}, version = 1)
 public abstract class BillDatabase extends RoomDatabase {
-    public abstract BillDao billDao();
 
-    private static final String DB_NAME = "feed.db";
     private static volatile BillDatabase INSTANCE = null;
+    private static final String DB_NAME = "feed.db";
+    public abstract BillDao billDao();
 
     public synchronized static BillDatabase getFeedDatabase(Context context){
         if (INSTANCE == null){

@@ -1,14 +1,17 @@
 package com.josh.billrssroom.api;
 
-import com.josh.billrssroom.model.Rss;
+import android.arch.lifecycle.LiveData;
+
+import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.model.RssResult;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface DataService {
 
-    String BASE_URL = "http://www.legislature.mi.gov/";
-
     @GET("documents/publications/RssFeeds/billupdate.xml")
-    Call<Rss> getFeedItems();
+    Call<RssResult> getRssFeed();
 }
