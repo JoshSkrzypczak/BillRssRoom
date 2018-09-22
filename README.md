@@ -6,7 +6,6 @@ Once complete, I plan to move this over into the production app, [Michigan Legis
 * Retrofit 2 & SimpleXMLConverter
 * Room Persistence Library
 * Lifecycle Architecture components
-* Data Binding
 
 Bill Feed | Favorites
 ---- | ----
