@@ -51,8 +51,8 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
         fun bindTo(model: FeedItem) {
             this.model = model
             titleView.text = model.title
-            dateView.text = model.pubDate
-            descriptionView.text = model.description
+            dateView.text = model.formattedDate
+            descriptionView.text = model.formattedDescription
 
             btnBrowser.setOnClickListener { rowClickCallback.onBrowserClicked(model) }
             btnShare.setOnClickListener { rowClickCallback.onShareClicked(model) }

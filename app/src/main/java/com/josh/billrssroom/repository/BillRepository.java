@@ -6,10 +6,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.api.DataService;
 import com.josh.billrssroom.api.RetrofitClient;
 import com.josh.billrssroom.db.BillDatabase;
+import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.model.RssResult;
 
 import java.util.List;
@@ -18,13 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Repository modules handle data operations.
- * They provide a clean API so that the rest of the app can retrieve this data easily.
- * They know where to get the data from and what API calls to make when data is updated.
- * You can consider repositories to be mediators between different data sources, such as persistent
- * models, web services, and caches.
- */
+
 public class BillRepository {
     private static BillRepository INSTANCE;
     private final DataService apiService;
@@ -36,9 +30,10 @@ public class BillRepository {
         this.billDatabase = billDatabase;
         observableBills = new MediatorLiveData<>();
 
-        observableBills.addSource(this.billDatabase.billDao().loadItems(), items -> {
-            observableBills.postValue(items);
-        });
+//        observableBills.addSource(this.billDatabase.billDao().loadFeedItems(), items -> {
+//            observableBills.postValue(items);
+//        });
+
 
         apiService = RetrofitClient.getInstance().getRestApi();
     }

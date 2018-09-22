@@ -19,7 +19,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 @Root(name = "item", strict = false)
-@Entity(tableName = "items")
+@Entity(tableName = "favorites")
 public class FeedItem {
 
     @PrimaryKey
@@ -39,6 +39,9 @@ public class FeedItem {
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
     public String guid;
+    @ColumnInfo(name = "isFav")
+    @Element(required = false)
+    public boolean isFavorite;
 
         public FeedItem(
                 @NonNull @Element(name = "title") String title,

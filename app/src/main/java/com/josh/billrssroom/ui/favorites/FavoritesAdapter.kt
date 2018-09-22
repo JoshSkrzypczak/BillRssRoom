@@ -10,9 +10,9 @@ import com.josh.billrssroom.model.FeedItem
 import kotlinx.android.synthetic.main.item_row_favorites.view.*
 import java.util.*
 
-class MyFavoritesAdapter(private val activity: Activity,
-                         val favoriteClickCallback: FavoriteClickListener) :
-    RecyclerView.Adapter<MyFavoritesAdapter.FavoritesViewHolder>() {
+class FavoritesAdapter(private val activity: Activity,
+                       val favoriteClickCallback: FavoriteClickListener) :
+    RecyclerView.Adapter<FavoritesAdapter.FavoritesViewHolder>() {
 
     private var favoritesList: List<FeedItem> = Collections.emptyList()
 

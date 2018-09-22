@@ -20,7 +20,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
     private FavoritesViewModel favoritesViewModel;
     private RecyclerView recyclerView;
-    private MyFavoritesAdapter adapter;
+    private FavoritesAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,18 +35,17 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
         recyclerView = findViewById(R.id.favorites_list);
 
-        adapter = new MyFavoritesAdapter(this, this);
+        adapter = new FavoritesAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-
-//        favoritesViewModel.getAllFavorites().observe(this, items -> {
-//            if (items != null){
-//                adapter.setBillItemList(items);
-//            }
-//        });
+        favoritesViewModel.getAllFavorites().observe(this, feedItems -> {
+            if (feedItems != null){
+                adapter.setBillItemList(feedItems);
+            }
+        });
     }
 
     @Override
@@ -63,9 +62,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     public void onTrashClick(FeedItem item, int position) {
         Toast.makeText(this, "TODO! Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
 
-//        favoritesViewModel.delete(item);
+        favoritesViewModel.delete(item);
         adapter.notifyDataSetChanged();
-        adapter.notifyItemRemoved(position);
+
     }
 
     @Override

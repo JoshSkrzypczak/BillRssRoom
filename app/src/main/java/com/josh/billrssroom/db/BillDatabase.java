@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.josh.billrssroom.db.dao.BillDao;
+import com.josh.billrssroom.db.dao.FavoritesDao;
 import com.josh.billrssroom.model.FeedItem;
 
 @Database(entities = {FeedItem.class}, version = 1)
@@ -13,7 +13,7 @@ public abstract class BillDatabase extends RoomDatabase {
 
     private static volatile BillDatabase INSTANCE = null;
     private static final String DB_NAME = "feed.db";
-    public abstract BillDao billDao();
+    public abstract FavoritesDao billDao();
 
     public synchronized static BillDatabase getFeedDatabase(Context context){
         if (INSTANCE == null){

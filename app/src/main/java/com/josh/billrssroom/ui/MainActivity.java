@@ -4,14 +4,15 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
@@ -28,7 +29,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements BillItemClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String ACTION_SAVE_BTN_CLICKED = "action_save_btn";
-    private FavoritesViewModel favoritesViewModel;
     private BillViewModel viewModel;
     private RssAdapter adapter;
     private RecyclerView recyclerView;
@@ -42,11 +42,8 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.recyclerview);
         adapter = new RssAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new BillItemAnimator());
-
-//        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         viewModel = ViewModelProviders.of(this).get(BillViewModel.class);
 
@@ -69,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         Toast.makeText(MainActivity.this, "Saved: " + item.getTitle(),
                 Toast.LENGTH_SHORT).show();
 
-//        favoritesViewModel.insert(item);
+        viewModel.insert(item);
 
         adapter.notifyItemChanged(position, ACTION_SAVE_BTN_CLICKED);
     }
