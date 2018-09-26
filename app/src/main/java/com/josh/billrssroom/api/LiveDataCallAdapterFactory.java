@@ -1,6 +1,4 @@
-package com.josh.billrssroom.githubdemo;
-
-import com.josh.billrssroom.api.ApiResponse;
+package com.josh.billrssroom.api;
 
 import androidx.lifecycle.LiveData;
 

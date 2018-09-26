@@ -1,13 +1,11 @@
 package com.josh.billrssroom.api;
 
-import com.josh.billrssroom.githubdemo.Status;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import static com.josh.billrssroom.githubdemo.Status.ERROR;
-import static com.josh.billrssroom.githubdemo.Status.LOADING;
-import static com.josh.billrssroom.githubdemo.Status.SUCCESS;
+import static com.josh.billrssroom.api.Status.ERROR;
+import static com.josh.billrssroom.api.Status.LOADING;
+import static com.josh.billrssroom.api.Status.SUCCESS;
 
 /**
  * A generic class that holds a value with its loading status.

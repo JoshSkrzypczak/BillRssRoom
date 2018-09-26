@@ -1,4 +1,4 @@
-package com.josh.billrssroom.githubdemo;
+package com.josh.billrssroom.api;
 
 /**
  * Status of a resource that is provided to the UI.

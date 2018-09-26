@@ -1,7 +1,5 @@
 package com.josh.billrssroom.api;
 
-import com.josh.billrssroom.githubdemo.LiveDataCallAdapterFactory;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;

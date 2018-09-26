@@ -1,4 +1,4 @@
-package com.josh.billrssroom.githubdemo;
+package com.josh.billrssroom.api;
 
 import com.josh.billrssroom.api.ApiResponse;
 
