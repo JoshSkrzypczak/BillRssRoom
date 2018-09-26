@@ -1,10 +1,10 @@
 package com.josh.billrssroom.ui.favorites
 
 import android.app.Activity
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.josh.billrssroom.R
 import com.josh.billrssroom.model.FeedItem
 import kotlinx.android.synthetic.main.item_row_favorites.view.*
@@ -22,9 +22,7 @@ class FavoritesAdapter(private val activity: Activity,
     }
 
     override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
-        val items = favoritesList.get(position)
-        // or? val billModel = favoritesList[position]
-        // or? holder.bindTo(favoritesList[position])
+        val items = favoritesList[position]
 
         holder.bindTo(items)
     }

@@ -36,32 +36,20 @@ public class BillViewModel extends AndroidViewModel {
     public BillViewModel(@NonNull Application application) {
         super(application);
 
-        favoriteRepository = new FavoriteRepository(application);
+//        favoriteRepository = new FavoriteRepository(application);
+
+        favoriteRepository = ((BasicApp)application).getFavoriteRepository();
 
         feedDao = BillDatabase.getFeedDatabase(application).billDao();
-
-//        observableBills = new MediatorLiveData<>();
-//        // set by default null, until we get data from the database.
-//        observableBills.setValue(null);
-//        LiveData<List<FeedItem>> items = ((BasicApp) application).getRepository().getFeedItems();
-//        observableBills.addSource(items, observableBills::setValue);
-
 
         LiveData<Resource<List<FeedItem>>> feedItems = ((BasicApp) application).getRepository().loadBillItems();
         secondAttemptObservableBills = new MediatorLiveData<>();
         secondAttemptObservableBills.addSource(feedItems, secondAttemptObservableBills::setValue);
-
-
     }
 
     public MediatorLiveData<Resource<List<FeedItem>>> getSecondAttemptObservableBills() {
         return secondAttemptObservableBills;
     }
-
-
-    //    public LiveData<List<FeedItem>> getAllBills() {
-//        return secondAttemptObservableBills;
-//    }
 
     public void insertItemToFavorites(FeedItem feedItem){
         favoriteRepository.insert(feedItem);

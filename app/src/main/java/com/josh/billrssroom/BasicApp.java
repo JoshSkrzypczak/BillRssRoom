@@ -28,4 +28,12 @@ public class BasicApp extends Application {
     public BillRepository getRepository() {
         return BillRepository.getInstance(getDatabase(), mAppExecutors);
     }
+
+    public FavoritesDatabase getFavoriteDatabase(){
+        return FavoritesDatabase.getFavoriteDatabase(this);
+    }
+
+    public FavoriteRepository getFavoriteRepository(){
+        return FavoriteRepository.getInstance(getFavoriteDatabase());
+    }
 }
