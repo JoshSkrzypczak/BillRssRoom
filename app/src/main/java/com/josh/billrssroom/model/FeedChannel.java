@@ -1,16 +1,12 @@
 package com.josh.billrssroom.model;
 
-import android.arch.persistence.room.Embedded;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Relation;
-import android.arch.persistence.room.TypeConverters;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.util.List;
+
+import androidx.room.Ignore;
 
 @Root(name = "channel", strict = false)
 public class FeedChannel {

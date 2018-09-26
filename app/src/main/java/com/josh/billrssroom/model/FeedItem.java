@@ -1,12 +1,6 @@
 package com.josh.billrssroom.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.text.Html;
 
 import org.simpleframework.xml.Element;
@@ -18,8 +12,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 @Root(name = "item", strict = false)
-@Entity(tableName = "favorites")
+@Entity(tableName = "items")
 public class FeedItem {
 
     @PrimaryKey
@@ -95,6 +94,14 @@ public class FeedItem {
 
     public void setGuid(String guid) {
         this.guid = guid;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 
     public String getFormattedDate() {
