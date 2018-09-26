@@ -1,28 +1,26 @@
 package com.josh.billrssroom.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
+import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
 import com.josh.billrssroom.ui.feed.BillItemAnimator;
 import com.josh.billrssroom.ui.feed.BillItemClickListener;
 import com.josh.billrssroom.ui.feed.RssAdapter;
 import com.josh.billrssroom.ui.viewmodel.BillViewModel;
-import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
 
 import java.util.List;
 
@@ -51,14 +49,23 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     }
 
     private void subscribeUi(BillViewModel viewModel) {
-        viewModel.getAllBills().observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(@Nullable List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    adapter.setRssList(feedItems);
-                }
+
+        viewModel.getSecondAttemptObservableBills().observe(this, listResource -> {
+
+            if (listResource != null && listResource.data != null){
+                adapter.setRssList(listResource.data);
             }
+
         });
+
+//        viewModel.getAllBills().observe(this, new Observer<List<FeedItem>>() {
+//            @Override
+//            public void onChanged(@Nullable List<FeedItem> feedItems) {
+//                if (feedItems != null){
+//                    adapter.setRssList(feedItems);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -66,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         Toast.makeText(MainActivity.this, "Saved: " + item.getTitle(),
                 Toast.LENGTH_SHORT).show();
 
-        viewModel.insert(item);
+        viewModel.insertItemToFavorites(item);
 
         adapter.notifyItemChanged(position, ACTION_SAVE_BTN_CLICKED);
     }
@@ -90,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.favorites:
+            case R.id.favorite:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;
         }
