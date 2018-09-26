@@ -1,13 +1,11 @@
 package com.josh.billrssroom.ui.feed
 
-import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.josh.billrssroom.R
 import com.josh.billrssroom.model.FeedItem
-import com.josh.billrssroom.model.RssResult
 import kotlinx.android.synthetic.main.item_row_rss.view.*
 import java.util.*
 
@@ -28,12 +26,12 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: RssViewHolder, position: Int) {
-        val item = items.get(position)
+        val item = items[position]
 
         holder.bindTo(item)
     }
 
-    fun setRssList(items: List<FeedItem>){
+    fun setRssList(items: List<FeedItem>) {
         this.items = items
         notifyDataSetChanged();
     }

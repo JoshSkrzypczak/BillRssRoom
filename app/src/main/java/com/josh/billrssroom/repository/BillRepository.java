@@ -76,23 +76,4 @@ public class BillRepository {
         }
         return INSTANCE;
     }
-
-    //    public LiveData<List<FeedItem>> getFeedItems() {
-//        final MutableLiveData<List<FeedItem>> data = new MutableLiveData<>();
-//        apiService.getRssFeed().enqueue(new Callback<RssResult>() {
-//            @Override
-//            public void onResponse(@NonNull Call<RssResult> call, @NonNull Response<RssResult> response) {
-//                if (response.isSuccessful()) {
-//                    data.setValue(response.body().getChannel().getItems());
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<RssResult> call, @NonNull Throwable t) {
-//                t.printStackTrace();
-//                Log.e("Error:: ", t.getMessage());
-//            }
-//        });
-//        return data;
-//    }
 }
