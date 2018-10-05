@@ -1,5 +1,6 @@
 package com.josh.billrssroom.db.dao;
 
+import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.model.FeedItem;
 
 import java.util.List;
@@ -15,8 +16,9 @@ import androidx.room.Update;
 @Dao
 public interface FeedDao {
 
-    @Query("SELECT * FROM items")
-    LiveData<List<FeedItem>> getAllFavorites();
+
+    @Query("SELECT * FROM items WHERE isFav = 1")
+    LiveData<List<FeedItem>> getFavorites();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAsFavorite(FeedItem feedItem);
@@ -34,15 +36,23 @@ public interface FeedDao {
     String getItemId(String billTitle);
 
 
+    @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
+    boolean getItemBoolean(String billTitle);
+
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertData(List<FeedItem> item);
 
     @Query("SELECT * FROM items")
     LiveData<List<FeedItem>> loadItems();
 
-    @Query("SELECT * FROM items WHERE isFav = 1 ORDER BY pubDate")
-    LiveData<List<FeedItem>> getFavorites();
 
+    @Query("UPDATE items SET isFav = 1 WHERE title = :billTitle")
+    void updateAndSetItemToTrue(String billTitle);
+
+    @Query("UPDATE items SET isFav = 0 WHERE title = :billTitle")
+    void updateAndSetItemToFalse(String billTitle);
 
 
 }

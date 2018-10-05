@@ -1,14 +1,19 @@
-package com.josh.billrssroom.ui.viewmodel;
+package com.josh.billrssroom.viewmodel;
 
 import android.app.Application;
+import android.widget.ImageButton;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 
 import com.josh.billrssroom.BasicApp;
+import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.db.BillDatabase;
+import com.josh.billrssroom.db.FavoritesDatabase;
 import com.josh.billrssroom.db.dao.FeedDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.repository.BillRepository;
@@ -22,36 +27,35 @@ import java.util.List;
  */
 public class BillViewModel extends AndroidViewModel {
 
-    // MediatorLiveData can observe other LiveData objects and react on their emissions.
-//    private final MediatorLiveData<List<FeedItem>> observableBills;
-
-    private final MediatorLiveData<Resource<List<FeedItem>>> secondAttemptObservableBills;
+    private final MediatorLiveData<Resource<List<FeedItem>>> observableFeedItems;
 
     private FeedDao feedDao;
     private BillRepository billRepository;
     private FavoriteRepository favoriteRepository;
 
-//    private final LiveData<Resource<List<FeedItem>>> items;
 
     public BillViewModel(@NonNull Application application) {
         super(application);
 
-//        favoriteRepository = new FavoriteRepository(application);
-
-        favoriteRepository = ((BasicApp)application).getFavoriteRepository();
-
         feedDao = BillDatabase.getFeedDatabase(application).billDao();
 
+        favoriteRepository = ((BasicApp) application).getFavoriteRepository();
+
+        billRepository = ((BasicApp) application).getRepository();
+
+
+        /* Feed Items */
         LiveData<Resource<List<FeedItem>>> feedItems = ((BasicApp) application).getRepository().loadBillItems();
-        secondAttemptObservableBills = new MediatorLiveData<>();
-        secondAttemptObservableBills.addSource(feedItems, secondAttemptObservableBills::setValue);
+        observableFeedItems = new MediatorLiveData<>();
+        observableFeedItems.addSource(feedItems, observableFeedItems::setValue);
+
     }
 
-    public MediatorLiveData<Resource<List<FeedItem>>> getSecondAttemptObservableBills() {
-        return secondAttemptObservableBills;
+    public MediatorLiveData<Resource<List<FeedItem>>> getObservableFeedItems() {
+        return observableFeedItems;
     }
 
-    public void insertItemToFavorites(FeedItem feedItem){
+    public void insertItemToFavorites(FeedItem feedItem) {
         favoriteRepository.insert(feedItem);
     }
 }

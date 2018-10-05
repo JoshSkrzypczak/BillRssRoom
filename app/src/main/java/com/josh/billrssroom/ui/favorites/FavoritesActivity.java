@@ -1,24 +1,30 @@
 package com.josh.billrssroom.ui.favorites;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.ui.viewmodel.FavoritesViewModel;
+import com.josh.billrssroom.singlesourceattempt.FeedViewModel;
+
+import java.util.List;
 
 public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
 
     private static final String TAG = FavoritesActivity.class.getSimpleName();
 
-    private FavoritesViewModel favoritesViewModel;
+    private FeedViewModel feedViewModel;
     private RecyclerView recyclerView;
     private FavoritesAdapter adapter;
 
@@ -40,10 +46,19 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-        favoritesViewModel.getAllFavorites().observe(this, feedItems -> {
-            if (feedItems != null){
-                adapter.setBillItemList(feedItems);
+        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+
+        subscribeFavUi(feedViewModel);
+
+    }
+
+    private void subscribeFavUi(FeedViewModel feedViewModel) {
+        feedViewModel.getObservableFavorites().observe(this, new Observer<List<FeedItem>>() {
+            @Override
+            public void onChanged(List<FeedItem> feedItems) {
+                if (feedItems != null){
+                    adapter.setBillItemList(feedItems);
+                }
             }
         });
     }
@@ -60,11 +75,10 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
 
     @Override
     public void onTrashClick(FeedItem item, int position) {
-        Toast.makeText(this, "TODO! Delete: " + item.getTitle(), Toast.LENGTH_SHORT).show();
 
-        favoritesViewModel.delete(item);
-        adapter.notifyDataSetChanged();
+        feedViewModel.removeItemFromFavorites(item);
 
+        adapter.notifyItemChanged(position);
     }
 
     @Override

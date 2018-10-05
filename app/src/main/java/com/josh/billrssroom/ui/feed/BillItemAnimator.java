@@ -7,14 +7,20 @@ import android.animation.ObjectAnimator;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
+
+import com.josh.billrssroom.R;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BillItemAnimator extends DefaultItemAnimator {
+
+    public static final String TAG = BillItemAnimator.class.getSimpleName();
 
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
     private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(4);
@@ -31,6 +37,7 @@ public class BillItemAnimator extends DefaultItemAnimator {
     public ItemHolderInfo recordPreLayoutInformation(@NonNull RecyclerView.State state,
                                                      @NonNull RecyclerView.ViewHolder viewHolder,
                                                      int changeFlags, @NonNull List<Object> payloads) {
+
         if (changeFlags == FLAG_CHANGED) {
             for (Object payload : payloads) {
                 if (payload instanceof String) {
@@ -38,7 +45,7 @@ public class BillItemAnimator extends DefaultItemAnimator {
                 }
             }
         }
-
+        Log.d(TAG, "recordPreLayoutInformation: " + state + " " + viewHolder + " " + payloads);
         return super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads);
     }
 
@@ -47,11 +54,13 @@ public class BillItemAnimator extends DefaultItemAnimator {
                                  @NonNull RecyclerView.ViewHolder newHolder,
                                  @NonNull ItemHolderInfo preInfo,
                                  @NonNull ItemHolderInfo postInfo) {
+        Log.d(TAG, "animateChange: " + preInfo + " " + postInfo);
         cancelCurrentAnimationIfExists(newHolder);
 
         if (preInfo instanceof FeedItemHolderInfo) {
+            Log.d(TAG, "animateChange: preInfo instanceof FeedItemHolder");
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
-            RssAdapter.RssViewHolder holder = (RssAdapter.RssViewHolder) newHolder;
+            OtherRssAdapter.OtherRssViewHolder holder = (OtherRssAdapter.OtherRssViewHolder) newHolder;
 
             animateHeartButton(holder);
         }
@@ -60,32 +69,36 @@ public class BillItemAnimator extends DefaultItemAnimator {
 
     private void cancelCurrentAnimationIfExists(RecyclerView.ViewHolder item) {
         if (heartAnimationsMap.containsKey(item)) {
+            Log.d(TAG, "cancelCurrentAnimationIfExists: " + item);
             heartAnimationsMap.get(item).cancel();
         }
     }
 
-    private void animateHeartButton(final RssAdapter.RssViewHolder holder) {
+    private void animateHeartButton(final OtherRssAdapter.OtherRssViewHolder holder) {
+        Log.d(TAG, "animateHeartButton: " + holder.titleView);
         AnimatorSet animatorSet = new AnimatorSet();
 
-        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.getBtnSave(), "rotation", 0f, 360f);
+        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
         rotationAnim.setDuration(300);
         rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
 
-        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.getBtnSave(), "scaleX", 0.2f, 1f);
+        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
         bounceAnimX.setDuration(300);
         bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
 
-        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.getBtnSave(), "scaleY", 0.2f, 1f);
+        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
         bounceAnimY.setDuration(300);
         bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-//                holder.binding.btnSave.setImageResource(R.drawable.ic_favorite_full);
+                Log.d(TAG, "onAnimationStart: ");
+//                holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                Log.d(TAG, "onAnimationEnd: ");
 //                heartAnimationsMap.remove(holder);
                 dispatchChangeFinishedIfAllAnimationsEnded(holder);
             }
@@ -95,9 +108,11 @@ public class BillItemAnimator extends DefaultItemAnimator {
         animatorSet.start();
 
         heartAnimationsMap.put(holder, animatorSet);
+        Log.d(TAG, "animatorSet: " + animatorSet);
     }
 
-    private void dispatchChangeFinishedIfAllAnimationsEnded(RssAdapter.RssViewHolder holder) {
+    private void dispatchChangeFinishedIfAllAnimationsEnded(OtherRssAdapter.OtherRssViewHolder holder) {
+        Log.d(TAG, "dispatchChangeFinishedIfAllAnimationsEnded: ");
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }
@@ -108,6 +123,7 @@ public class BillItemAnimator extends DefaultItemAnimator {
     @Override
     public void endAnimation(RecyclerView.ViewHolder item) {
         super.endAnimation(item);
+        Log.d(TAG, "endAnimation: " + item);
         cancelCurrentAnimationIfExists(item);
     }
 

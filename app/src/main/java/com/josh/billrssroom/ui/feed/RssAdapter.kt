@@ -1,5 +1,6 @@
 package com.josh.billrssroom.ui.feed
 
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,9 @@ import com.josh.billrssroom.model.FeedItem
 import kotlinx.android.synthetic.main.item_row_rss.view.*
 import java.util.*
 
-class RssAdapter(val rowClickCallback: BillItemClickListener) :
+class RssAdapter(private val activity: Activity, val rowClickCallback: BillItemClickListener) :
     RecyclerView.Adapter<RssAdapter.RssViewHolder>() {
 
-    private val TAG = RssAdapter::class.java.simpleName
 
     private var items: List<FeedItem> = Collections.emptyList()
 
@@ -38,13 +38,14 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
 
     inner class RssViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val titleView = itemView.bill_title
-        val dateView = itemView.bill_pub_date
-        val descriptionView = itemView.bill_description
+        val titleView = itemView.text_title
+        val dateView = itemView.text_date
+        val descriptionView = itemView.text_description
         val btnShare = itemView.btn_share
         val btnBrowser = itemView.btn_browser
         val btnSave = itemView.btn_save
         var model: FeedItem? = null
+
 
         fun bindTo(model: FeedItem) {
             this.model = model
@@ -53,7 +54,8 @@ class RssAdapter(val rowClickCallback: BillItemClickListener) :
             descriptionView.text = model.formattedDescription
 
             btnBrowser.setOnClickListener { rowClickCallback.onBrowserClicked(model) }
-            btnShare.setOnClickListener { rowClickCallback.onShareClicked(model) }
+            btnShare.setOnClickListener { rowClickCallback.onShareClicked(model, adapterPosition) }
+
             btnSave.setOnClickListener { rowClickCallback.onSaveClicked(model, adapterPosition) }
         }
     }

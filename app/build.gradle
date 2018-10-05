@@ -46,6 +46,8 @@ dependencies {
     implementation "androidx.browser:browser:$rootProject.supportLibraryVersion"
     implementation "androidx.cardview:cardview:$rootProject.supportLibraryVersion"
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
 
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
     implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
@@ -55,9 +57,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
     implementation "androidx.paging:paging-runtime:$rootProject.pagingVersion"
-    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttpLoggingInterceptorVersion"

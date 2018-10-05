@@ -38,11 +38,12 @@ public class FeedItem {
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
     public String guid;
+
     @ColumnInfo(name = "isFav")
-    @Element(required = false)
     public boolean isFavorite;
 
-        public FeedItem(
+
+    public FeedItem(
                 @NonNull @Element(name = "title") String title,
                 @Element(name = "link") String link,
                 @Element(name = "description") String description,
@@ -53,6 +54,7 @@ public class FeedItem {
         this.description = description;
         this.pubDate = pubDate;
         this.guid = guid;
+
 }
 
     @NonNull
