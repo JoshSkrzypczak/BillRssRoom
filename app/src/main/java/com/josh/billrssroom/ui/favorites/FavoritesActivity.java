@@ -53,14 +53,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     }
 
     private void subscribeFavUi(FeedViewModel feedViewModel) {
-        feedViewModel.getObservableFavorites().observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    adapter.setBillItemList(feedItems);
-                }
-            }
-        });
+
     }
 
     @Override
@@ -76,9 +69,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     @Override
     public void onTrashClick(FeedItem item, int position) {
 
-        feedViewModel.removeItemFromFavorites(item);
 
-        adapter.notifyItemChanged(position);
     }
 
     @Override

@@ -1,13 +1,9 @@
 package com.josh.billrssroom.repository;
 
-import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 
 import android.os.AsyncTask;
 
-import com.josh.billrssroom.AppExecutors;
-import com.josh.billrssroom.db.BillDatabase;
 import com.josh.billrssroom.db.FavoritesDatabase;
 import com.josh.billrssroom.db.dao.FeedDao;
 import com.josh.billrssroom.model.FeedItem;
@@ -28,9 +24,9 @@ public class FavoriteRepository {
     public FavoriteRepository(final FavoritesDatabase favoritesDatabase) {
         this.favoritesDatabase = favoritesDatabase;
         feedDao = favoritesDatabase.favoriteDao();
-        allFavorites = feedDao.getAllFavorites();
+        allFavorites = feedDao.getFavorites();
+        System.out.println("allFavorites: " + allFavorites);
     }
-
 
 
     public LiveData<List<FeedItem>> getAllFavorites() {
@@ -60,9 +56,11 @@ public class FavoriteRepository {
 
             if (apiBillTitle == null) {
                 feedItems[0].setFavorite(true);
+                asyncFavDao.updateAndSetItemToTrue(apiBillTitle);
                 asyncFavDao.insertAsFavorite(feedItems[0]);
             } else {
                 feedItems[0].setFavorite(false);
+                asyncFavDao.updateAndSetItemToFalse(apiBillTitle);
                 asyncFavDao.deleteFavorite(feedItems[0]);
             }
             return null;

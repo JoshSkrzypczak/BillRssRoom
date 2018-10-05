@@ -29,7 +29,7 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
     int position;
 
     public MyAsyncTask(Activity activity, int position, AsyncResponse asyncResponse) {
-        asyncDao = ((BasicApp) activity.getApplication()).getOtherFeedDatabase().feedDao();
+        asyncDao = ((BasicApp) activity.getApplication()).getFeedDatabase().feedDao();
         this.position = position;
         delegate = asyncResponse;
     }

@@ -2,17 +2,22 @@ package com.josh.billrssroom.ui.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.josh.billrssroom.R;
+import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.singlesourceattempt.FeedViewModel;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
 
+import java.util.List;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,11 +40,6 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        recyclerView = findViewById(R.id.recyclerview);
-//        adapter = new RssAdapter(this, this);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setItemAnimator(new BillItemAnimator());
-
 
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this);
@@ -55,10 +55,14 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
     }
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
-        feedViewModel.getObservableFeedItems().observe(this, listResource -> {
+        // TODO: 10/4/2018 something not working properly here
+        /**
+         * Items don't always load upon launching app?
+         */
+        feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
             if (listResource != null && listResource.data != null) {
+                Log.d(TAG, "subscribeFeedUi: message: " + listResource.message + " status:"  + listResource.status);
                 otherRssAdapter.setRssList(listResource.data);
-                recyclerView.invalidate();
             }
         });
     }
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
     @Override
     public void onSaveClick(View v, int position, FeedItem item) {
 
-        feedViewModel.updateFeedItemAsFavorite(item);
 
     }
 }

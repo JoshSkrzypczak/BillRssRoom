@@ -57,7 +57,7 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
 
     public void setRssList(List<FeedItem> feedItems) {
         this.feedItems = feedItems;
-//        notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     @Override

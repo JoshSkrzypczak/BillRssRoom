@@ -29,7 +29,7 @@ class FavoritesAdapter(private val activity: Activity,
 
     fun setBillItemList(billFeedItemList: List<FeedItem>) {
         favoritesList = billFeedItemList
-        notifyDataSetChanged()
+//        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {

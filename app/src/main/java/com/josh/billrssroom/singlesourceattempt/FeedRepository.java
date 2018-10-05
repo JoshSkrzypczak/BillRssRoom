@@ -25,14 +25,11 @@ public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
 
     private static FeedRepository INSTANCE;
-    private final DataService apiService;
-    private final FeedDatabase feedDatabase;
-
-    private LiveData<List<FeedItem>> allFavoriteItems;
-
-
-    private final AppExecutors appExecutors;
     private FeedDao feedDao;
+    private final AppExecutors appExecutors;
+    private final FeedDatabase feedDatabase;
+    private final DataService apiService;
+
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
 
@@ -40,9 +37,6 @@ public class FeedRepository {
         this.feedDatabase = feedDatabase;
         this.appExecutors = appExecutors;
 
-        feedDao = feedDatabase.feedDao();
-
-        allFavoriteItems = feedDao.getFavorites();
 
         apiService = RetrofitClient.getInstance().getRestApi();
     }
@@ -75,7 +69,7 @@ public class FeedRepository {
 
 
     public LiveData<List<FeedItem>> loadAllFavoriteItems(){
-        return allFavoriteItems;
+        return feedDatabase.feedDao().getFavorites();
     }
 
     public void removeItemFromFavorites(FeedItem feedItem){
@@ -100,9 +94,17 @@ public class FeedRepository {
 
             boolean favoriteValue = asyncDao.getItemBoolean(items[0].getTitle());
 
-            if (favoriteValue == true){
+            if (favoriteValue){
+                Log.d(TAG, "doInBackground: favoriteValue " + favoriteValue);
+                // Set isFavorite to false
+                // Item previously favorite; onClick sets favorite to false
+                // Show empty image drawable
                 asyncDao.updateAndSetItemToFalse(items[0].getTitle());
             } else {
+                Log.d(TAG, "doInBackground: else favoriteValue" + favoriteValue);
+                // Set isFavorite to true
+                // Item is not favorite; onClick sets favorite to true
+                // Show full image drawable
                 asyncDao.updateAndSetItemToTrue(items[0].getTitle());
             }
 

@@ -29,16 +29,11 @@ public interface FeedDao {
     @Delete
     void deleteFavorite(FeedItem feedItem);
 
-    @Query("SELECT * FROM items WHERE title = :billTitle LIMIT 1")
-    FeedItem checkIfFavoriteExistsByTitle(String billTitle);
-
     @Query("SELECT title FROM items WHERE title = :billTitle LIMIT 1")
     String getItemId(String billTitle);
 
-
     @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
     boolean getItemBoolean(String billTitle);
-
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
