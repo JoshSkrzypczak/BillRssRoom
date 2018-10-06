@@ -1,4 +1,4 @@
-package com.josh.billrssroom.singlesourceattempt;
+package com.josh.billrssroom.repository;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -9,6 +9,7 @@ import com.josh.billrssroom.api.DataService;
 import com.josh.billrssroom.api.NetworkBoundResource;
 import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.api.RetrofitClient;
+import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.db.dao.FeedDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.model.RssResult;
@@ -18,8 +19,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 
 public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
@@ -49,14 +50,14 @@ public class FeedRepository {
             }
 
             @Override
-            protected boolean shouldFetch(@androidx.annotation.Nullable List<FeedItem> data) {
+            protected boolean shouldFetch(@Nullable List<FeedItem> data) {
                 return data == null || data.isEmpty() || billFeedRateLimit.shouldFetch(data.toString());
             }
 
             @NonNull
             @Override
             protected LiveData<List<FeedItem>> loadFromDb() {
-                return feedDatabase.feedDao().loadItems();
+                return feedDatabase.feedDao().loadFeedDbItems();
             }
 
             @NonNull

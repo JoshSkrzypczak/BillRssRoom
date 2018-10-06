@@ -3,6 +3,8 @@ package com.josh.billrssroom.model;
 import android.os.Build;
 import android.text.Html;
 
+import com.josh.billrssroom.utilities.DateTypeConverter;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Root(name = "item", strict = false)
 @Entity(tableName = "items")
@@ -34,6 +37,7 @@ public class FeedItem {
     public String description;
     @ColumnInfo(name = "pubDate")
     @Element(name = "pubDate")
+    @TypeConverters({DateTypeConverter.class})
     public String pubDate;
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
@@ -123,6 +127,17 @@ public class FeedItem {
         destinationFormat.setTimeZone(tz);
 
         return destinationFormat.format(parsedDated);
+    }
+
+    public Date getDateObject(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.getDefault());
+        Date convertedDate = new Date();
+        try {
+            convertedDate = dateFormat.parse(pubDate);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+        return convertedDate;
     }
 
     public String getFormattedDescription() {

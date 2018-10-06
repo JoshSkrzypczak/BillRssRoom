@@ -1,8 +1,7 @@
-package com.josh.billrssroom.singlesourceattempt;
+package com.josh.billrssroom.db;
 
 import android.content.Context;
 
-import com.josh.billrssroom.db.BillDatabase;
 import com.josh.billrssroom.db.dao.FeedDao;
 import com.josh.billrssroom.model.FeedItem;
 

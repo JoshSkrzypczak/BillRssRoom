@@ -2,12 +2,8 @@ package com.josh.billrssroom;
 
 import android.app.Application;
 
-import com.josh.billrssroom.db.BillDatabase;
-import com.josh.billrssroom.db.FavoritesDatabase;
-import com.josh.billrssroom.repository.BillRepository;
-import com.josh.billrssroom.repository.FavoriteRepository;
-import com.josh.billrssroom.singlesourceattempt.FeedDatabase;
-import com.josh.billrssroom.singlesourceattempt.FeedRepository;
+import com.josh.billrssroom.db.FeedDatabase;
+import com.josh.billrssroom.repository.FeedRepository;
 
 /**
  * Android Application class. Used for accessing singletons.

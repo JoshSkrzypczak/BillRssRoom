@@ -22,15 +22,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity implements OtherRssAdapter.OnFeedItemClickListener {
+
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
 
     private FeedViewModel feedViewModel;
-    private RssAdapter adapter;
     private RecyclerView recyclerView;
     private OtherRssAdapter otherRssAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,25 +37,18 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this);
         otherRssAdapter.setOnFeedItemClickListener(this);
         recyclerView.setAdapter(otherRssAdapter);
         recyclerView.setItemAnimator(new BillItemAnimator());
 
-
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-
 
         subscribeFeedUi(feedViewModel);
     }
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
-        // TODO: 10/4/2018 something not working properly here
-        /**
-         * Items don't always load upon launching app?
-         */
         feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
             if (listResource != null && listResource.data != null) {
                 Log.d(TAG, "subscribeFeedUi: message: " + listResource.message + " status:"  + listResource.status);
@@ -85,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
 
     @Override
     public void onSaveClick(View v, int position, FeedItem item) {
-
-
+        // TODO: 10/5/2018 Save item to favorites
     }
 }

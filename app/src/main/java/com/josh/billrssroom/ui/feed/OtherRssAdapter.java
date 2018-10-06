@@ -1,6 +1,7 @@
 package com.josh.billrssroom.ui.feed;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherRssViewHolder> {
     public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
-
+    public static final String TAG = OtherRssAdapter.class.getSimpleName();
     private final LayoutInflater inflater;
     private List<FeedItem> feedItems;
     private Context context;
@@ -91,6 +92,8 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
             titleView.setText(feedItem.getTitle());
             descriptionView.setText(feedItem.getFormattedDescription());
             dateView.setText(feedItem.getFormattedDate());
+            Log.d(TAG, "formattedDateString" + feedItem.getFormattedDate());
+            Log.d(TAG, "dateObject: " + feedItem.getDateObject());
         }
     }
 
