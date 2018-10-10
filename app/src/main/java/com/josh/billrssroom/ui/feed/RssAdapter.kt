@@ -13,7 +13,6 @@ import java.util.*
 class RssAdapter(private val activity: Activity, val rowClickCallback: BillItemClickListener) :
     RecyclerView.Adapter<RssAdapter.RssViewHolder>() {
 
-
     private var items: List<FeedItem> = Collections.emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RssViewHolder {
@@ -53,10 +52,9 @@ class RssAdapter(private val activity: Activity, val rowClickCallback: BillItemC
             dateView.text = model.formattedDate
             descriptionView.text = model.formattedDescription
 
-            btnBrowser.setOnClickListener { rowClickCallback.onBrowserClicked(model) }
-            btnShare.setOnClickListener { rowClickCallback.onShareClicked(model, adapterPosition) }
-
-            btnSave.setOnClickListener { rowClickCallback.onSaveClicked(model, adapterPosition) }
+            btnBrowser.setOnClickListener { rowClickCallback.onBrowserBtnClick(model) }
+            btnShare.setOnClickListener { rowClickCallback.onShareBtnClick(model, adapterPosition) }
+            btnSave.setOnClickListener { v -> rowClickCallback.onSaveBtnClick(v, model, adapterPosition) }
         }
     }
 }

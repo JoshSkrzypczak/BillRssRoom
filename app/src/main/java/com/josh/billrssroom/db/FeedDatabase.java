@@ -2,7 +2,7 @@ package com.josh.billrssroom.db;
 
 import android.content.Context;
 
-import com.josh.billrssroom.db.dao.FeedDao;
+import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 
 import androidx.room.Database;
@@ -14,7 +14,7 @@ public abstract class FeedDatabase extends RoomDatabase {
 
     private static volatile FeedDatabase INSTANCE = null;
     private static final String DB_NAME = "dummy.db";
-    public abstract FeedDao feedDao();
+    public abstract ItemDao feedDao();
 
     public synchronized static FeedDatabase getFeedDatabase(Context context){
         if (INSTANCE == null){

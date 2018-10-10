@@ -3,12 +3,10 @@ package com.josh.billrssroom.utilities;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.josh.billrssroom.BasicApp;
-import com.josh.billrssroom.db.dao.FeedDao;
+import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.ui.feed.MainActivity;
 
 public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, Integer> {
 
@@ -25,7 +23,7 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
     public static final String TAG = MyAsyncTask.class.getSimpleName();
 
     public AsyncResponse delegate;
-    public FeedDao asyncDao;
+    public ItemDao asyncDao;
     int position;
 
     public MyAsyncTask(Activity activity, int position, AsyncResponse asyncResponse) {
@@ -45,9 +43,13 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
         int myIntParam = myTaskParams[0].intParam;
         FeedItem feedItem = myTaskParams[0].feedItem;
 
-        boolean favoriteValue = asyncDao.getItemBoolean(feedItem.getTitle());
+//        boolean favoriteValue = asyncDao.getItemBoolean(feedItem.getTitle());
 
-        if (favoriteValue) {
+        int favoriteValueInt = asyncDao.getIntBoolean(feedItem.getTitle());
+
+        Log.i(TAG, "::int value:: " + String.valueOf(favoriteValueInt));
+
+        if (favoriteValueInt == 1) {
             asyncDao.updateAndSetItemToFalse(feedItem.getTitle());
         } else {
             asyncDao.updateAndSetItemToTrue(feedItem.getTitle());

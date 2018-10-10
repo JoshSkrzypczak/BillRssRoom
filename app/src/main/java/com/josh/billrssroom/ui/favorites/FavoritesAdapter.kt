@@ -27,9 +27,9 @@ class FavoritesAdapter(private val activity: Activity,
         holder.bindTo(items)
     }
 
-    fun setBillItemList(billFeedItemList: List<FeedItem>) {
-        favoritesList = billFeedItemList
-//        notifyDataSetChanged()
+    fun setFavoritesList(favoriteItemsList: List<FeedItem>) {
+        favoritesList = favoriteItemsList
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -39,7 +39,7 @@ class FavoritesAdapter(private val activity: Activity,
     inner class FavoritesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         val titleView = itemView.text_title
-        val dateView = itemView.text_pubdate
+        val dateView = itemView.text_date
         val descriptionView = itemView.text_description
         val btnShare = itemView.btn_share
         val btnBrowser = itemView.btn_browser
@@ -52,9 +52,9 @@ class FavoritesAdapter(private val activity: Activity,
             dateView.text = favorite.formattedDate
             descriptionView.text = favorite.formattedDescription
 
-            btnTrash.setOnClickListener { favoriteClickCallback.onTrashClick(favorite, adapterPosition) }
-            btnBrowser.setOnClickListener { favoriteClickCallback.onBrowserClick(favorite, adapterPosition) }
-            btnShare.setOnClickListener { favoriteClickCallback.onShareClick(favorite, adapterPosition) }
+            btnTrash.setOnClickListener { favoriteClickCallback.onTrashBtnClick(favorite, adapterPosition) }
+            btnBrowser.setOnClickListener { favoriteClickCallback.onBrowserBtnClick(favorite, adapterPosition) }
+            btnShare.setOnClickListener { favoriteClickCallback.onShareBtnClick(favorite, adapterPosition) }
         }
     }
 }

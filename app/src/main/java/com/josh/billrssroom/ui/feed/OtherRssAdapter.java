@@ -1,18 +1,15 @@
 package com.josh.billrssroom.ui.feed;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -77,9 +74,9 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
             btnShare = itemView.findViewById(R.id.btn_share);
             btnBrowser = itemView.findViewById(R.id.btn_browser);
 
-            btnSave.setOnClickListener(v -> listener.onSaveClicked(v, feedItem, getAdapterPosition()));
-            btnBrowser.setOnClickListener(v -> listener.onBrowserClicked(feedItem));
-            btnShare.setOnClickListener(v -> listener.onShareClicked(feedItem, getAdapterPosition()));
+            btnSave.setOnClickListener(v -> listener.onSaveBtnClick(v, feedItem, getAdapterPosition()));
+            btnBrowser.setOnClickListener(v -> listener.onBrowserBtnClick(feedItem));
+            btnShare.setOnClickListener(v -> listener.onShareBtnClick(feedItem, getAdapterPosition()));
         }
 
         public void bindView(FeedItem feedItem) {

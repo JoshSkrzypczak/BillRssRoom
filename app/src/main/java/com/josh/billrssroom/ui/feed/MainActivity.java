@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
 
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this, this);
-
         recyclerView.setAdapter(otherRssAdapter);
         recyclerView.setItemAnimator(new BillItemAnimator());
 
@@ -64,41 +64,34 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     }
 
     @Override
-    public void onSaveClicked(View view, FeedItem model, int position) {
-        Log.d(TAG, "onSaveClick: Favorite button pressed.");
+    public void onSaveBtnClick(View view, FeedItem model, int position) {
+        Toast.makeText(this, "onSaveClick: " + model.getTitle(), Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onSaveClick: Favorite button pressed " + model.getTitle());
 
+        MyAsyncTask.MyTaskParams params = new MyAsyncTask.MyTaskParams(position, model);
 
+        MyAsyncTask myAsyncTask = new MyAsyncTask(this, position, new AsyncResponse() {
+            @Override
+            public void processTaskSetup(int position) {
+                otherRssAdapter.notifyItemChanged(position, PAYLOAD_SAVE_BTN_CLICKED);
+            }
 
-        feedViewModel.inDatabase(model.getTitle()).getValue();
+            @Override
+            public void processFinish(int position) {
 
-
-
-
-
-//        MyAsyncTask.MyTaskParams params = new MyAsyncTask.MyTaskParams(position, item);
-//
-//        MyAsyncTask myAsyncTask = new MyAsyncTask(this, position, new AsyncResponse() {
-//            @Override
-//            public void processTaskSetup(int position) {
-//                otherRssAdapter.notifyItemChanged(position, PAYLOAD_SAVE_BTN_CLICKED);
-//            }
-//
-//            @Override
-//            public void processFinish(int position) {
-//
-//            }
-//        });
-//        myAsyncTask.execute(params);
+            }
+        });
+        myAsyncTask.execute(params);
     }
 
     @Override
-    public void onShareClicked(FeedItem model, int position) {
-
+    public void onShareBtnClick(FeedItem model, int position) {
+        Log.d(TAG, "onShareBtnClick: " + model.getTitle());
     }
 
     @Override
-    public void onBrowserClicked(FeedItem model) {
-
+    public void onBrowserBtnClick(FeedItem model) {
+        Log.d(TAG, "onBrowserBtnClick: " + model.getTitle());
     }
 
     @Override

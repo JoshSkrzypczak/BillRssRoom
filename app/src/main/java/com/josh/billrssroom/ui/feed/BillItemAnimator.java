@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Adapted from: https://github.com/frogermcs/InstaMaterial
+ */
 public class BillItemAnimator extends DefaultItemAnimator {
 
     public static final String TAG = BillItemAnimator.class.getSimpleName();
@@ -45,7 +48,6 @@ public class BillItemAnimator extends DefaultItemAnimator {
                 }
             }
         }
-        Log.d(TAG, "recordPreLayoutInformation: " + state + " " + viewHolder + " " + payloads);
         return super.recordPreLayoutInformation(state, viewHolder, changeFlags, payloads);
     }
 
@@ -54,11 +56,9 @@ public class BillItemAnimator extends DefaultItemAnimator {
                                  @NonNull RecyclerView.ViewHolder newHolder,
                                  @NonNull ItemHolderInfo preInfo,
                                  @NonNull ItemHolderInfo postInfo) {
-        Log.d(TAG, "animateChange: " + preInfo + " " + postInfo);
         cancelCurrentAnimationIfExists(newHolder);
 
         if (preInfo instanceof FeedItemHolderInfo) {
-            Log.d(TAG, "animateChange: preInfo instanceof FeedItemHolder");
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
             OtherRssAdapter.OtherRssViewHolder holder = (OtherRssAdapter.OtherRssViewHolder) newHolder;
 
@@ -69,13 +69,11 @@ public class BillItemAnimator extends DefaultItemAnimator {
 
     private void cancelCurrentAnimationIfExists(RecyclerView.ViewHolder item) {
         if (heartAnimationsMap.containsKey(item)) {
-            Log.d(TAG, "cancelCurrentAnimationIfExists: " + item);
             heartAnimationsMap.get(item).cancel();
         }
     }
 
     private void animateHeartButton(final OtherRssAdapter.OtherRssViewHolder holder) {
-        Log.d(TAG, "animateHeartButton: " + holder.titleView);
         AnimatorSet animatorSet = new AnimatorSet();
 
         ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
@@ -92,13 +90,11 @@ public class BillItemAnimator extends DefaultItemAnimator {
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
-                Log.d(TAG, "onAnimationStart: ");
 //                holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                Log.d(TAG, "onAnimationEnd: ");
 //                heartAnimationsMap.remove(holder);
                 dispatchChangeFinishedIfAllAnimationsEnded(holder);
             }
@@ -108,11 +104,9 @@ public class BillItemAnimator extends DefaultItemAnimator {
         animatorSet.start();
 
         heartAnimationsMap.put(holder, animatorSet);
-        Log.d(TAG, "animatorSet: " + animatorSet);
     }
 
     private void dispatchChangeFinishedIfAllAnimationsEnded(OtherRssAdapter.OtherRssViewHolder holder) {
-        Log.d(TAG, "dispatchChangeFinishedIfAllAnimationsEnded: ");
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }
@@ -123,7 +117,6 @@ public class BillItemAnimator extends DefaultItemAnimator {
     @Override
     public void endAnimation(RecyclerView.ViewHolder item) {
         super.endAnimation(item);
-        Log.d(TAG, "endAnimation: " + item);
         cancelCurrentAnimationIfExists(item);
     }
 

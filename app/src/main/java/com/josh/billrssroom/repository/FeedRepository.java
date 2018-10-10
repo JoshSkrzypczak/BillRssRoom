@@ -10,7 +10,7 @@ import com.josh.billrssroom.api.NetworkBoundResource;
 import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.api.RetrofitClient;
 import com.josh.billrssroom.db.FeedDatabase;
-import com.josh.billrssroom.db.dao.FeedDao;
+import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.model.RssResult;
 import com.josh.billrssroom.utilities.RateLimiter;
@@ -26,20 +26,29 @@ public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
 
     private static FeedRepository INSTANCE;
-    private FeedDao feedDao;
+    private ItemDao itemDao;
     private final AppExecutors appExecutors;
     private final FeedDatabase feedDatabase;
     private final DataService apiService;
 
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
+    private final LiveData<List<FeedItem>> favorites;
+
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
         this.feedDatabase = feedDatabase;
         this.appExecutors = appExecutors;
 
+        itemDao = feedDatabase.feedDao();
 
         apiService = RetrofitClient.getInstance().getRestApi();
+
+        favorites = itemDao.getFavorites();
+    }
+
+    public LiveData<List<FeedItem>> getFavorites() {
+        return favorites;
     }
 
     public LiveData<Resource<List<FeedItem>>> loadBillItems() {
@@ -69,41 +78,39 @@ public class FeedRepository {
     }
 
 
-    public LiveData<List<FeedItem>> loadAllFavoriteItems(){
-        return feedDatabase.feedDao().getFavorites();
-    }
 
-    public void removeItemFromFavorites(FeedItem feedItem){
-        new removeItemFromFavoritesAsync(feedDao).execute(feedItem);
+
+    public void removeItemFromFavorites(FeedItem feedItem) {
+        new removeItemFromFavoritesAsync(itemDao).execute(feedItem);
     }
 
 
     public void updateFeedItemAsFavorite(FeedItem item) {
-        new updateFeedItemFavoriteAsync(feedDao).execute(item);
+        new updateFeedItemFavoriteAsync(itemDao).execute(item);
     }
 
-    private static class updateFeedItemFavoriteAsync extends AsyncTask<FeedItem, Void, Void>{
+    private static class updateFeedItemFavoriteAsync extends AsyncTask<FeedItem, Void, Void> {
 
-        private FeedDao asyncDao;
+        private ItemDao asyncDao;
 
-        updateFeedItemFavoriteAsync(FeedDao dao){
+        updateFeedItemFavoriteAsync(ItemDao dao) {
             asyncDao = dao;
         }
 
         @Override
         protected Void doInBackground(FeedItem... items) {
 
-            boolean favoriteValue = asyncDao.getItemBoolean(items[0].getTitle());
+            int favoriteValueInt = asyncDao.getIntBoolean(items[0].getTitle());
 
-            if (favoriteValue){
-                Log.d(TAG, "doInBackground: favoriteValue " + favoriteValue);
-                // Set isFavorite to false
+            Log.d(TAG, "doInBackground: favoriteIntValue: " + favoriteValueInt);
+
+            if (favoriteValueInt == 1) {
+                // Sets isFavorite to false
                 // Item previously favorite; onClick sets favorite to false
                 // Show empty image drawable
                 asyncDao.updateAndSetItemToFalse(items[0].getTitle());
             } else {
-                Log.d(TAG, "doInBackground: else favoriteValue" + favoriteValue);
-                // Set isFavorite to true
+                // Sets isFavorite to true
                 // Item is not favorite; onClick sets favorite to true
                 // Show full image drawable
                 asyncDao.updateAndSetItemToTrue(items[0].getTitle());
@@ -113,10 +120,10 @@ public class FeedRepository {
         }
     }
 
-    private static class removeItemFromFavoritesAsync extends AsyncTask<FeedItem, Void, Void>{
-        private FeedDao asyncRemoveDao;
+    private static class removeItemFromFavoritesAsync extends AsyncTask<FeedItem, Void, Void> {
+        private ItemDao asyncRemoveDao;
 
-        public removeItemFromFavoritesAsync(FeedDao asyncRemoveDao) {
+        public removeItemFromFavoritesAsync(ItemDao asyncRemoveDao) {
             this.asyncRemoveDao = asyncRemoveDao;
         }
 

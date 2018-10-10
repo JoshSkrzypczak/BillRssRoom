@@ -1,24 +1,21 @@
 package com.josh.billrssroom.ui.favorites;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.singlesourceattempt.FeedViewModel;
+import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
 
@@ -40,36 +37,39 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         }
 
         recyclerView = findViewById(R.id.favorites_list);
-
-        adapter = new FavoritesAdapter(this, this);
+        adapter = new FavoritesAdapter(this,this);
         recyclerView.setAdapter(adapter);
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        subscribeFavUi(feedViewModel);
+        subscribeUiFavorites(feedViewModel);
 
     }
 
-    private void subscribeFavUi(FeedViewModel feedViewModel) {
-
-    }
-
-    @Override
-    public void onBrowserClick(FeedItem item, int position) {
-        Toast.makeText(this, "TODO! Browser: " + item.getTitle(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onShareClick(FeedItem item, int position) {
-        Toast.makeText(this, "TODO! Share: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+    private void subscribeUiFavorites(FeedViewModel feedViewModel) {
+        feedViewModel.getFavoriteFeedItems().observe(this, new Observer<List<FeedItem>>() {
+            @Override
+            public void onChanged(List<FeedItem> feedItems) {
+                if (feedItems != null){
+                    adapter.setFavoritesList(feedItems);
+                }
+            }
+        });
     }
 
     @Override
-    public void onTrashClick(FeedItem item, int position) {
+    public void onBrowserBtnClick(FeedItem model, int position) {
+        Log.d(TAG, "onBrowserBtnClick: " + model.getTitle());
+    }
 
+    @Override
+    public void onShareBtnClick(FeedItem model, int position) {
+        Log.d(TAG, "onShareBtnClick: " + model.getTitle());
+    }
 
+    @Override
+    public void onTrashBtnClick(FeedItem model, int position) {
+        feedViewModel.removeItemFromFavorites(model);
     }
 
     @Override

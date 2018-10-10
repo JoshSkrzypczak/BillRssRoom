@@ -2,6 +2,7 @@ package com.josh.billrssroom;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
 import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.repository.FeedRepository;
 
@@ -17,22 +18,8 @@ public class BasicApp extends Application {
         super.onCreate();
 
         mAppExecutors = new AppExecutors();
-    }
 
-    public BillDatabase getDatabase() {
-        return BillDatabase.getFeedDatabase(this);
-    }
-
-    public BillRepository getRepository() {
-        return BillRepository.getInstance(getDatabase(), mAppExecutors);
-    }
-
-    public FavoritesDatabase getFavoriteDatabase(){
-        return FavoritesDatabase.getFavoriteDatabase(this);
-    }
-
-    public FavoriteRepository getFavoriteRepository(){
-        return FavoriteRepository.getInstance(getFavoriteDatabase());
+        Stetho.initializeWithDefaults(this);
     }
 
     public FeedDatabase getFeedDatabase(){

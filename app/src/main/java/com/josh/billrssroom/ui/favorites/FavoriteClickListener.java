@@ -4,9 +4,9 @@ import com.josh.billrssroom.model.FeedItem;
 
 public interface FavoriteClickListener {
 
-    void onBrowserClick(FeedItem model, int position);
+    void onBrowserBtnClick(FeedItem model, int position);
 
-    void onShareClick(FeedItem model, int position);
+    void onShareBtnClick(FeedItem model, int position);
 
-    void onTrashClick(FeedItem model, int position);
+    void onTrashBtnClick(FeedItem model, int position);
 }
