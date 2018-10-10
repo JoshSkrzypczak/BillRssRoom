@@ -2,6 +2,9 @@ package com.josh.billrssroom.ui.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,20 +13,23 @@ import android.view.View;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.singlesourceattempt.FeedViewModel;
+import com.josh.billrssroom.viewmodel.FeedViewModel;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
+import com.josh.billrssroom.utilities.AsyncResponse;
+import com.josh.billrssroom.utilities.MyAsyncTask;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements OtherRssAdapter.OnFeedItemClickListener {
+public class MainActivity extends AppCompatActivity implements BillItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
 
     private FeedViewModel feedViewModel;
     private RecyclerView recyclerView;
@@ -38,10 +44,11 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
         setSupportActionBar(toolbar);
 
         recyclerView = findViewById(R.id.recyclerview);
-        otherRssAdapter = new OtherRssAdapter(this);
-        otherRssAdapter.setOnFeedItemClickListener(this);
+        otherRssAdapter = new OtherRssAdapter(this, this);
+
         recyclerView.setAdapter(otherRssAdapter);
         recyclerView.setItemAnimator(new BillItemAnimator());
+
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
@@ -51,10 +58,47 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
         feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
             if (listResource != null && listResource.data != null) {
-                Log.d(TAG, "subscribeFeedUi: message: " + listResource.message + " status:"  + listResource.status);
                 otherRssAdapter.setRssList(listResource.data);
             }
         });
+    }
+
+    @Override
+    public void onSaveClicked(View view, FeedItem model, int position) {
+        Log.d(TAG, "onSaveClick: Favorite button pressed.");
+
+
+
+        feedViewModel.inDatabase(model.getTitle()).getValue();
+
+
+
+
+
+//        MyAsyncTask.MyTaskParams params = new MyAsyncTask.MyTaskParams(position, item);
+//
+//        MyAsyncTask myAsyncTask = new MyAsyncTask(this, position, new AsyncResponse() {
+//            @Override
+//            public void processTaskSetup(int position) {
+//                otherRssAdapter.notifyItemChanged(position, PAYLOAD_SAVE_BTN_CLICKED);
+//            }
+//
+//            @Override
+//            public void processFinish(int position) {
+//
+//            }
+//        });
+//        myAsyncTask.execute(params);
+    }
+
+    @Override
+    public void onShareClicked(FeedItem model, int position) {
+
+    }
+
+    @Override
+    public void onBrowserClicked(FeedItem model) {
+
     }
 
     @Override
@@ -73,8 +117,5 @@ public class MainActivity extends AppCompatActivity implements OtherRssAdapter.O
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onSaveClick(View v, int position, FeedItem item) {
-        // TODO: 10/5/2018 Save item to favorites
-    }
+
 }
