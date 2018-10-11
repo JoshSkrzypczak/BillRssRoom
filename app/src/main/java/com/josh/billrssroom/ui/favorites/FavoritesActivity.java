@@ -30,8 +30,7 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }

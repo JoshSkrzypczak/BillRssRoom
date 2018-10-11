@@ -2,27 +2,25 @@ package com.josh.billrssroom.ui.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.viewmodel.FeedViewModel;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
 import com.josh.billrssroom.utilities.AsyncResponse;
+import com.josh.billrssroom.utilities.BottomNavDrawerFragment;
 import com.josh.billrssroom.utilities.MyAsyncTask;
+import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,25 +33,28 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     private FeedViewModel feedViewModel;
     private RecyclerView recyclerView;
     private OtherRssAdapter otherRssAdapter;
+    private BottomAppBar bottomAppBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
+        bottomAppBar = findViewById(R.id.bar);
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this, this);
         recyclerView.setAdapter(otherRssAdapter);
         recyclerView.setItemAnimator(new BillItemAnimator());
 
-
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
+
+
+        setSupportActionBar(bottomAppBar);
     }
+
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
         feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
@@ -103,12 +104,14 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                BottomNavDrawerFragment bottomNavDrawerFragment = new BottomNavDrawerFragment();
+                bottomNavDrawerFragment.show(getSupportFragmentManager(), bottomNavDrawerFragment.getTag());
+                return true;
             case R.id.favorite:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

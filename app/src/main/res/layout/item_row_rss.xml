@@ -6,12 +6,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_view_item_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:cardCornerRadius="2dp">
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp">
 
         <RelativeLayout
             android:id="@+id/top_layout_item_row"
@@ -34,12 +35,12 @@
                 android:id="@+id/text_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/text_title"
+                android:layout_alignParentEnd="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:paddingBottom="4dp"
                 android:paddingTop="4dp"
+                android:paddingBottom="4dp"
                 android:textColor="@color/text_color_primary_dark"
                 android:textSize="14sp"
                 tools:text="@string/publication_date" />
@@ -57,12 +58,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_date"
-                android:layout_marginBottom="6dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginBottom="6dp"
                 android:maxLines="15"
-                android:paddingBottom="6dp"
                 android:paddingTop="4dp"
+                android:paddingBottom="6dp"
                 android:textColor="@color/text_color_primary_dark"
                 android:textSize="14sp"
                 tools:text="@string/bill_description" />
@@ -114,6 +115,6 @@
 
         </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

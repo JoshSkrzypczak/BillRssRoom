@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="color_primary">@color/md_blue_grey_700</color>
-    <color name="color_primary_dark">@color/md_blue_grey_800</color>
+    <color name="color_primary">@color/white</color>
+    <color name="color_primary_dark">@color/white</color>
     <color name="color_accent">#F9AA33</color>
-    <color name="color_window_background">#FFF5F5F5</color>
-
+    <color name="color_accent_tint">#b4f9aa33</color>
+    <color name="color_window_background">@color/white</color>
+    <color name="white">#fff</color>
     <color name="text_color_primary_dark">#DE000000</color>
     <color name="text_color_secondary_dark">#8A000000</color>
     <color name="text_color_tertiary_dark">#61000000</color>
@@ -19,7 +20,9 @@
     <color name="icon_color_inactive_light">#80FFFFFF</color>
     <color name="icon_color_active_dark">#8A000000</color>
     <color name="icon_color_inactive_dark">#61000000</color>
-
+    <color name="status_bar">@color/white</color>
+    <color name="highlight_light">#33ffffff</color>
     <color name="md_blue_grey_700">#455A64</color>
     <color name="md_blue_grey_800">#37474F</color>
+    <color name="bottom_bar_tint">#b4818181</color>
 </resources>
