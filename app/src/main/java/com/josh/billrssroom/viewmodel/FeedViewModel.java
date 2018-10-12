@@ -49,6 +49,10 @@ public class FeedViewModel extends AndroidViewModel {
         return favoriteMediatorLd;
     }
 
+    public void deleteAllFavorites(){
+        feedRepository.deleteAllFavorites();
+    }
+
     public void updateItemAsFavorite(FeedItem feedItem){
         feedRepository.updateFeedItemAsFavorite(feedItem);
     }

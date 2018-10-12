@@ -77,8 +77,9 @@ public class FeedRepository {
         }.asLiveData();
     }
 
-
-
+    public void deleteAllFavorites(){
+        new deleteAllFavoritesAsyncTask(itemDao).execute();
+    }
 
     public void removeItemFromFavorites(FeedItem feedItem) {
         new removeItemFromFavoritesAsync(itemDao).execute(feedItem);
@@ -132,6 +133,22 @@ public class FeedRepository {
 
             asyncRemoveDao.updateAndSetItemToFalse(items[0].getTitle());
 
+            return null;
+        }
+    }
+
+    private static class deleteAllFavoritesAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        private ItemDao asyncItemDao;
+
+        deleteAllFavoritesAsyncTask(ItemDao itemDao){
+            asyncItemDao = itemDao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            asyncItemDao.deleteAllFavorites();
             return null;
         }
     }

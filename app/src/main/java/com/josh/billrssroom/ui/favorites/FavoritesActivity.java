@@ -2,7 +2,9 @@ package com.josh.billrssroom.ui.favorites;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
@@ -30,7 +32,9 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -72,10 +76,21 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_favorites, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.onBackPressed();
+                return true;
+            case R.id.clear_data:
+                Toast.makeText(this, "Clearing favorites...", Toast.LENGTH_SHORT).show();
+
+                feedViewModel.deleteAllFavorites();
                 return true;
         }
         return super.onOptionsItemSelected(item);

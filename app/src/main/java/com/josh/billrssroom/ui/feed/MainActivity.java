@@ -21,6 +21,7 @@ import com.josh.billrssroom.viewmodel.FeedViewModel;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     private FeedViewModel feedViewModel;
     private RecyclerView recyclerView;
     private OtherRssAdapter otherRssAdapter;
-    private BottomAppBar bottomAppBar;
 
 
     @Override
@@ -41,7 +41,9 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bottomAppBar = findViewById(R.id.bar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this, this);
         recyclerView.setAdapter(otherRssAdapter);
@@ -50,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
-
-
-        setSupportActionBar(bottomAppBar);
     }
 
 
@@ -104,10 +103,6 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
-                BottomNavDrawerFragment bottomNavDrawerFragment = new BottomNavDrawerFragment();
-                bottomNavDrawerFragment.show(getSupportFragmentManager(), bottomNavDrawerFragment.getTag());
-                return true;
             case R.id.favorite:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;

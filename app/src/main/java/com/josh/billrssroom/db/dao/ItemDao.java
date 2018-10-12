@@ -15,9 +15,11 @@ import androidx.room.Update;
 @Dao
 public interface ItemDao {
 
+    @Query("UPDATE items SET isFav = 0")
+    void deleteAllFavorites();
+
     @Query("SELECT * FROM items WHERE isFav = 1")
     LiveData<List<FeedItem>> getFavorites();
-
 
     // If insert method only receives 1 param, it can return a long, which is the new rowId for the inserted item.
     @Insert(onConflict = OnConflictStrategy.IGNORE)
