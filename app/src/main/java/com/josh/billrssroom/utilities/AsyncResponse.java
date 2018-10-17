@@ -2,9 +2,9 @@ package com.josh.billrssroom.utilities;
 
 public interface AsyncResponse {
 
+    void delegatePreExecute(int position);
 
-    void processTaskSetup(int position);
+    void delegateProgressUpdate(int value);
 
-    void processFinish(int position);
-
+    void delegatePostExecute(int favoriteValueInt);
 }

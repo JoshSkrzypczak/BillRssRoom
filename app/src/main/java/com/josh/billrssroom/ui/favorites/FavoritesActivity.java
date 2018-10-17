@@ -95,4 +95,6 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

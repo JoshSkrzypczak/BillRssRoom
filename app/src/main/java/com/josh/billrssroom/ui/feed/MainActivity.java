@@ -1,6 +1,8 @@
 package com.josh.billrssroom.ui.feed;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,8 +11,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
+import com.josh.billrssroom.db.FeedDatabase;
+import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
 import com.josh.billrssroom.utilities.AsyncResponse;
@@ -18,6 +23,7 @@ import com.josh.billrssroom.utilities.BottomNavDrawerFragment;
 import com.josh.billrssroom.utilities.MyAsyncTask;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,11 +53,13 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this, this);
         recyclerView.setAdapter(otherRssAdapter);
-        recyclerView.setItemAnimator(new BillItemAnimator());
+//        recyclerView.setItemAnimator(new BillItemAnimator());
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
+
+
     }
 
 
@@ -65,23 +73,6 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
 
     @Override
     public void onSaveBtnClick(View view, FeedItem model, int position) {
-        Toast.makeText(this, "onSaveClick: " + model.getTitle(), Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "onSaveClick: Favorite button pressed " + model.getTitle());
-
-        MyAsyncTask.MyTaskParams params = new MyAsyncTask.MyTaskParams(position, model);
-
-        MyAsyncTask myAsyncTask = new MyAsyncTask(this, position, new AsyncResponse() {
-            @Override
-            public void processTaskSetup(int position) {
-                otherRssAdapter.notifyItemChanged(position, PAYLOAD_SAVE_BTN_CLICKED);
-            }
-
-            @Override
-            public void processFinish(int position) {
-
-            }
-        });
-        myAsyncTask.execute(params);
     }
 
     @Override

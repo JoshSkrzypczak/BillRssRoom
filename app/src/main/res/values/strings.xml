@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Bill Updates</string>
+    <string name="app_name">Bill Activity</string>
 
     <string name="bill_title">Bill Title</string>
     <string name="bill_description">Bill Description</string>

@@ -1,16 +1,13 @@
 package com.josh.billrssroom.utilities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.ui.favorites.FavoritesActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

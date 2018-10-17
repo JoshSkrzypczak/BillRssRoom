@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textAppearance="@style/TextAppearance.ToolbarTitle"
-                android:text="@string/app_name"/>
+                android:text="@string/activity_favorites"/>
 
         </androidx.appcompat.widget.Toolbar>
 

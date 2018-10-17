@@ -90,11 +90,13 @@ public class BillItemAnimator extends DefaultItemAnimator {
         bounceAnimY.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
+                Log.d(TAG, "onAnimationStart: Started");
 //                holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                Log.d(TAG, "onAnimationEnd: Ended");
 //                heartAnimationsMap.remove(holder);
                 dispatchChangeFinishedIfAllAnimationsEnded(holder);
             }
