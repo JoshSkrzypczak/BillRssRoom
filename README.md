@@ -5,7 +5,11 @@ Once complete, I'll likely move this over into the production app, [Michigan Leg
 
 * Retrofit 2 & SimpleXMLConverter
 * Room Persistence Library
-* Lifecycle Architecture components
+* Lifecycle Extensions
+
+// TODO
+* FTS
+* Unit tests
 
 Bill Feed | Favorites
 ---- | ----
