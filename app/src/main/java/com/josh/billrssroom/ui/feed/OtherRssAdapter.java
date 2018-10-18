@@ -27,8 +27,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherRssViewHolder> {
 
-    public static final String TAG = OtherRssAdapter.class.getSimpleName();
-    public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
+    private static final String TAG = OtherRssAdapter.class.getSimpleName();
+    private static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
     private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(4);
 
@@ -55,25 +55,24 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
     public void onBindViewHolder(@NonNull OtherRssViewHolder holder, int position) {
         FeedItem item = feedItems.get(position);
 
-        int adapterPosition = holder.getAdapterPosition();
 
         holder.bindView(item);
 
         /*
          * Get the boolean value of each row and set the drawable as full or empty.
-         * 0 not saved. 1 is saved.
+         * 0 not saved is empty. 1 is saved is full.
          */
         AsyncRowTask asyncRowTask = new AsyncRowTask(activity.getApplicationContext(), new AsyncResponse() {
             @Override
-            public void delegatePreExecute(int position) {
+            public void onPreExecute(int position) {
             }
 
             @Override
-            public void delegateProgressUpdate(int value) {
+            public void onProgressUpdate(int value) {
             }
 
             @Override
-            public void delegatePostExecute(int favoriteValueInt) {
+            public void onPostExecute(int favoriteValueInt) {
                 if (favoriteValueInt > 0) {
                     holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
                 } else {
@@ -89,6 +88,8 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
             @Override
             public void onClick(View v) {
 
+                int adapterPosition = holder.getAdapterPosition();
+
                 AsyncClickTask.TaskParams taskParams =
                         new AsyncClickTask.TaskParams(adapterPosition, item);
 
@@ -97,17 +98,17 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
                         adapterPosition,
                         new AsyncResponse() {
                             @Override
-                            public void delegatePreExecute(int position) {
-                                Log.d(TAG, "delegatePreExecute: position: " + position);
+                            public void onPreExecute(int position) {
+                                Log.d(TAG, "onPreExecute: position: " + position);
                             }
 
                             @Override
-                            public void delegateProgressUpdate(int value) {
+                            public void onProgressUpdate(int value) {
                             }
 
                             @Override
-                            public void delegatePostExecute(int value) {
-                                Log.d(TAG, "delegatePostExecute: value: " + value);
+                            public void onPostExecute(int value) {
+                                Log.d(TAG, "onPostExecute: value: " + value);
 
                                 AnimatorSet animatorSet = new AnimatorSet();
 
@@ -142,7 +143,8 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
                         });
                 asyncTask.execute(taskParams);
 
-                notifyItemChanged(position, PAYLOAD_SAVE_BTN_CLICKED);
+                notifyItemChanged(adapterPosition, PAYLOAD_SAVE_BTN_CLICKED);
+
             }
         });
 

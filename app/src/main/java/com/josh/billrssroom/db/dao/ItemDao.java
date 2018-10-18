@@ -53,7 +53,7 @@ public interface ItemDao {
      * 2) Instead of using bill title as the primary key, autogenerate primary key to an int.
      * @param item
      */
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertData(List<FeedItem> item);
 
     @Query("SELECT * FROM items ORDER BY pubDate DESC")

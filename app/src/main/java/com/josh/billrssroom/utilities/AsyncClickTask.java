@@ -2,7 +2,6 @@ package com.josh.billrssroom.utilities;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.db.dao.ItemDao;
@@ -36,7 +35,7 @@ public class AsyncClickTask extends AsyncTask<AsyncClickTask.TaskParams, Integer
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        delegate.delegatePreExecute(position);
+        delegate.onPreExecute(position);
     }
 
     @Override
@@ -45,8 +44,6 @@ public class AsyncClickTask extends AsyncTask<AsyncClickTask.TaskParams, Integer
         FeedItem feedItem = taskParams[0].feedItem;
 
         int favoriteValueInt = asyncDao.getIntBoolean(feedItem.getTitle());
-        Log.d(TAG, "doInBackground: favoriteIntValue: " + favoriteValueInt);
-
 
         if (favoriteValueInt == 1) {
             asyncDao.updateAndSetItemToFalse(feedItem.getTitle());
@@ -61,12 +58,12 @@ public class AsyncClickTask extends AsyncTask<AsyncClickTask.TaskParams, Integer
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        delegate.delegateProgressUpdate(values[0]);
+        delegate.onProgressUpdate(values[0]);
     }
 
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
-        delegate.delegatePostExecute(integer);
+        delegate.onPostExecute(integer);
     }
 }

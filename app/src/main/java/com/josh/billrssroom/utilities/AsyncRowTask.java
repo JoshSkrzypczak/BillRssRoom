@@ -28,6 +28,6 @@ public class AsyncRowTask extends AsyncTask<FeedItem, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer favoriteValueInt) {
-        delegate.delegatePostExecute(favoriteValueInt);
+        delegate.onPostExecute(favoriteValueInt);
     }
 }

@@ -36,7 +36,7 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
     protected void onPreExecute() {
         Log.i(TAG, "onPreExecute: position: " + position);
         super.onPreExecute();
-        delegate.delegatePreExecute(position);
+        delegate.onPreExecute(position);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
 
     @Override
     protected void onProgressUpdate(Integer... values) {
-        Log.i(TAG, "delegateProgressUpdate: value: " + values[0]);
+        Log.i(TAG, "onProgressUpdate: value: " + values[0]);
         super.onProgressUpdate(values);
     }
 
@@ -68,6 +68,6 @@ public class MyAsyncTask extends AsyncTask<MyAsyncTask.MyTaskParams, Integer, In
     protected void onPostExecute(Integer integer) {
         Log.i(TAG, "onPostExecute: value: " + integer);
         super.onPostExecute(integer);
-        delegate.delegatePostExecute(integer);
+        delegate.onPostExecute(integer);
     }
 }
