@@ -13,4 +13,4 @@ Once complete, I'll likely move this over into the production app, [Michigan Leg
 
 Bill Feed | Favorites
 ---- | ----
-![Bill Feed](https://i.imgur.com/bKYUtiE.png?1) | ![Favorites](https://i.imgur.com/Ydu20wX.png?1)
+![Bill Feed](https://i.imgur.com/VAIGjfP.png?1) | ![Favorites](https://i.imgur.com/hdxrVDV.png?1)
