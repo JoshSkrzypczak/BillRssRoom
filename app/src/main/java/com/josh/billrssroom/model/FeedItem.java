@@ -123,7 +123,7 @@ public class FeedItem {
         }
         TimeZone tz = TimeZone.getTimeZone("America/Detroit");
         SimpleDateFormat destinationFormat =
-                new SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a", Locale.getDefault());
+                new SimpleDateFormat("EEE. MMM dd, yyyy | hh:mm a", Locale.getDefault());
         destinationFormat.setTimeZone(tz);
 
         return destinationFormat.format(parsedDated);

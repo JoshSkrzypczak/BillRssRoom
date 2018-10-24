@@ -53,13 +53,10 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
         recyclerView = findViewById(R.id.recyclerview);
         otherRssAdapter = new OtherRssAdapter(this, this);
         recyclerView.setAdapter(otherRssAdapter);
-//        recyclerView.setItemAnimator(new BillItemAnimator());
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
-
-
     }
 
 

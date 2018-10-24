@@ -73,6 +73,8 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     @Override
     public void onTrashBtnClick(FeedItem model, int position) {
         feedViewModel.removeItemFromFavorites(model);
+
+        adapter.notifyItemRemoved(position);
     }
 
     @Override
