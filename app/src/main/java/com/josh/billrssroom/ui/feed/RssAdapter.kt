@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.josh.billrssroom.R
 import com.josh.billrssroom.model.FeedItem
+import kotlinx.android.synthetic.main.include_item_row_rss.view.*
 import kotlinx.android.synthetic.main.item_row_rss.view.*
 import java.util.*
 

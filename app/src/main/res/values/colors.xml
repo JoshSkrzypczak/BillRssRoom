@@ -3,7 +3,7 @@
 
     <color name="color_primary">@color/white</color>
     <color name="color_primary_dark">@color/white</color>
-    <color name="color_accent">#F9AA33</color>
+    <color name="color_accent">#f9aa33</color>
     <color name="color_accent_tint">#b4f9aa33</color>
     <color name="color_window_background">@color/white</color>
     <color name="white">#fff</color>
@@ -25,4 +25,19 @@
     <color name="md_blue_grey_700">#455A64</color>
     <color name="md_blue_grey_800">#37474F</color>
     <color name="bottom_bar_tint">#b4818181</color>
+
+    <color name="md_grey_50">#FAFAFA</color>
+    <color name="md_grey_100">#F5F5F5</color>
+    <color name="md_grey_200">#EEEEEE</color>
+    <color name="md_grey_300">#F0F0F0</color>
+    <color name="md_grey_400">#DEDEDE</color>
+    <color name="md_grey_500">#c2c2c2</color>
+    <color name="md_grey_600">#979797</color>
+    <color name="md_grey_700">#818181</color>
+    <color name="md_grey_800">#606060</color>
+    <color name="md_grey_900">#3c3c3c</color>
+    <color name="md_black_1000">#000000</color>
+    <color name="md_white_1000">#ffffff</color>
+
+
 </resources>

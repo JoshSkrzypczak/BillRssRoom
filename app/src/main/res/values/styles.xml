@@ -37,4 +37,17 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="AppTheme.Favorites" parent="AppTheme">
+
+    </style>
+    
+    <style name="TextAppearance.Date" parent="@android:style/TextAppearance.Material.Caption">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_color_secondary_dark</item>
+    </style>
+
+    <style name="TextAppearance.BillTitle" parent="@android:style/TextAppearance.Material.Headline">
+        <item name="android:fontFamily">@font/roboto_mono</item>
+    </style>
+
 </resources>
