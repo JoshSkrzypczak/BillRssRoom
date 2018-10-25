@@ -1,85 +1,65 @@
 package com.josh.billrssroom.ui.feed;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.api.Resource;
-import com.josh.billrssroom.db.FeedDatabase;
-import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.ui.favorites.FavoritesActivity;
-import com.josh.billrssroom.utilities.AsyncResponse;
-import com.josh.billrssroom.utilities.BottomNavDrawerFragment;
-import com.josh.billrssroom.utilities.MyAsyncTask;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements BillItemClickListener {
+public class MainActivity extends AppCompatActivity implements MainActivityViewMvcImpl.Listener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
 
+    private MainActivityViewMvc viewMvc;
+
     private FeedViewModel feedViewModel;
-    private RecyclerView recyclerView;
-    private OtherRssAdapter otherRssAdapter;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        viewMvc = new MainActivityViewMvcImpl(LayoutInflater.from(this), null);
+        viewMvc.registerListener(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        recyclerView = findViewById(R.id.recyclerview);
-        otherRssAdapter = new OtherRssAdapter(this, this);
-        recyclerView.setAdapter(otherRssAdapter);
+
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
+
+        setContentView(viewMvc.getRootView());
     }
 
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
         feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
             if (listResource != null && listResource.data != null) {
-                otherRssAdapter.setRssList(listResource.data);
+
+                viewMvc.bindFeedItems(listResource.data);
+
+
             }
         });
-    }
-
-    @Override
-    public void onSaveBtnClick(View view, FeedItem model, int position) {
-    }
-
-    @Override
-    public void onShareBtnClick(FeedItem model, int position) {
-        Log.d(TAG, "onShareBtnClick: " + model.getTitle());
-    }
-
-    @Override
-    public void onBrowserBtnClick(FeedItem model) {
-        Log.d(TAG, "onBrowserBtnClick: " + model.getTitle());
     }
 
     @Override
@@ -96,5 +76,19 @@ public class MainActivity extends AppCompatActivity implements BillItemClickList
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveBtnClicked(FeedItem model, int position) {
+    }
+
+    @Override
+    public void onShareBtnClicked(FeedItem feedItem, int position) {
+        Toast.makeText(this, "Shared: " + feedItem.getTitle(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBrowserBtnClicked(FeedItem feedItem) {
+        Toast.makeText(this, "Browser: " + feedItem.getTitle(), Toast.LENGTH_SHORT).show();
     }
 }

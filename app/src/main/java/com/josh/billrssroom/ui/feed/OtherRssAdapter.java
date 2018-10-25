@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,12 +37,12 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
 
     private final LayoutInflater inflater;
     private List<FeedItem> feedItems;
-    private Activity activity;
+    private Context context;
 
-    public OtherRssAdapter(Activity activity, BillItemClickListener billItemClickListener) {
-        this.activity = activity;
+    public OtherRssAdapter(Context context, BillItemClickListener billItemClickListener) {
+        this.context = context;
         this.billItemClickListener = billItemClickListener;
-        inflater = LayoutInflater.from(activity);
+        inflater = LayoutInflater.from(context);
     }
 
     @NonNull
@@ -62,7 +63,7 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
          * Get the boolean value of each row and set the drawable as full or empty.
          * 0 not saved is empty. 1 is saved is full.
          */
-        AsyncRowTask asyncRowTask = new AsyncRowTask(activity.getApplicationContext(), new AsyncResponse() {
+        AsyncRowTask asyncRowTask = new AsyncRowTask(context.getApplicationContext(), new AsyncResponse() {
             @Override
             public void onPreExecute(int position) {
             }
@@ -94,7 +95,7 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
                         new AsyncClickTask.TaskParams(adapterPosition, item);
 
                 AsyncClickTask asyncTask = new AsyncClickTask(
-                        activity.getApplicationContext(),
+                        context.getApplicationContext(),
                         adapterPosition,
                         new AsyncResponse() {
                             @Override
@@ -110,35 +111,35 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
                             public void onPostExecute(int value) {
                                 Log.d(TAG, "onPostExecute: value: " + value);
 
-                                AnimatorSet animatorSet = new AnimatorSet();
-
-                                ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
-                                rotationAnim.setDuration(300);
-                                rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
-
-                                ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
-                                bounceAnimX.setDuration(300);
-                                bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
-
-                                ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
-                                bounceAnimY.setDuration(300);
-                                bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
-                                bounceAnimY.addListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationStart(Animator animation) {
-                                        super.onAnimationStart(animation);
-                                        Log.d(TAG, "onAnimationStart: ");
-                                    }
-
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        Log.d(TAG, "onAnimationEnd: ");
-                                    }
-                                });
-
-                                animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
-                                animatorSet.start();
+//                                AnimatorSet animatorSet = new AnimatorSet();
+//
+//                                ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
+//                                rotationAnim.setDuration(250);
+//                                rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+//
+//                                ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
+//                                bounceAnimX.setDuration(250);
+//                                bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
+//
+//                                ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
+//                                bounceAnimY.setDuration(250);
+//                                bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
+//                                bounceAnimY.addListener(new AnimatorListenerAdapter() {
+//                                    @Override
+//                                    public void onAnimationStart(Animator animation) {
+//                                        super.onAnimationStart(animation);
+//                                        Log.d(TAG, "onAnimationStart: ");
+//                                    }
+//
+//                                    @Override
+//                                    public void onAnimationEnd(Animator animation) {
+//                                        super.onAnimationEnd(animation);
+//                                        Log.d(TAG, "onAnimationEnd: ");
+//                                    }
+//                                });
+//
+//                                animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+//                                animatorSet.start();
                             }
                         });
                 asyncTask.execute(taskParams);

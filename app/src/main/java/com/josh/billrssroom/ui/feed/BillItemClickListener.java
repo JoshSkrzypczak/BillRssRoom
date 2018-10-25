@@ -7,7 +7,7 @@ import com.josh.billrssroom.model.FeedItem;
 
 public interface BillItemClickListener {
 
-    void onSaveBtnClick(View view, FeedItem model, int position);
+    void onSaveBtnClick(FeedItem model, int position);
 
     void onShareBtnClick(FeedItem model, int position);
 
