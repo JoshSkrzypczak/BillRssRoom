@@ -1,17 +1,10 @@
-package com.josh.billrssroom.ui.feed;
+package com.josh.billrssroom.screens.feed;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -30,8 +23,6 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
 
     private static final String TAG = OtherRssAdapter.class.getSimpleName();
     private static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
-    private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
-    private static final OvershootInterpolator OVERSHOOT_INTERPOLATOR = new OvershootInterpolator(4);
 
     private BillItemClickListener billItemClickListener;
 
@@ -110,36 +101,6 @@ public class OtherRssAdapter extends RecyclerView.Adapter<OtherRssAdapter.OtherR
                             @Override
                             public void onPostExecute(int value) {
                                 Log.d(TAG, "onPostExecute: value: " + value);
-
-//                                AnimatorSet animatorSet = new AnimatorSet();
-//
-//                                ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
-//                                rotationAnim.setDuration(250);
-//                                rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
-//
-//                                ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
-//                                bounceAnimX.setDuration(250);
-//                                bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
-//
-//                                ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
-//                                bounceAnimY.setDuration(250);
-//                                bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
-//                                bounceAnimY.addListener(new AnimatorListenerAdapter() {
-//                                    @Override
-//                                    public void onAnimationStart(Animator animation) {
-//                                        super.onAnimationStart(animation);
-//                                        Log.d(TAG, "onAnimationStart: ");
-//                                    }
-//
-//                                    @Override
-//                                    public void onAnimationEnd(Animator animation) {
-//                                        super.onAnimationEnd(animation);
-//                                        Log.d(TAG, "onAnimationEnd: ");
-//                                    }
-//                                });
-//
-//                                animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
-//                                animatorSet.start();
                             }
                         });
                 asyncTask.execute(taskParams);

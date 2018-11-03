@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui.favorites
+package com.josh.billrssroom.screens.favorites
 
 import android.app.Activity
 import android.view.LayoutInflater

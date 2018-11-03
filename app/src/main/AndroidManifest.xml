@@ -14,16 +14,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.feed.MainActivity">
+        <activity android:name=".screens.feed.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.favorites.FavoritesActivity"
+        <activity android:name=".screens.favorites.FavoritesActivity"
             android:label="@string/activity_favorites"
-            android:parentActivityName=".ui.feed.MainActivity"
+            android:parentActivityName=".screens.feed.MainActivity"
             android:theme="@style/AppTheme.Favorites">
             <meta-data
                 android:name="android.suppport.PARENT_ACTIVITY"

@@ -1,7 +1,4 @@
-package com.josh.billrssroom.ui.feed;
-
-import android.view.View;
-import android.widget.ImageButton;
+package com.josh.billrssroom.screens.feed;
 
 import com.josh.billrssroom.model.FeedItem;
 

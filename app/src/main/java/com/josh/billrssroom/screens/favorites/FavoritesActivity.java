@@ -1,35 +1,42 @@
-package com.josh.billrssroom.ui.favorites;
+package com.josh.billrssroom.screens.favorites;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.screens.common.BaseActivity;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
-
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
-public class FavoritesActivity extends AppCompatActivity implements FavoriteClickListener {
+public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener {
 
     private static final String TAG = FavoritesActivity.class.getSimpleName();
 
+    private FavoriteListViewMvc favoriteViewMvc;
+
     private FeedViewModel feedViewModel;
-    private RecyclerView recyclerView;
-    private FavoritesAdapter adapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        favoriteViewMvc = getCompositionRoot().getViewMvcFactory().getFavoriteListViewMvc(null);
+        favoriteViewMvc.registerListener(this);
+
+        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+
+        subscribeUiFavorites(feedViewModel);
+
         setContentView(R.layout.activity_favorites);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -38,43 +45,14 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        recyclerView = findViewById(R.id.favorites_list);
-        adapter = new FavoritesAdapter(this,this);
-        recyclerView.setAdapter(adapter);
-
-        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
-
-        subscribeUiFavorites(feedViewModel);
-
     }
 
     private void subscribeUiFavorites(FeedViewModel feedViewModel) {
-        feedViewModel.getFavoriteFeedItems().observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    adapter.setFavoritesList(feedItems);
-                }
+        feedViewModel.getFavoriteFeedItems().observe(this, feedItems -> {
+            if (feedItems != null){
+                favoriteViewMvc.bindFavoriteItems(feedItems);
             }
         });
-    }
-
-    @Override
-    public void onBrowserBtnClick(FeedItem model, int position) {
-        Log.d(TAG, "onBrowserBtnClick: " + model.getTitle());
-    }
-
-    @Override
-    public void onShareBtnClick(FeedItem model, int position) {
-        Log.d(TAG, "onShareBtnClick: " + model.getTitle());
-    }
-
-    @Override
-    public void onTrashBtnClick(FeedItem model, int position) {
-        feedViewModel.removeItemFromFavorites(model);
-
-        adapter.notifyItemRemoved(position);
     }
 
     @Override
@@ -99,4 +77,19 @@ public class FavoritesActivity extends AppCompatActivity implements FavoriteClic
     }
 
 
+    @Override
+    public void onDeleteBtnClicked(FeedItem feedItem, int position) {
+        feedViewModel.removeItemFromFavorites(feedItem);
+//        adapter.notifyItemRemoved(position);
+    }
+
+    @Override
+    public void onShareBtnClicked(FeedItem feedItem, int position) {
+        Log.d(TAG, "onShareBtnClick: " + feedItem.getTitle() + " " + position);
+    }
+
+    @Override
+    public void onBrowserBtnClicked(FeedItem feedItem) {
+        Log.d(TAG, "onBrowserBtnClick: " + feedItem.getTitle());
+    }
 }

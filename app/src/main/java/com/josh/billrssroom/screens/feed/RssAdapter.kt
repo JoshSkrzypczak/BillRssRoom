@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui.feed
+package com.josh.billrssroom.screens.feed
 
 import android.app.Activity
 import android.view.LayoutInflater
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.josh.billrssroom.R
 import com.josh.billrssroom.model.FeedItem
 import kotlinx.android.synthetic.main.include_item_row_rss.view.*
-import kotlinx.android.synthetic.main.item_row_rss.view.*
 import java.util.*
 
 class RssAdapter(private val activity: Activity, val rowClickCallback: BillItemClickListener) :
@@ -55,7 +54,7 @@ class RssAdapter(private val activity: Activity, val rowClickCallback: BillItemC
 
             btnBrowser.setOnClickListener { rowClickCallback.onBrowserBtnClick(model) }
             btnShare.setOnClickListener { rowClickCallback.onShareBtnClick(model, adapterPosition) }
-            btnSave.setOnClickListener { v -> rowClickCallback.onSaveBtnClick(v, model, adapterPosition) }
+            btnSave.setOnClickListener { v -> rowClickCallback.onSaveBtnClick(model, adapterPosition) }
         }
     }
 }

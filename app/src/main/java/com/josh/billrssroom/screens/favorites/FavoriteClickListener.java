@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui.favorites;
+package com.josh.billrssroom.screens.favorites;
 
 import com.josh.billrssroom.model.FeedItem;
 

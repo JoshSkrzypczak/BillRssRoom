@@ -1,4 +1,4 @@
-package com.josh.billrssroom.ui.feed;
+package com.josh.billrssroom.screens.feed;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
-
-import com.josh.billrssroom.R;
 
 import java.util.HashMap;
 import java.util.List;
