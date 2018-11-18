@@ -3,6 +3,7 @@ package com.josh.billrssroom.screens.common;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import com.josh.billrssroom.screens.common.toolbar.ToolbarViewMvc;
 import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvc;
 import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvcImpl;
 import com.josh.billrssroom.screens.favorites.FavoriteListViewMvc;
@@ -36,5 +37,9 @@ public class ViewMvcFactory {
 
     public FavoriteItemViewMvc getFavoriteItemViewMvc(@Nullable ViewGroup parent){
         return new FavoriteItemViewMvcImpl(layoutInflater, parent);
+    }
+
+    public ToolbarViewMvc getToolbarViewMvc(@Nullable ViewGroup parent) {
+        return new ToolbarViewMvc(layoutInflater, parent);
     }
 }

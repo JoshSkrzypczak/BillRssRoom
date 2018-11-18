@@ -3,6 +3,8 @@ package com.josh.billrssroom.screens.common.views;
 import android.content.Context;
 import android.view.View;
 
+import androidx.annotation.StringRes;
+
 public abstract class BaseViewMvc implements ViewMvc {
 
     private View rootView;
@@ -22,5 +24,9 @@ public abstract class BaseViewMvc implements ViewMvc {
 
     protected Context getContext() {
         return getRootView().getContext();
+    }
+
+    protected String getString(@StringRes int id){
+        return getContext().getString(id);
     }
 }
