@@ -11,6 +11,7 @@ import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.favorites.FavoritesActivity;
+import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
@@ -23,7 +24,6 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
     private FeedListViewMvc viewMvc;
 
     private FeedViewModel feedViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +79,12 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
-        Toast.makeText(this, "Share: " + feedItem.getTitle() + " " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "TODO Implement Share: " + feedItem.getTitle() + " " + position, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem, int position) {
-        Toast.makeText(this, "Browse: " + feedItem.getTitle() + " position: " + position, Toast.LENGTH_SHORT).show();
+        Utils.openCustomTab(MainActivity.this, feedItem.getLink());
 
     }
 }

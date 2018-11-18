@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,9 +59,9 @@ public class BillItemAnimator extends DefaultItemAnimator {
 
         if (preInfo instanceof FeedItemHolderInfo) {
             FeedItemHolderInfo feedItemHolderInfo = (FeedItemHolderInfo) preInfo;
-            OtherRssAdapter.OtherRssViewHolder holder = (OtherRssAdapter.OtherRssViewHolder) newHolder;
+            FeedAdapterMvc.FeedViewHolderMvc holder = (FeedAdapterMvc.FeedViewHolderMvc) newHolder;
 
-            animateHeartButton(holder);
+//            animateHeartButton(holder);
         }
         return false;
     }
@@ -71,42 +72,42 @@ public class BillItemAnimator extends DefaultItemAnimator {
         }
     }
 
-    private void animateHeartButton(final OtherRssAdapter.OtherRssViewHolder holder) {
-        AnimatorSet animatorSet = new AnimatorSet();
+//    private void animateHeartButton(final FeedAdapterMvc.FeedViewHolderMvc holder) {
+//        AnimatorSet animatorSet = new AnimatorSet();
+//
+//        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
+//        rotationAnim.setDuration(300);
+//        rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+//
+//        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
+//        bounceAnimX.setDuration(300);
+//        bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
+//
+//        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
+//        bounceAnimY.setDuration(300);
+//        bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
+//        bounceAnimY.addListener(new AnimatorListenerAdapter() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                Log.d(TAG, "onAnimationStart: Started");
+////                holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//                Log.d(TAG, "onAnimationEnd: Ended");
+////                heartAnimationsMap.remove(holder);
+//                dispatchChangeFinishedIfAllAnimationsEnded(holder);
+//            }
+//        });
+//
+//        animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+//        animatorSet.start();
+//
+//        heartAnimationsMap.put(holder, animatorSet);
+//    }
 
-        ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnSave, "rotation", 0f, 360f);
-        rotationAnim.setDuration(300);
-        rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
-
-        ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnSave, "scaleX", 0.2f, 1f);
-        bounceAnimX.setDuration(300);
-        bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
-
-        ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnSave, "scaleY", 0.2f, 1f);
-        bounceAnimY.setDuration(300);
-        bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
-        bounceAnimY.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                Log.d(TAG, "onAnimationStart: Started");
-//                holder.btnSave.setImageResource(R.drawable.ic_favorite_full);
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                Log.d(TAG, "onAnimationEnd: Ended");
-//                heartAnimationsMap.remove(holder);
-                dispatchChangeFinishedIfAllAnimationsEnded(holder);
-            }
-        });
-
-        animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
-        animatorSet.start();
-
-        heartAnimationsMap.put(holder, animatorSet);
-    }
-
-    private void dispatchChangeFinishedIfAllAnimationsEnded(OtherRssAdapter.OtherRssViewHolder holder) {
+    private void dispatchChangeFinishedIfAllAnimationsEnded(FeedAdapterMvc.FeedViewHolderMvc holder) {
         if (heartAnimationsMap.containsKey(holder)) {
             return;
         }

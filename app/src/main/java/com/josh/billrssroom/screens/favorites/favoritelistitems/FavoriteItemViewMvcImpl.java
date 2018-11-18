@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.screens.favorites.FavoriteListViewMvc;
 
 public class FavoriteItemViewMvcImpl extends BaseObservableViewMvc<FavoriteItemViewMvc.Listener>
         implements FavoriteItemViewMvc {
@@ -33,24 +34,21 @@ public class FavoriteItemViewMvcImpl extends BaseObservableViewMvc<FavoriteItemV
         btnShare = findViewById(R.id.btn_share);
         btnBrowser = findViewById(R.id.btn_browser);
 
+        btnBrowser.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onBrowserBtnClicked(feedItem);
+            }
+        });
 
-        getRootView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (Listener listener : getListeners()){
-                    int itemId = v.getId();
-                    switch (itemId){
-                        case R.id.btn_browser:
-                            listener.onBrowserBtnClicked(feedItem);
-                            break;
-                        case R.id.btn_share:
-                            listener.onShareBtnClicked(feedItem, position);
-                            break;
-                        case R.id.btn_trash:
-                            listener.onDeleteBtnClicked(feedItem, position);
-                    }
+        btnShare.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onShareBtnClicked(feedItem, position);
+            }
+        });
 
-                }
+        btnDelete.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onDeleteBtnClicked(feedItem, position);
             }
         });
     }
