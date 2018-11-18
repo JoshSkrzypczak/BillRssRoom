@@ -1,4 +1,4 @@
-package com.josh.billrssroom.screens.common;
+package com.josh.billrssroom.screens.common.views;
 
 import android.view.View;
 

@@ -1,14 +1,13 @@
-package com.josh.billrssroom.screens.feed;
+package com.josh.billrssroom.screens.feed.feedlistitems;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.screens.common.BaseObservableViewMvc;
+import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 
 public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.Listener>
         implements FeedItemViewMvc {
@@ -34,12 +33,15 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
         btnShare = findViewById(R.id.btn_share);
         btnBrowser = findViewById(R.id.btn_browser);
 
-        btnBrowser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (Listener listener : getListeners()){
-                    listener.onBrowserBtnClicked(feedItem, position);
-                }
+        btnBrowser.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onBrowserBtnClicked(feedItem, position);
+            }
+        });
+
+        btnShare.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onShareBtnClicked(feedItem, position);
             }
         });
     }

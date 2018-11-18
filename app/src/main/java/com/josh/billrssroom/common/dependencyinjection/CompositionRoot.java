@@ -1,6 +1,6 @@
 package com.josh.billrssroom.common.dependencyinjection;
 
-import com.josh.billrssroom.api.DataService;
+import com.josh.billrssroom.networking.DataService;
 import com.josh.billrssroom.common.Constants;
 
 import retrofit2.Retrofit;

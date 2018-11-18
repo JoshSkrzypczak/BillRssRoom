@@ -1,4 +1,4 @@
-package com.josh.billrssroom.api;
+package com.josh.billrssroom.networking;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;

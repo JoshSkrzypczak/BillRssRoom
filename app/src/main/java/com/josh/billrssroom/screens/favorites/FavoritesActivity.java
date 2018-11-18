@@ -2,18 +2,16 @@ package com.josh.billrssroom.screens.favorites;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.screens.common.BaseActivity;
+import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProviders;
 

@@ -1,4 +1,4 @@
-package com.josh.billrssroom.screens.common;
+package com.josh.billrssroom.screens.common.views;
 
 public interface ObservableViewMvc<ListenerType> extends ViewMvc {
 

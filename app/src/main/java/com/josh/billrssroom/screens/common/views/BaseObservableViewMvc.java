@@ -1,11 +1,11 @@
-package com.josh.billrssroom.screens.common;
+package com.josh.billrssroom.screens.common.views;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class BaseObservableViewMvc <ListenerType> extends BaseViewMvc
-        implements ObservableViewMvc<ListenerType> {
+public abstract class BaseObservableViewMvc <ListenerType> extends BaseViewMvc implements
+        ObservableViewMvc<ListenerType> {
 
     private Set<ListenerType> listeners = new HashSet<>();
 

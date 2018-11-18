@@ -2,16 +2,13 @@ package com.josh.billrssroom.screens.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.api.DataService;
-import com.josh.billrssroom.api.Resource;
-import com.josh.billrssroom.screens.common.BaseActivity;
+import com.josh.billrssroom.networking.Resource;
+import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.favorites.FavoritesActivity;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
@@ -23,30 +20,19 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
-
-    public static final String PAYLOAD_SAVE_BTN_CLICKED = "PAYLOAD_SAVE_BTN_CLICKED";
-
     private FeedListViewMvc viewMvc;
 
     private FeedViewModel feedViewModel;
-
-    private DataService dataServiceApi;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         viewMvc = getCompositionRoot().getViewMvcFactory().getFeedListViewMvc(null);
-        viewMvc.registerListener(this);
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
-
-//        dataServiceApi = getCompositionRoot().getRssFeedApi();
-
 
         setContentView(viewMvc.getRootView());
 
@@ -55,11 +41,21 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        viewMvc.registerListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        viewMvc.unregisterListener(this);
+    }
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
         feedViewModel.getObservableFeedItems().observe(this, (Resource<List<FeedItem>> listResource) -> {
             if (listResource != null && listResource.data != null) {
-
                 viewMvc.bindFeedItems(listResource.data);
             }
         });
@@ -88,7 +84,7 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem, int position) {
-        Log.d(TAG, "onBrowserBtnClicked: " + feedItem.getTitle());
         Toast.makeText(this, "Browse: " + feedItem.getTitle() + " position: " + position, Toast.LENGTH_SHORT).show();
+
     }
 }

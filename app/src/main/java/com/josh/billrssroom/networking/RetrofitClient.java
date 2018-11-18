@@ -1,4 +1,4 @@
-package com.josh.billrssroom.api;
+package com.josh.billrssroom.networking;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

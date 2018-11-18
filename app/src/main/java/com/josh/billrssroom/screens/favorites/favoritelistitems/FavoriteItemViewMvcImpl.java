@@ -1,4 +1,4 @@
-package com.josh.billrssroom.screens.favorites;
+package com.josh.billrssroom.screens.favorites.favoritelistitems;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.screens.common.BaseObservableViewMvc;
+import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 import com.josh.billrssroom.model.FeedItem;
 
 public class FavoriteItemViewMvcImpl extends BaseObservableViewMvc<FavoriteItemViewMvc.Listener>

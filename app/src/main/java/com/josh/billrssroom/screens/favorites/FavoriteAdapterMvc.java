@@ -1,12 +1,11 @@
 package com.josh.billrssroom.screens.favorites;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.screens.common.ViewMvc;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
+import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvc;
 
 import java.util.List;
 

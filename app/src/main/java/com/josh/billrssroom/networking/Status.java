@@ -1,4 +1,4 @@
-package com.josh.billrssroom.api;
+package com.josh.billrssroom.networking;
 
 /**
  * Status of a resource that is provided to the UI.

@@ -1,6 +1,6 @@
 package com.josh.billrssroom.screens.favorites;
 
-import com.josh.billrssroom.screens.common.ObservableViewMvc;
+import com.josh.billrssroom.screens.common.views.ObservableViewMvc;
 import com.josh.billrssroom.model.FeedItem;
 
 import java.util.List;

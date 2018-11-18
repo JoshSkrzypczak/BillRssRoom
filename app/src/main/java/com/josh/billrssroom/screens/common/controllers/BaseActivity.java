@@ -1,4 +1,4 @@
-package com.josh.billrssroom.screens.common;
+package com.josh.billrssroom.screens.common.controllers;
 
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.common.dependencyinjection.ControllerCompositionRoot;
@@ -12,8 +12,7 @@ public class BaseActivity extends AppCompatActivity {
     protected ControllerCompositionRoot getCompositionRoot(){
         if (controllerCompositionRoot == null){
             controllerCompositionRoot = new ControllerCompositionRoot(
-                    ((BasicApp)getApplication()).getCompositionRoot(),
-                    this
+                    ((BasicApp)getApplication()).getCompositionRoot(), this
             );
         }
 

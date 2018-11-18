@@ -1,9 +1,10 @@
 package com.josh.billrssroom.common.dependencyinjection;
 
 import android.app.Activity;
+import android.content.Context;
 import android.view.LayoutInflater;
 
-import com.josh.billrssroom.api.DataService;
+import com.josh.billrssroom.networking.DataService;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
 
 public class ControllerCompositionRoot {
@@ -17,6 +18,9 @@ public class ControllerCompositionRoot {
         this.activity = activity;
     }
 
+    private Context getContext(){
+        return activity;
+    }
 
     public DataService getRssFeedApi() {
         return compositionRoot.getRssFeedApi();
@@ -26,7 +30,5 @@ public class ControllerCompositionRoot {
         return LayoutInflater.from(activity);
     }
 
-    public ViewMvcFactory getViewMvcFactory(){
-        return new ViewMvcFactory(getLayoutInflater());
-    }
+    public ViewMvcFactory getViewMvcFactory(){ return new ViewMvcFactory(getLayoutInflater()); }
 }

@@ -1,7 +1,7 @@
 package com.josh.billrssroom.screens.feed;
 
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.screens.common.ObservableViewMvc;
+import com.josh.billrssroom.screens.common.views.ObservableViewMvc;
 
 import java.util.List;
 

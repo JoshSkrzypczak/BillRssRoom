@@ -3,12 +3,12 @@ package com.josh.billrssroom.screens.common;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import com.josh.billrssroom.screens.favorites.FavoriteItemViewMvc;
-import com.josh.billrssroom.screens.favorites.FavoriteItemViewMvcImpl;
+import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvc;
+import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvcImpl;
 import com.josh.billrssroom.screens.favorites.FavoriteListViewMvc;
 import com.josh.billrssroom.screens.favorites.FavoriteListViewMvcImpl;
-import com.josh.billrssroom.screens.feed.FeedItemViewMvc;
-import com.josh.billrssroom.screens.feed.FeedItemViewMvcImpl;
+import com.josh.billrssroom.screens.feed.feedlistitems.FeedItemViewMvc;
+import com.josh.billrssroom.screens.feed.feedlistitems.FeedItemViewMvcImpl;
 import com.josh.billrssroom.screens.feed.FeedListViewMvc;
 import com.josh.billrssroom.screens.feed.FeedListViewMvcImpl;
 

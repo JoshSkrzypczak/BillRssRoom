@@ -4,11 +4,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.josh.billrssroom.AppExecutors;
-import com.josh.billrssroom.api.ApiResponse;
-import com.josh.billrssroom.api.DataService;
-import com.josh.billrssroom.api.NetworkBoundResource;
-import com.josh.billrssroom.api.Resource;
-import com.josh.billrssroom.api.RetrofitClient;
+import com.josh.billrssroom.networking.ApiResponse;
+import com.josh.billrssroom.networking.DataService;
+import com.josh.billrssroom.networking.NetworkBoundResource;
+import com.josh.billrssroom.networking.Resource;
+import com.josh.billrssroom.networking.RetrofitClient;
 import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;

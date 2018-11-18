@@ -3,7 +3,7 @@ package com.josh.billrssroom.viewmodel;
 import android.app.Application;
 
 import com.josh.billrssroom.BasicApp;
-import com.josh.billrssroom.api.Resource;
+import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;

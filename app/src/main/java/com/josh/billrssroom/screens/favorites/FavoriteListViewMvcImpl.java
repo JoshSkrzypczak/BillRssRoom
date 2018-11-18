@@ -4,7 +4,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.screens.common.BaseObservableViewMvc;
+import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
 
