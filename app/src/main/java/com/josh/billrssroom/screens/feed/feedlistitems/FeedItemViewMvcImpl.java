@@ -15,7 +15,7 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
     private final TextView titleView;
     private final TextView descriptionView;
     private final TextView dateView;
-    private final ImageButton btnSave;
+    public final ImageButton btnSave;
     private final ImageButton btnShare;
     private final ImageButton btnBrowser;
 
@@ -42,6 +42,12 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
         btnShare.setOnClickListener(v -> {
             for (Listener listener : getListeners()){
                 listener.onShareBtnClicked(feedItem, position);
+            }
+        });
+
+        btnSave.setOnClickListener(v -> {
+            for (Listener listener : getListeners()){
+                listener.onSaveBtnClicked(feedItem, position);
             }
         });
     }

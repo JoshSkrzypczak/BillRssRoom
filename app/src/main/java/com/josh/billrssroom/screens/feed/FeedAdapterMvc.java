@@ -18,10 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedViewHolderMvc>
         implements FeedItemViewMvc.Listener {
 
-
     public interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
         void onBrowserBtnClicked(FeedItem feedItem, int position);
+        void onSaveBtnClicked(FeedItem feedItem, int position);
     }
 
     static class FeedViewHolderMvc extends RecyclerView.ViewHolder {
@@ -62,8 +62,9 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
         holder.feedItemViewMvc.bindItem(feedItems.get(position), holder.getAdapterPosition());
 
         /*
-         * Get the boolean value of each row and set the drawable as full or empty.
-         * 0 not saved is empty. 1 is saved is full.
+         * Get the boolean value of each row and setImageResource of the save button:
+         * 0 =  Item is Not saved. Use empty heart drawable
+         * 1  = Item is saved. Use full hear drawable.
          */
         AsyncRowTask asyncRowTask = new AsyncRowTask(context.getApplicationContext(), new AsyncResponse() {
             @Override
@@ -86,7 +87,7 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
         });
         asyncRowTask.execute(feedItems.get(position));
 
-        // TODO: 10/30/2018 Implement onClick to save
+        // TODO: 10/30/2018 Implement item saving via onClick here or in activity?
     }
 
     @Override
@@ -102,5 +103,10 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem, int position) {
         listener.onBrowserBtnClicked(feedItem, position);
+    }
+
+    @Override
+    public void onSaveBtnClicked(FeedItem feedItem, int position) {
+        listener.onSaveBtnClicked(feedItem, position);
     }
 }

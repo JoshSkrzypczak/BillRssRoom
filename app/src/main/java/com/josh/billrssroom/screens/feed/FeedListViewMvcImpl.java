@@ -37,7 +37,6 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
 //        toolbarViewMvc = viewMvcFactory.getToolbarViewMvc(toolbar);
 //        toolbar.addView(toolbarViewMvc.getRootView());
 //        toolbarViewMvc.setTitle(getString(R.string.app_name));
-
     }
 
     @Override
@@ -57,5 +56,13 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
         for (Listener listener : getListeners()) {
             listener.onBrowserBtnClicked(feedItem, position);
         }
+    }
+
+    @Override
+    public void onSaveBtnClicked(FeedItem feedItem, int position) {
+        for (Listener listener : getListeners()){
+            listener.onSaveBtnClicked(feedItem, position);
+        }
+//        feedAdapterMvc.notifyItemChanged(position);
     }
 }

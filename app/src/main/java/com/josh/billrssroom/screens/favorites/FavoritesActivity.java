@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
+import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import androidx.annotation.Nullable;
@@ -17,25 +18,20 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener {
 
-    private static final String TAG = FavoritesActivity.class.getSimpleName();
-
     private FavoriteListViewMvc favoriteViewMvc;
 
     private FeedViewModel feedViewModel;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         favoriteViewMvc = getCompositionRoot().getViewMvcFactory().getFavoriteListViewMvc(null);
-        favoriteViewMvc.registerListener(this);
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeUiFavorites(feedViewModel);
 
-        setContentView(R.layout.activity_favorites);
+        setContentView(favoriteViewMvc.getRootView());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,6 +39,18 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        favoriteViewMvc.registerListener(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        favoriteViewMvc.unregisterListener(this);
     }
 
     private void subscribeUiFavorites(FeedViewModel feedViewModel) {
@@ -67,7 +75,6 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 return true;
             case R.id.clear_data:
                 Toast.makeText(this, "Clearing favorites...", Toast.LENGTH_SHORT).show();
-
                 feedViewModel.deleteAllFavorites();
                 return true;
         }
@@ -78,16 +85,15 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         feedViewModel.removeItemFromFavorites(feedItem);
-//        adapter.notifyItemRemoved(position);
     }
 
     @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
-        Log.d(TAG, "onShareBtnClick: " + feedItem.getTitle() + " " + position);
+        // TODO: 11/17/2018 Implement Share Btn Clicked
     }
 
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem) {
-        Log.d(TAG, "onBrowserBtnClick: " + feedItem.getTitle());
+        Utils.openCustomTab(FavoritesActivity.this, feedItem.getLink());
     }
 }

@@ -9,6 +9,10 @@ import android.widget.TextView;
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.screens.common.views.BaseViewMvc;
 
+/**
+ * This would be a good way to separate Toolbar logic.
+ * Todo: Explore how this might work with a SearchView
+ */
 public class ToolbarViewMvc extends BaseViewMvc {
 
     public interface NavigateUpClickListener {

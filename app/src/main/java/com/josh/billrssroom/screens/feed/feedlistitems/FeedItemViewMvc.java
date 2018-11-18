@@ -11,10 +11,10 @@ public interface FeedItemViewMvc extends ObservableViewMvc<FeedItemViewMvc.Liste
     public interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
         void onBrowserBtnClicked(FeedItem feedItem, int position);
+        void onSaveBtnClicked(FeedItem feedItem, int position);
     }
 
     void bindItem(FeedItem feedItem, int position);
-
 
     void setImageResource(int drawable);
 }

@@ -4,9 +4,9 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.josh.billrssroom.R;
-import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
+import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
- * Implemented by the FavoritesActivity
+ * Implemented in {@link FavoritesActivity}
  */
 public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListViewMvc.Listener> implements
         FavoriteListViewMvc,
@@ -42,6 +42,8 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         for (Listener listener : getListeners()){
             listener.onDeleteBtnClicked(feedItem, position);
+
+            favoriteAdapterMvc.notifyItemRemoved(position);
         }
     }
 
