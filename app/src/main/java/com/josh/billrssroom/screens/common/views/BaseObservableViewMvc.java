@@ -22,4 +22,8 @@ public abstract class BaseObservableViewMvc <ListenerType> extends BaseViewMvc i
     protected Set<ListenerType> getListeners(){
         return Collections.unmodifiableSet(listeners);
     }
+
+    protected void openDrawer() {
+
+    }
 }

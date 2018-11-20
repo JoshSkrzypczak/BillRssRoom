@@ -11,4 +11,5 @@
     <string name="action_settings">Settings</string>
     <string name="action_favorites">Favorites</string>
     <string name="clear_all_data">Remove all</string>
+    <string name="drawer_menu_item_favorites">Favorites</string>
 </resources>
