@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.josh.billrssroom.R;
+import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
-import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.favorites.FavoritesActivity;
 import com.josh.billrssroom.utilities.AsyncClickTask;
 import com.josh.billrssroom.utilities.AsyncResponse;

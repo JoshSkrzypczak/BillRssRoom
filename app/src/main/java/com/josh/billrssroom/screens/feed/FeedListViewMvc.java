@@ -9,7 +9,9 @@ public interface FeedListViewMvc extends ObservableViewMvc<FeedListViewMvc.Liste
 
     public interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
+
         void onBrowserBtnClicked(FeedItem feedItem, int position);
+
         void onSaveBtnClicked(FeedItem feedItem, int position);
     }
 
