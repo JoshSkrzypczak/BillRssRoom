@@ -33,8 +33,18 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
     }
 
     @Override
+    public void setFeedItemList(List<FeedItem> feedItems) {
+        feedAdapterMvc.setFeedItemList(feedItems);
+    }
+
+    @Override
     public void bindFeedItems(List<FeedItem> data) {
         feedAdapterMvc.setFeedItems(data);
+    }
+
+    @Override
+    public int getFeedCount() {
+        return feedAdapterMvc.getItemCount();
     }
 
     @Override

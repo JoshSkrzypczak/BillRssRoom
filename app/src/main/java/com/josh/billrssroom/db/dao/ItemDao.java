@@ -1,6 +1,7 @@
 package com.josh.billrssroom.db.dao;
 
 import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.networking.Resource;
 
 import java.util.List;
 
@@ -10,37 +11,38 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Update;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 @Dao
 public interface ItemDao {
+
+    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.description = itemsFts.description) "
+            + "WHERE itemsFts MATCH :query")
+    LiveData<List<FeedItem>> searchAllItems(String query);
+
+
+    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.description = itemsFts.description) WHERE items.isFav = 1"
+            + " AND itemsFts MATCH :query")
+    LiveData<List<FeedItem>> searchAllFavorites(String query);
+
+
+
+    @Query("SELECT * FROM items ORDER BY pubDate DESC")
+    LiveData<List<FeedItem>> loadFeedDbItems();
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertData(List<FeedItem> item);
 
     @Query("UPDATE items SET isFav = 0")
     void deleteAllFavorites();
 
     @Query("SELECT * FROM items WHERE isFav = 1")
-    LiveData<List<FeedItem>> getFavorites();
+    LiveData<List<FeedItem>> loadFavorites();
 
     @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
     int getIntBoolean(String billTitle);
-
-    // TODO: 10/5/2018 Use Replace or Ignore?
-    /**
-     * By using REPLACE, when fetching from the api, an item with same title as another item
-     * already in the list, it replaces that original at the old position instead of at the top.
-     *
-     * Does ORDER BY not have an impact?
-     *
-     * Possible Options:
-     * 1) Use IGNORE
-     * 2) Instead of using bill title as the primary key, autogenerate primary key to an int.
-     * @param item
-     */
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertData(List<FeedItem> item);
-
-    @Query("SELECT * FROM items ORDER BY pubDate DESC")
-    LiveData<List<FeedItem>> loadFeedDbItems();
 
     // True is 1
     @Query("UPDATE items SET isFav = 1 WHERE title = :billTitle")
@@ -54,8 +56,21 @@ public interface ItemDao {
 
 
 
+
+
+
+
+
+
+
+
     @Query("SELECT title FROM items WHERE title = :billTitle LIMIT 1")
-    String getItemId(String billTitle);
+    String getItemTitle(String billTitle);
+
+
+    @Query("SELECT description FROM items WHERE description = :billDescription LIMIT 1")
+    String getItemDescription(String billDescription);
+
 
     @Query("SELECT title FROM items where title = :currentId")
     LiveData<String> inDatabase(String currentId);
@@ -71,5 +86,4 @@ public interface ItemDao {
 
     @Delete
     void deleteFavorite(FeedItem feedItem);
-
 }

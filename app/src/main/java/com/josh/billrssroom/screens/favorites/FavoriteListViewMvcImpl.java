@@ -36,8 +36,13 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
     }
 
     @Override
+    public int getFavoriteCount() {
+        return favoriteAdapterMvc.getItemCount();
+    }
+
+    @Override
     public void bindFavoriteItems(List<FeedItem> data) {
-        favoriteAdapterMvc.setFavoriteItems(data);
+        favoriteAdapterMvc.setFavoritesList(data);
     }
 
     @Override

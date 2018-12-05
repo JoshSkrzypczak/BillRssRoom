@@ -3,10 +3,10 @@ package com.josh.billrssroom.viewmodel;
 import android.app.Application;
 
 import com.josh.billrssroom.BasicApp;
-import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.repository.FeedRepository;
 
 import java.util.List;
@@ -17,47 +17,76 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 
 public class FeedViewModel extends AndroidViewModel {
+
     private ItemDao itemDao;
+
     private FeedRepository feedRepository;
+
+    private final MediatorLiveData<List<FeedItem>> mObservableFavorites;
+    private final MediatorLiveData<List<FeedItem>> mObservableFeedItems;
 
     private final LiveData<Resource<List<FeedItem>>> liveDataFeedItems;
 
-    private final MediatorLiveData<List<FeedItem>> favoriteMediatorLd;
+
 
     public FeedViewModel(@NonNull Application application) {
         super(application);
 
         itemDao = FeedDatabase.getFeedDatabase(application).feedDao();
 
-        feedRepository = ((BasicApp)application).getFeedRepository();
+        feedRepository = ((BasicApp) application).getFeedRepository();
 
         liveDataFeedItems = feedRepository.loadBillItems();
 
-        favoriteMediatorLd = new MediatorLiveData<>();
-        favoriteMediatorLd.setValue(null);
-        LiveData<List<FeedItem>> favorites = ((BasicApp)application).getFeedRepository().getFavorites();
+        mObservableFavorites = new MediatorLiveData<>();
+        mObservableFavorites.setValue(null);
+        LiveData<List<FeedItem>> favorites = ((BasicApp) application).getFeedRepository().getObservableFavorites();
+        mObservableFavorites.addSource(favorites, mObservableFavorites::setValue);
 
-        favoriteMediatorLd.addSource(favorites, favoriteMediatorLd::setValue);
+
+        mObservableFeedItems = new MediatorLiveData<>();
+        mObservableFeedItems.setValue(null);
+        LiveData<List<FeedItem>> feedItems = ((BasicApp) application).getFeedRepository().getObservableFeedItems();
+        mObservableFeedItems.addSource(feedItems, mObservableFeedItems::setValue);
+
     }
 
-
-    public LiveData<Resource<List<FeedItem>>> getObservableFeedItems() {
+    public LiveData<Resource<List<FeedItem>>> getLiveDataFeedItems() {
         return liveDataFeedItems;
     }
 
-    public LiveData<List<FeedItem>> getFavoriteFeedItems(){
-        return favoriteMediatorLd;
+    public LiveData<List<FeedItem>> searchFeedItems(String query){
+        return feedRepository.searchFeedItems(query);
     }
 
-    public void deleteAllFavorites(){
+    public LiveData<List<FeedItem>> getObservableFeedItems() {
+        return mObservableFeedItems;
+    }
+
+
+    public LiveData<List<FeedItem>> searchFavorites(String query){
+        return feedRepository.searchFavorites(query);
+    }
+
+    public LiveData<List<FeedItem>> getFavorites() {
+        return mObservableFavorites;
+    }
+
+    public void deleteAllFavorites() {
         feedRepository.deleteAllFavorites();
     }
 
-    public void updateItemAsFavorite(FeedItem feedItem){
+
+
+
+
+    public void updateItemAsFavorite(FeedItem feedItem) {
         feedRepository.updateFeedItemAsFavorite(feedItem);
     }
 
-    public void removeItemFromFavorites(FeedItem feedItem){
+    public void removeItemFromFavorites(FeedItem feedItem) {
         feedRepository.removeItemFromFavorites(feedItem);
     }
+
+
 }

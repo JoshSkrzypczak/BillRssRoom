@@ -17,16 +17,8 @@
             android:layout_height="?android:attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.ToolbarTitle"
-                android:text="@string/activity_favorites"/>
-
-        </androidx.appcompat.widget.Toolbar>
+            app:title="@string/activity_favorites"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

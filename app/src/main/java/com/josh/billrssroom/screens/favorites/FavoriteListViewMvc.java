@@ -10,6 +10,8 @@ import java.util.List;
  */
 public interface FavoriteListViewMvc extends ObservableViewMvc<FavoriteListViewMvc.Listener> {
 
+    int getFavoriteCount();
+
     public interface Listener {
         void onDeleteBtnClicked(FeedItem feedItem, int position);
         void onShareBtnClicked(FeedItem feedItem, int position);

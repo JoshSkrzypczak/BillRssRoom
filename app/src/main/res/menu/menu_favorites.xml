@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_get_count"
+        android:orderInCategory="100"
+        android:title="Get count"
+        android:icon="@drawable/ic_rss_feed_black_24dp"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="200"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="@string/action_search"
+        app:showAsAction="ifRoom"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+
     <item
         android:id="@+id/clear_data"
-        android:orderInCategory="100"
+        android:orderInCategory="300"
         android:title="@string/clear_all_data"
         app:showAsAction="never" />
 </menu>

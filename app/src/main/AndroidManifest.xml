@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.josh.billrssroom">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".BasicApp"
@@ -18,21 +18,27 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.favorites.FavoritesActivity"
+        <activity
+            android:name=".screens.favorites.FavoritesActivity"
             android:label="@string/activity_favorites"
             android:parentActivityName=".screens.feed.MainActivity"
             android:theme="@style/AppTheme.Favorites">
             <meta-data
                 android:name="android.suppport.PARENT_ACTIVITY"
-                android:value="com.josh.billrssroom.ui.FavoritesActivity"/>
+                android:value="com.josh.billrssroom.ui.FavoritesActivity" />
         </activity>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+
     </application>
 
 </manifest>

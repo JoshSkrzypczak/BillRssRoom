@@ -1,7 +1,6 @@
 package com.josh.billrssroom.screens.favorites;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -12,11 +11,17 @@ import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener {
+public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener,
+        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private FavoriteListViewMvc favoriteViewMvc;
 
@@ -29,13 +34,12 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        subscribeUiFavorites(feedViewModel);
+        subscribeUiFavorites(feedViewModel.getFavorites());
 
         setContentView(favoriteViewMvc.getRootView());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -53,10 +57,13 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         favoriteViewMvc.unregisterListener(this);
     }
 
-    private void subscribeUiFavorites(FeedViewModel feedViewModel) {
-        feedViewModel.getFavoriteFeedItems().observe(this, feedItems -> {
-            if (feedItems != null){
-                favoriteViewMvc.bindFavoriteItems(feedItems);
+    private void subscribeUiFavorites(LiveData<List<FeedItem>> liveData) {
+        liveData.observe(this, new Observer<List<FeedItem>>() {
+            @Override
+            public void onChanged(List<FeedItem> feedItems) {
+                if (feedItems != null){
+                    favoriteViewMvc.bindFavoriteItems(feedItems);
+                }
             }
         });
     }
@@ -64,6 +71,10 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
+        searchView.setQueryHint("Search");
         return true;
     }
 
@@ -77,10 +88,13 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 Toast.makeText(this, "Clearing favorites...", Toast.LENGTH_SHORT).show();
                 feedViewModel.deleteAllFavorites();
                 return true;
+            case R.id.action_get_count:
+                int favoriteCount = favoriteViewMvc.getFavoriteCount();
+                Toast.makeText(this, "Count: " + favoriteCount, Toast.LENGTH_SHORT).show();
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
@@ -95,5 +109,25 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem) {
         Utils.openCustomTab(FavoritesActivity.this, feedItem.getLink());
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        if (query == null || query.isEmpty()){
+            subscribeUiFavorites(feedViewModel.getFavorites());
+        } else {
+            subscribeUiFavorites(feedViewModel.searchFavorites("*" + query + "*"));
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onClose() {
+        return false;
     }
 }

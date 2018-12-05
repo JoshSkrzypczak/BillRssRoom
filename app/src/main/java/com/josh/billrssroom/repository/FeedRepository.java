@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
@@ -34,6 +35,8 @@ public class FeedRepository {
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
     private final LiveData<List<FeedItem>> favorites;
+    private MediatorLiveData<List<FeedItem>> mObservableFavorites;
+    private MediatorLiveData<List<FeedItem>> mObservableFeedItems;
 
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
@@ -44,18 +47,63 @@ public class FeedRepository {
 
         apiService = RetrofitClient.getInstance().getRestApi();
 
-        favorites = itemDao.getFavorites();
+        favorites = itemDao.loadFavorites();
+
+        mObservableFavorites = new MediatorLiveData<>();
+        mObservableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
+            mObservableFavorites.postValue(favorites);
+        });
+
+        mObservableFeedItems = new MediatorLiveData<>();
+        mObservableFeedItems.addSource(feedDatabase.feedDao().loadFeedDbItems(), feedItems -> {
+            mObservableFeedItems.postValue(feedItems);
+        });
+
+
+    }
+
+    public LiveData<List<FeedItem>> getObservableFavorites(){
+        return mObservableFavorites;
+    }
+
+    public LiveData<List<FeedItem>> searchFavorites(String query){
+        return feedDatabase.feedDao().searchAllFavorites(query);
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
         return favorites;
     }
 
+    public LiveData<List<FeedItem>> getObservableFeedItems(){
+        return mObservableFavorites;
+    }
+
+    public LiveData<List<FeedItem>> searchFeedItems(String query){
+        return feedDatabase.feedDao().searchAllItems(query);
+    }
+
+
+
+
+
     public LiveData<Resource<List<FeedItem>>> loadBillItems() {
         return new NetworkBoundResource<List<FeedItem>, RssResult>(appExecutors) {
             @Override
             protected void saveCallResult(@NonNull RssResult item) {
                 feedDatabase.feedDao().insertData(item.getChannel().getItems());
+
+//                for (FeedItem feedItem : item.getChannel().getItems()){
+//                    String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
+//                    String billDescription = feedDatabase.feedDao().getItemDescription(feedItem.getDescription());
+//
+//                    System.out.println(":::billTitle::: " + billTitle);
+//
+//                    if (billTitle == null){
+////                        feedDatabase.feedDao().insertItem(feedItem);
+//                    } else {
+////                        feedDatabase.feedDao().updateItemDate(feedItem.pubDate);
+//                    }
+//                }
             }
 
             @Override
@@ -77,14 +125,13 @@ public class FeedRepository {
         }.asLiveData();
     }
 
-    public void deleteAllFavorites(){
+    public void deleteAllFavorites() {
         new deleteAllFavoritesAsyncTask(itemDao).execute();
     }
 
     public void removeItemFromFavorites(FeedItem feedItem) {
         new removeItemFromFavoritesAsync(itemDao).execute(feedItem);
     }
-
 
     public void updateFeedItemAsFavorite(FeedItem item) {
         new updateFeedItemFavoriteAsync(itemDao).execute(item);
@@ -137,11 +184,11 @@ public class FeedRepository {
         }
     }
 
-    private static class deleteAllFavoritesAsyncTask extends AsyncTask<Void, Void, Void>{
+    private static class deleteAllFavoritesAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private ItemDao asyncItemDao;
 
-        deleteAllFavoritesAsyncTask(ItemDao itemDao){
+        deleteAllFavoritesAsyncTask(ItemDao itemDao) {
             asyncItemDao = itemDao;
         }
 

@@ -12,4 +12,6 @@
     <string name="action_favorites">Favorites</string>
     <string name="clear_all_data">Remove all</string>
     <string name="drawer_menu_item_favorites">Favorites</string>
+    <string name="hint_bill_favorites_search">Enter Bill # or keyword</string>
+    <string name="activity_feed">Recent Bill Activity</string>
 </resources>

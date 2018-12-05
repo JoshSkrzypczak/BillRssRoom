@@ -2,6 +2,8 @@ package com.josh.billrssroom.screens.favorites;
 
 import android.content.Context;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
@@ -10,11 +12,11 @@ import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemView
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.FavoriteViewHolderMvc>
         implements FavoriteItemViewMvc.Listener {
-
 
     public interface Listener {
         void onDeleteBtnClicked(FeedItem feedItem, int position);
@@ -46,6 +48,40 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     public void setFavoriteItems(List<FeedItem> favoriteItems) {
         this.favoriteItems = favoriteItems;
         notifyDataSetChanged();
+    }
+
+    public void setFavoritesList(final List<FeedItem> favoriteItemsList){
+        if (this.favoriteItems == null){
+            this.favoriteItems = favoriteItemsList;
+            notifyItemRangeInserted(0, favoriteItemsList.size());
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return favoriteItems.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return favoriteItemsList.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return favoriteItems.get(oldItemPosition).getDescription()
+                            .equals(favoriteItemsList.get(newItemPosition).getDescription());
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    FeedItem newItem = favoriteItemsList.get(newItemPosition);
+                    FeedItem oldItem = favoriteItems.get(oldItemPosition);
+                    return newItem.getDescription().equals(oldItem.getDescription());
+                }
+            });
+            favoriteItems = favoriteItemsList;
+            result.dispatchUpdatesTo(this);
+        }
     }
 
     @NonNull

@@ -12,7 +12,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+        android:fontFamily="sans-serif-regular"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,7 +26,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textAlignment="textEnd"
+        android:textAlignment="textStart"
         android:textAppearance="@style/TextAppearance.Date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,8 +52,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
-        android:maxLines="15"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:maxLines="10"
+        android:ellipsize="end"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view"
@@ -111,6 +113,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="visible"
-        app:constraint_referenced_ids="btn_share, btn_trash, btn_browser"/>
+        app:constraint_referenced_ids="btn_share, btn_trash, btn_browser" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

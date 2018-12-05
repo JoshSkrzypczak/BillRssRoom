@@ -12,11 +12,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -48,20 +51,19 @@ public class FeedItem {
 
 
     public FeedItem(
-                @NonNull @Element(name = "title") String title,
-                @Element(name = "link") String link,
-                @Element(name = "description") String description,
-                @Element(name = "pubDate") String pubDate,
-                @Element(name = "guid") String guid) {
+            @Element(name = "title") String title,
+            @Element(name = "link") String link,
+            @Element(name = "description") String description,
+            @Element(name = "pubDate") String pubDate,
+            @Element(name = "guid") String guid) {
         this.title = title;
         this.link = link;
         this.description = description;
         this.pubDate = pubDate;
         this.guid = guid;
+    }
 
-}
-
-    @NonNull
+        @NonNull
     public String getTitle() {
         return title;
     }
@@ -110,6 +112,7 @@ public class FeedItem {
         isFavorite = favorite;
     }
 
+
     public String getFormattedDate() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.getDefault());
@@ -129,12 +132,12 @@ public class FeedItem {
         return destinationFormat.format(parsedDated);
     }
 
-    public Date getDateObject(){
+    public Date getDateObject() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.getDefault());
         Date convertedDate = new Date();
         try {
             convertedDate = dateFormat.parse(pubDate);
-        } catch (ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return convertedDate;
@@ -146,5 +149,13 @@ public class FeedItem {
         } else {
             return Html.fromHtml(description).toString();
         }
+    }
+
+
+    public boolean equals(FeedItem other){
+        if (other == null)return false;
+
+        return (Objects.equals(this.description, other.description))
+                &&(Objects.equals(this.title, other.title));
     }
 }
