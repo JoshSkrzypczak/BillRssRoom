@@ -2,6 +2,7 @@ package com.josh.billrssroom.utilities;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.db.dao.ItemDao;
@@ -23,7 +24,8 @@ public class AsyncClickTask extends AsyncTask<AsyncClickTask.TaskParams, Integer
     public static final String TAG = AsyncClickTask.class.getSimpleName();
 
 
-    public ItemDao asyncDao;public AsyncResponse delegate;
+    public ItemDao asyncDao;
+    public AsyncResponse delegate;
     int position;
 
     public AsyncClickTask(Context context, int position, AsyncResponse asyncResponse){

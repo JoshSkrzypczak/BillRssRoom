@@ -42,7 +42,7 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
 
     @Override
     public void bindFavoriteItems(List<FeedItem> data) {
-        favoriteAdapterMvc.setFavoritesList(data);
+        favoriteAdapterMvc.setFavoriteItems(data);
     }
 
     @Override

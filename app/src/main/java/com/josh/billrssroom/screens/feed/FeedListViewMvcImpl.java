@@ -33,11 +33,6 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
     }
 
     @Override
-    public void setFeedItemList(List<FeedItem> feedItems) {
-        feedAdapterMvc.setFeedItemList(feedItems);
-    }
-
-    @Override
     public void bindFeedItems(List<FeedItem> data) {
         feedAdapterMvc.setFeedItems(data);
     }
@@ -65,7 +60,8 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
     public void onSaveBtnClicked(FeedItem feedItem, int position) {
         for (Listener listener : getListeners()){
             listener.onSaveBtnClicked(feedItem, position);
+            System.out.println(":::onSaveBtnClicked::: " + feedItem.getTitle() + " pos: " + position);
         }
-//        feedAdapterMvc.notifyItemChanged(position);
+
     }
 }

@@ -18,23 +18,6 @@ import androidx.sqlite.db.SupportSQLiteQuery;
 @Dao
 public interface ItemDao {
 
-    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.description = itemsFts.description) "
-            + "WHERE itemsFts MATCH :query")
-    LiveData<List<FeedItem>> searchAllItems(String query);
-
-
-    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.description = itemsFts.description) WHERE items.isFav = 1"
-            + " AND itemsFts MATCH :query")
-    LiveData<List<FeedItem>> searchAllFavorites(String query);
-
-
-
-    @Query("SELECT * FROM items ORDER BY pubDate DESC")
-    LiveData<List<FeedItem>> loadFeedDbItems();
-
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertData(List<FeedItem> item);
-
     @Query("UPDATE items SET isFav = 0")
     void deleteAllFavorites();
 
@@ -44,6 +27,12 @@ public interface ItemDao {
     @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
     int getIntBoolean(String billTitle);
 
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertData(List<FeedItem> item);
+
+    @Query("SELECT * FROM items ORDER BY pubDate DESC") //ORDER BY pubDate DESC
+    LiveData<List<FeedItem>> loadFeedDbItems();
+
     // True is 1
     @Query("UPDATE items SET isFav = 1 WHERE title = :billTitle")
     void updateAndSetItemToTrue(String billTitle);
@@ -52,13 +41,11 @@ public interface ItemDao {
     @Query("UPDATE items SET isFav = 0 WHERE title = :billTitle")
     void updateAndSetItemToFalse(String billTitle);
 
+    @Insert
+    void insertItem(FeedItem feedItem);
 
-
-
-
-
-
-
+    @Query("UPDATE items SET pubDate = :date, description = :description WHERE title = :billTitle")
+    void updateItem(String date, String description, String billTitle);
 
 
 
@@ -70,7 +57,6 @@ public interface ItemDao {
 
     @Query("SELECT description FROM items WHERE description = :billDescription LIMIT 1")
     String getItemDescription(String billDescription);
-
 
     @Query("SELECT title FROM items where title = :currentId")
     LiveData<String> inDatabase(String currentId);

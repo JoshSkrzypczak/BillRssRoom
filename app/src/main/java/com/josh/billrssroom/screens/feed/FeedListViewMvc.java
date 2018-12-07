@@ -7,9 +7,6 @@ import java.util.List;
 
 public interface FeedListViewMvc extends ObservableViewMvc<FeedListViewMvc.Listener> {
 
-
-    void setFeedItemList(List<FeedItem> feedItems);
-
     public interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
 

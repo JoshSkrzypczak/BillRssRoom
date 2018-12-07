@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 
 public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
@@ -35,8 +34,6 @@ public class FeedRepository {
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
     private final LiveData<List<FeedItem>> favorites;
-    private MediatorLiveData<List<FeedItem>> mObservableFavorites;
-    private MediatorLiveData<List<FeedItem>> mObservableFeedItems;
 
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
@@ -48,78 +45,50 @@ public class FeedRepository {
         apiService = RetrofitClient.getInstance().getRestApi();
 
         favorites = itemDao.loadFavorites();
-
-        mObservableFavorites = new MediatorLiveData<>();
-        mObservableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
-            mObservableFavorites.postValue(favorites);
-        });
-
-        mObservableFeedItems = new MediatorLiveData<>();
-        mObservableFeedItems.addSource(feedDatabase.feedDao().loadFeedDbItems(), feedItems -> {
-            mObservableFeedItems.postValue(feedItems);
-        });
-
-
-    }
-
-    public LiveData<List<FeedItem>> getObservableFavorites(){
-        return mObservableFavorites;
-    }
-
-    public LiveData<List<FeedItem>> searchFavorites(String query){
-        return feedDatabase.feedDao().searchAllFavorites(query);
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
         return favorites;
     }
 
-    public LiveData<List<FeedItem>> getObservableFeedItems(){
-        return mObservableFavorites;
-    }
-
-    public LiveData<List<FeedItem>> searchFeedItems(String query){
-        return feedDatabase.feedDao().searchAllItems(query);
-    }
-
-
-
-
 
     public LiveData<Resource<List<FeedItem>>> loadBillItems() {
         return new NetworkBoundResource<List<FeedItem>, RssResult>(appExecutors) {
             @Override
             protected void saveCallResult(@NonNull RssResult item) {
-                feedDatabase.feedDao().insertData(item.getChannel().getItems());
+                Log.d(TAG, "saveCallResult: ");
+//                feedDatabase.feedDao().insertData(item.getChannel().getItems());
 
-//                for (FeedItem feedItem : item.getChannel().getItems()){
-//                    String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
-//                    String billDescription = feedDatabase.feedDao().getItemDescription(feedItem.getDescription());
-//
-//                    System.out.println(":::billTitle::: " + billTitle);
-//
-//                    if (billTitle == null){
-////                        feedDatabase.feedDao().insertItem(feedItem);
-//                    } else {
-////                        feedDatabase.feedDao().updateItemDate(feedItem.pubDate);
-//                    }
-//                }
+                for (FeedItem feedItem : item.getChannel().getItems()) {
+                    String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
+
+                    System.out.println(":::billTitle::: " + billTitle);
+
+                    if (billTitle == null) {
+                        feedDatabase.feedDao().insertItem(feedItem);
+                    } else {
+                        feedDatabase.feedDao().updateItem(feedItem.pubDate, feedItem.description, feedItem.title);
+                    }
+                }
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<FeedItem> data) {
+                Log.d(TAG, "shouldFetch: ");
                 return data == null || data.isEmpty() || billFeedRateLimit.shouldFetch(data.toString());
             }
 
             @NonNull
             @Override
             protected LiveData<List<FeedItem>> loadFromDb() {
+                Log.d(TAG, "loadFromDb: ");
                 return feedDatabase.feedDao().loadFeedDbItems();
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<RssResult>> createCall() {
+                Log.d(TAG, "createCall: ");
                 return apiService.getMyService();
             }
         }.asLiveData();
@@ -150,20 +119,19 @@ public class FeedRepository {
 
             int favoriteValueInt = asyncDao.getIntBoolean(items[0].getTitle());
 
-            Log.d(TAG, "doInBackground: favoriteIntValue: " + favoriteValueInt);
-
             if (favoriteValueInt == 1) {
+                Log.d(TAG, "doInBackground: updateAndSetItemToFalse");
                 // Sets isFavorite to false
                 // Item previously favorite; onClick sets favorite to false
                 // Show empty image drawable
                 asyncDao.updateAndSetItemToFalse(items[0].getTitle());
             } else {
+                Log.d(TAG, "doInBackground: updateAndSetItemToTrue");
                 // Sets isFavorite to true
                 // Item is not favorite; onClick sets favorite to true
                 // Show full image drawable
                 asyncDao.updateAndSetItemToTrue(items[0].getTitle());
             }
-
             return null;
         }
     }
@@ -191,7 +159,6 @@ public class FeedRepository {
         deleteAllFavoritesAsyncTask(ItemDao itemDao) {
             asyncItemDao = itemDao;
         }
-
 
         @Override
         protected Void doInBackground(Void... voids) {

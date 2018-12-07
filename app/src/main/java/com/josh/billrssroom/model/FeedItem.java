@@ -40,7 +40,6 @@ public class FeedItem {
     public String description;
     @ColumnInfo(name = "pubDate")
     @Element(name = "pubDate")
-    @TypeConverters({DateTypeConverter.class})
     public String pubDate;
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
@@ -51,7 +50,7 @@ public class FeedItem {
 
 
     public FeedItem(
-            @Element(name = "title") String title,
+            @NonNull @Element(name = "title") String title,
             @Element(name = "link") String link,
             @Element(name = "description") String description,
             @Element(name = "pubDate") String pubDate,
@@ -63,7 +62,7 @@ public class FeedItem {
         this.guid = guid;
     }
 
-        @NonNull
+    @NonNull
     public String getTitle() {
         return title;
     }
@@ -112,7 +111,6 @@ public class FeedItem {
         isFavorite = favorite;
     }
 
-
     public String getFormattedDate() {
         SimpleDateFormat formatter =
                 new SimpleDateFormat("EEE, dd MMM yyyy hh:mm:ss z", Locale.getDefault());
@@ -149,13 +147,5 @@ public class FeedItem {
         } else {
             return Html.fromHtml(description).toString();
         }
-    }
-
-
-    public boolean equals(FeedItem other){
-        if (other == null)return false;
-
-        return (Objects.equals(this.description, other.description))
-                &&(Objects.equals(this.title, other.title));
     }
 }

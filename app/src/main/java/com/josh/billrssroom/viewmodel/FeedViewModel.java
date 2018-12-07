@@ -1,6 +1,7 @@
 package com.josh.billrssroom.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.db.FeedDatabase;
@@ -18,12 +19,13 @@ import androidx.lifecycle.MediatorLiveData;
 
 public class FeedViewModel extends AndroidViewModel {
 
+    public static final String TAG = FeedViewModel.class.getSimpleName();
+
     private ItemDao itemDao;
 
     private FeedRepository feedRepository;
 
     private final MediatorLiveData<List<FeedItem>> mObservableFavorites;
-    private final MediatorLiveData<List<FeedItem>> mObservableFeedItems;
 
     private final LiveData<Resource<List<FeedItem>>> liveDataFeedItems;
 
@@ -40,51 +42,33 @@ public class FeedViewModel extends AndroidViewModel {
 
         mObservableFavorites = new MediatorLiveData<>();
         mObservableFavorites.setValue(null);
-        LiveData<List<FeedItem>> favorites = ((BasicApp) application).getFeedRepository().getObservableFavorites();
+        LiveData<List<FeedItem>> favorites = ((BasicApp) application).getFeedRepository().getFavorites();
         mObservableFavorites.addSource(favorites, mObservableFavorites::setValue);
-
-
-        mObservableFeedItems = new MediatorLiveData<>();
-        mObservableFeedItems.setValue(null);
-        LiveData<List<FeedItem>> feedItems = ((BasicApp) application).getFeedRepository().getObservableFeedItems();
-        mObservableFeedItems.addSource(feedItems, mObservableFeedItems::setValue);
 
     }
 
     public LiveData<Resource<List<FeedItem>>> getLiveDataFeedItems() {
+        Log.d(TAG, "getLiveDataFeedItems: ");
         return liveDataFeedItems;
     }
 
-    public LiveData<List<FeedItem>> searchFeedItems(String query){
-        return feedRepository.searchFeedItems(query);
-    }
-
-    public LiveData<List<FeedItem>> getObservableFeedItems() {
-        return mObservableFeedItems;
-    }
-
-
-    public LiveData<List<FeedItem>> searchFavorites(String query){
-        return feedRepository.searchFavorites(query);
-    }
-
     public LiveData<List<FeedItem>> getFavorites() {
+        Log.d(TAG, "getFavorites: ");
         return mObservableFavorites;
     }
 
     public void deleteAllFavorites() {
+        Log.d(TAG, "deleteAllFavorites: ");
         feedRepository.deleteAllFavorites();
     }
 
-
-
-
-
     public void updateItemAsFavorite(FeedItem feedItem) {
+        Log.d(TAG, "updateItemAsFavorite: " + feedItem.getTitle());
         feedRepository.updateFeedItemAsFavorite(feedItem);
     }
 
     public void removeItemFromFavorites(FeedItem feedItem) {
+        Log.d(TAG, "removeItemFromFavorites: " + feedItem.getTitle());
         feedRepository.removeItemFromFavorites(feedItem);
     }
 

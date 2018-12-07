@@ -1,6 +1,7 @@
 package com.josh.billrssroom.screens.feed;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -50,7 +51,6 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
     private ViewMvcFactory viewMvcFactory;
     private List<FeedItem> feedItems;
 
-
     public FeedAdapterMvc(Context context, Listener listener, ViewMvcFactory viewMvcFactory) {
         this.listener = listener;
         this.context = context;
@@ -60,41 +60,6 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
     public void setFeedItems(List<FeedItem> feedItems) {
         this.feedItems = feedItems;
         notifyDataSetChanged();
-    }
-
-
-    public void setFeedItemList(final List<FeedItem> feedItemList){
-        if (this.feedItems == null){
-            this.feedItems = feedItemList;
-            notifyItemRangeInserted(0, feedItemList.size());
-        } else {
-            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    return feedItems.size();
-                }
-
-                @Override
-                public int getNewListSize() {
-                    return feedItemList.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return feedItems.get(oldItemPosition).getDescription()
-                            .equals(feedItemList.get(newItemPosition).getDescription());
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    FeedItem newItem = feedItemList.get(newItemPosition);
-                    FeedItem oldItem = feedItems.get(oldItemPosition);
-                    return newItem.getDescription().equals(oldItem.getDescription());
-                }
-            });
-            feedItems = feedItemList;
-            result.dispatchUpdatesTo(this);
-        }
     }
 
     @NonNull

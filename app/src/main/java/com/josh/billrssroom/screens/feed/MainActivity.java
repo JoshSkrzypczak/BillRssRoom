@@ -25,8 +25,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener,
-        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener {
 
     private FeedListViewMvc viewMvc;
 
@@ -40,7 +39,7 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        subscribeFeedUi(feedViewModel.getLiveDataFeedItems());
+        subscribeFeedUi(feedViewModel);
 
         setContentView(viewMvc.getRootView());
 
@@ -60,13 +59,10 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
         viewMvc.unregisterListener(this);
     }
 
-    private void subscribeFeedUi(LiveData<Resource<List<FeedItem>>> liveData) {
-        liveData.observe(this, new Observer<Resource<List<FeedItem>>>() {
-            @Override
-            public void onChanged(Resource<List<FeedItem>> listResource) {
-                if (listResource.data != null) {
-                    viewMvc.setFeedItemList(listResource.data);
-                }
+    private void subscribeFeedUi(FeedViewModel feedViewModel) {
+        feedViewModel.getLiveDataFeedItems().observe(this, listResource -> {
+            if (listResource != null && listResource.data != null){
+                viewMvc.bindFeedItems(listResource.data);
             }
         });
     }
@@ -74,10 +70,6 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-        searchView.setQueryHint("Search");
         return true;
     }
 
@@ -135,36 +127,5 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
                     }
                 });
         asyncTask.execute(taskParams);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        if (query == null || query.isEmpty()){
-            subscribeFeedUi(feedViewModel.getLiveDataFeedItems());
-        } else {
-            subscribeSearchFeedUi(feedViewModel.searchFeedItems("*" + query + "*"));
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onClose() {
-        return false;
-    }
-
-    private void subscribeSearchFeedUi(LiveData<List<FeedItem>> liveData) {
-        liveData.observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    viewMvc.setFeedItemList(feedItems);
-                }
-            }
-        });
     }
 }

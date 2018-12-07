@@ -20,8 +20,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener,
-        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener {
 
     private FavoriteListViewMvc favoriteViewMvc;
 
@@ -34,7 +33,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        subscribeUiFavorites(feedViewModel.getFavorites());
+        subscribeUiFavorites(feedViewModel);
 
         setContentView(favoriteViewMvc.getRootView());
 
@@ -57,13 +56,10 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         favoriteViewMvc.unregisterListener(this);
     }
 
-    private void subscribeUiFavorites(LiveData<List<FeedItem>> liveData) {
-        liveData.observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    favoriteViewMvc.bindFavoriteItems(feedItems);
-                }
+    private void subscribeUiFavorites(FeedViewModel feedViewModel) {
+        feedViewModel.getFavorites().observe(this, feedItems -> {
+            if (feedItems != null){
+                favoriteViewMvc.bindFavoriteItems(feedItems);
             }
         });
     }
@@ -71,10 +67,6 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-        searchView.setQueryHint("Search");
         return true;
     }
 
@@ -109,25 +101,5 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem) {
         Utils.openCustomTab(FavoritesActivity.this, feedItem.getLink());
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        if (query == null || query.isEmpty()){
-            subscribeUiFavorites(feedViewModel.getFavorites());
-        } else {
-            subscribeUiFavorites(feedViewModel.searchFavorites("*" + query + "*"));
-        }
-        return false;
-    }
-
-    @Override
-    public boolean onClose() {
-        return false;
     }
 }
