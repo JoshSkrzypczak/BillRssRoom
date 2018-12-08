@@ -72,5 +72,9 @@ public class FeedViewModel extends AndroidViewModel {
         feedRepository.removeItemFromFavorites(feedItem);
     }
 
+    public LiveData<List<FeedItem>> searchFavorites(String query){
+        return feedRepository.searchFavorites(query);
+    }
+
 
 }

@@ -47,6 +47,12 @@ public interface ItemDao {
     @Query("UPDATE items SET pubDate = :date, description = :description WHERE title = :billTitle")
     void updateItem(String date, String description, String billTitle);
 
+    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.title = itemsFts.title) WHERE items.isFav = 1"
+            + " AND itemsFts MATCH :query")
+    LiveData<List<FeedItem>> searchFavorites(String query);
+
+
+
 
 
 

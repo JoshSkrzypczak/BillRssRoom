@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
@@ -33,7 +34,9 @@ public class FeedRepository {
 
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
-    private final LiveData<List<FeedItem>> favorites;
+//    private final LiveData<List<FeedItem>> favorites;
+
+    private MediatorLiveData<List<FeedItem>> mObservableFavorites;
 
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
@@ -44,11 +47,20 @@ public class FeedRepository {
 
         apiService = RetrofitClient.getInstance().getRestApi();
 
-        favorites = itemDao.loadFavorites();
+//        favorites = itemDao.loadFavorites();
+
+        mObservableFavorites = new MediatorLiveData<>();
+        mObservableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
+            mObservableFavorites.postValue(favorites);
+        });
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
-        return favorites;
+        return mObservableFavorites;
+    }
+
+    public LiveData<List<FeedItem>> searchFavorites(String query){
+        return feedDatabase.feedDao().searchFavorites(query);
     }
 
 

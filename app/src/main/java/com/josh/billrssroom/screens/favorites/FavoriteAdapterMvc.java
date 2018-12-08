@@ -50,6 +50,40 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
         notifyDataSetChanged();
     }
 
+    public void setFavoriteItemList(final List<FeedItem> itemList) {
+        if (favoriteItems == null) {
+            favoriteItems = itemList;
+            notifyItemRangeInserted(0, itemList.size());
+        } else {
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                @Override
+                public int getOldListSize() {
+                    return favoriteItems.size();
+                }
+
+                @Override
+                public int getNewListSize() {
+                    return itemList.size();
+                }
+
+                @Override
+                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                    return favoriteItems.get(oldItemPosition).getTitle()
+                            .equals(itemList.get(newItemPosition).getTitle());
+                }
+
+                @Override
+                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                    FeedItem newProduct = itemList.get(newItemPosition);
+                    FeedItem oldProduct = favoriteItems.get(oldItemPosition);
+                    return newProduct.getTitle().equals(oldProduct.getTitle());
+                }
+            });
+            favoriteItems = itemList;
+            result.dispatchUpdatesTo(this);
+        }
+    }
+
     @NonNull
     @Override
     public FavoriteViewHolderMvc onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
