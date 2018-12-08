@@ -5,24 +5,17 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import android.widget.Toast;
-
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.networking.Resource;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
+import com.josh.billrssroom.screens.common.toastshelper.ToastsHelper;
 import com.josh.billrssroom.screens.favorites.FavoritesActivity;
 import com.josh.billrssroom.utilities.AsyncClickTask;
 import com.josh.billrssroom.utilities.AsyncResponse;
 import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
-import java.util.List;
-
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener {
@@ -31,12 +24,13 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     private FeedViewModel feedViewModel;
 
+    private ToastsHelper toastsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         viewMvc = getCompositionRoot().getViewMvcFactory().getFeedListViewMvc(null);
-
+        toastsHelper = getCompositionRoot().getToastsHelper();
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
         subscribeFeedUi(feedViewModel);
@@ -61,7 +55,7 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     private void subscribeFeedUi(FeedViewModel feedViewModel) {
         feedViewModel.getLiveDataFeedItems().observe(this, listResource -> {
-            if (listResource != null && listResource.data != null){
+            if (listResource != null && listResource.data != null) {
                 viewMvc.bindFeedItems(listResource.data);
             }
         });
@@ -79,10 +73,10 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
             case R.id.favorite:
                 startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
                 return true;
-            // TODO: 11/29/2018 Remove counting menu item in future. Using only for DB troubleshooting
+            // TODO: 11/29/2018 Remove later
             case R.id.action_get_count:
                 int feedCount = viewMvc.getFeedCount();
-                Toast.makeText(this, "Count: " + feedCount, Toast.LENGTH_SHORT).show();
+                toastsHelper.showListCountToast(feedCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -90,10 +84,7 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
-        Toast.makeText(this, "TODO: Implement Share: " +
-                feedItem.getTitle() +
-                " position: " +
-                position, Toast.LENGTH_SHORT).show();
+        toastsHelper.showShareButtonToast(feedItem, position);
     }
 
     @Override
@@ -103,10 +94,8 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
 
     @Override
     public void onSaveBtnClicked(FeedItem feedItem, int position) {
-
         // TODO: 11/17/2018 Animate btn onClick
         // TODO: 11/17/2018 No ripple effect onClick
-
         AsyncClickTask.TaskParams taskParams =
                 new AsyncClickTask.TaskParams(position, feedItem);
 

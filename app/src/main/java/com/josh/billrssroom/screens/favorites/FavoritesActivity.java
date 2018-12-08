@@ -3,11 +3,11 @@ package com.josh.billrssroom.screens.favorites;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
+import com.josh.billrssroom.screens.common.toastshelper.ToastsHelper;
 import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
@@ -27,10 +27,13 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     private FeedViewModel feedViewModel;
 
+    private ToastsHelper toastsHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         favoriteViewMvc = getCompositionRoot().getViewMvcFactory().getFavoriteListViewMvc(null);
+        toastsHelper = getCompositionRoot().getToastsHelper();
 
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
@@ -85,12 +88,12 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 this.onBackPressed();
                 return true;
             case R.id.clear_data:
-                Toast.makeText(this, "Clearing favorites...", Toast.LENGTH_SHORT).show();
+                toastsHelper.showClearingFavoritesToast();
                 feedViewModel.deleteAllFavorites();
                 return true;
             case R.id.action_get_count:
                 int favoriteCount = favoriteViewMvc.getFavoriteCount();
-                Toast.makeText(this, "Count: " + favoriteCount, Toast.LENGTH_SHORT).show();
+                toastsHelper.showListCountToast(favoriteCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -103,10 +106,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
-        Toast.makeText(this, "TODO: Implement Share: "
-                + feedItem.getTitle()
-                + " position: "
-                + position, Toast.LENGTH_SHORT).show();
+        toastsHelper.showShareButtonToast(feedItem, position);
     }
 
     @Override
