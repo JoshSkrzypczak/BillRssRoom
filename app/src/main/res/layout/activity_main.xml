@@ -25,6 +25,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
+        android:stateListAnimator="@animator/item_selection"
+        android:background="@drawable/feed_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"

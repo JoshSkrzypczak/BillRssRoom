@@ -2,6 +2,7 @@ package com.josh.billrssroom.screens.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +17,8 @@ import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener {
@@ -25,6 +28,10 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
     private FeedViewModel feedViewModel;
 
     private ToastsHelper toastsHelper;
+
+    ConstraintLayout constraintLayout;
+
+    ConstraintSet constraintSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
