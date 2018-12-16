@@ -42,12 +42,12 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
     kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
-    implementation "androidx.appcompat:appcompat:$rootProject.supportLibraryVersion"
-    implementation "androidx.browser:browser:$rootProject.supportLibraryVersion"
-    implementation "androidx.cardview:cardview:$rootProject.supportLibraryVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "com.google.android.material:material:$rootProject.supportLibraryVersion"
-    implementation "androidx.recyclerview:recyclerview:$rootProject.supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.appCompatVersion"
+    implementation "androidx.browser:browser:$rootProject.browserVersion"
+    implementation "androidx.cardview:cardview:$rootProject.cardViewVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
+    implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.recyclerViewVersion"
 
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
     implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
@@ -69,7 +69,7 @@ dependencies {
         exclude group: 'stax', module: 'stax'
     }
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 
 }
