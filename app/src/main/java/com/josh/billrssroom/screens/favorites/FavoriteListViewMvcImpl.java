@@ -42,15 +42,15 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
 
     @Override
     public void bindFavoriteItems(List<FeedItem> data) {
-        favoriteAdapterMvc.setFavoriteItems(data);
+        favoriteAdapterMvc.setFavoriteItemList(data);
     }
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         for (Listener listener : getListeners()) {
             listener.onDeleteBtnClicked(feedItem, position);
-            favoriteAdapterMvc.notifyItemRemoved(position);
         }
+        favoriteAdapterMvc.notifyItemRemoved(position);
     }
 
     @Override

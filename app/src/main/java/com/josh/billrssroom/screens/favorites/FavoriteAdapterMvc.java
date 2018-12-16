@@ -1,15 +1,15 @@
 package com.josh.billrssroom.screens.favorites;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
 import com.josh.billrssroom.screens.favorites.favoritelistitems.FavoriteItemViewMvc;
 
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.FavoriteViewHolderMvc>
         implements FavoriteItemViewMvc.Listener {
+
+    private static final String TAG = "FavoriteAdapterMvc";
 
     public interface Listener {
         void onDeleteBtnClicked(FeedItem feedItem, int position);
@@ -51,6 +53,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     }
 
     public void setFavoriteItemList(final List<FeedItem> itemList) {
+        notifyDataSetChanged();
         if (favoriteItems == null) {
             favoriteItems = itemList;
             notifyItemRangeInserted(0, itemList.size());
@@ -58,11 +61,13 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
                 public int getOldListSize() {
+                    Log.d(TAG, "getOldListSize: " + favoriteItems.size());
                     return favoriteItems.size();
                 }
 
                 @Override
                 public int getNewListSize() {
+                    Log.d(TAG, "getNewListSize: " + itemList.size());
                     return itemList.size();
                 }
 
@@ -76,7 +81,9 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
                     FeedItem newProduct = itemList.get(newItemPosition);
                     FeedItem oldProduct = favoriteItems.get(oldItemPosition);
-                    return newProduct.getTitle().equals(oldProduct.getTitle());
+                    return newProduct.getTitle().equals(oldProduct.getTitle())
+                            && Objects.equals(newProduct.getDescription(), oldProduct.getDescription())
+                            && Objects.equals(newProduct.getLink(), oldProduct.getLink());
                 }
             });
             favoriteItems = itemList;
@@ -110,6 +117,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
     @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
+        Log.d(TAG, "onShareBtnClicked: " + position);
         listener.onShareBtnClicked(feedItem, position);
     }
 

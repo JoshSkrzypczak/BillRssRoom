@@ -17,7 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener,
@@ -61,12 +60,9 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     }
 
     private void subscribeUiFavorites(LiveData<List<FeedItem>> liveData) {
-        liveData.observe(this, new Observer<List<FeedItem>>() {
-            @Override
-            public void onChanged(List<FeedItem> feedItems) {
-                if (feedItems != null){
-                    favoriteViewMvc.bindFavoriteItems(feedItems);
-                }
+        liveData.observe(this, feedItems -> {
+            if (feedItems != null){
+                favoriteViewMvc.bindFavoriteItems(feedItems);
             }
         });
     }
