@@ -12,11 +12,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="sans-serif-regular"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@+id/text_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_date"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="HB 6455 of 2018" />
 
@@ -29,9 +28,9 @@
         android:layout_marginEnd="16dp"
         android:textAlignment="textEnd"
         android:textAppearance="@style/TextAppearance.Date"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/view"
         tools:text="@tools:sample/date/mmddyy" />
 
     <View
@@ -42,9 +41,9 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/text_view_divider"
+        app:layout_constraintBottom_toTopOf="@+id/text_description"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/text_description" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/text_description"
@@ -53,51 +52,61 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="16dp"
         android:maxLines="10"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintBottom_toTopOf="@+id/btn_browser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_browser"
-        app:layout_goneMarginBottom="12dp"
+        app:layout_goneMarginBottom="16dp"
         tools:text="@tools:sample/lorem" />
 
     <ImageView
         android:id="@+id/btn_browser"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
         android:tint="@color/color_accent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_save"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_browser_dark"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/btn_save"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="24dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
         android:tint="@color/color_accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_share"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_browser"
         app:srcCompat="@drawable/ic_favorite_empty"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/btn_share"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="centerInside"
         android:tint="@color/color_accent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_save"
         app:srcCompat="@drawable/ic_share_dark"
         tools:ignore="ContentDescription" />
 
@@ -105,10 +114,10 @@
         android:id="@+id/group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="visible"
+        app:constraint_referenced_ids="btn_browser, btn_save, btn_share"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_description"
-        app:constraint_referenced_ids="btn_browser, btn_save, btn_share"/>
+        app:layout_constraintTop_toBottomOf="@+id/text_description" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
