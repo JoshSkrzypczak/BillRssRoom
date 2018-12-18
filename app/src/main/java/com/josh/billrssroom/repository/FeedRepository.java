@@ -74,10 +74,10 @@ public class FeedRepository {
                 for (FeedItem feedItem : item.getChannel().getItems()) {
                     String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
 
-                    System.out.println(":::billTitle::: " + billTitle);
-
-                    if (billTitle == null) {
+                    if (billTitle == null){
                         feedDatabase.feedDao().insertItem(feedItem);
+                    } else if (feedItem.getTitle().contains(billTitle)){
+                        feedDatabase.feedDao().updateItem(feedItem.pubDate, feedItem.description, feedItem.title);
                     } else {
                         feedDatabase.feedDao().updateItem(feedItem.pubDate, feedItem.description, feedItem.title);
                     }
