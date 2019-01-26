@@ -4,14 +4,17 @@ import android.content.Context;
 
 import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
+import com.josh.billrssroom.utilities.DateTypeConverter;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 @Database(entities = {FeedItem.class, FeedItemFtsEntity.class}, version = 1)
+@TypeConverters({DateTypeConverter.class})
 public abstract class FeedDatabase extends RoomDatabase {
 
     private static volatile FeedDatabase INSTANCE = null;
