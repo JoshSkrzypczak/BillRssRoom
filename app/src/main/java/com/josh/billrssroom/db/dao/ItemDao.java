@@ -52,13 +52,20 @@ public interface ItemDao {
     LiveData<List<FeedItem>> searchFavorites(String query);
 
 
-
-
-
-
-
-    @Query("SELECT title FROM items WHERE title = :billTitle LIMIT 1")
+    @Query("SELECT title FROM items WHERE title LIKE :billTitle")
     String getItemTitle(String billTitle);
+
+
+
+    @Query("SELECT title FROM items WHERE title LIKE :billTitle || '%'")
+    String getItemLikeTitle(String billTitle);
+
+
+
+
+
+
+
 
 
     @Query("SELECT description FROM items WHERE description = :billDescription LIMIT 1")

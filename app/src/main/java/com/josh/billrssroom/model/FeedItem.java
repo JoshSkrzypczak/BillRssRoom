@@ -3,8 +3,6 @@ package com.josh.billrssroom.model;
 import android.os.Build;
 import android.text.Html;
 
-import com.josh.billrssroom.utilities.DateTypeConverter;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -12,16 +10,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 @Root(name = "item", strict = false)
 @Entity(tableName = "items")

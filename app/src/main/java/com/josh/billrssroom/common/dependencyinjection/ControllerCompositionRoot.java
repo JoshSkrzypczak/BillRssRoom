@@ -18,7 +18,7 @@ public class ControllerCompositionRoot {
         this.activity = activity;
     }
 
-    private Context getContext(){
+    private Context getContext() {
         return activity;
     }
 
@@ -26,13 +26,15 @@ public class ControllerCompositionRoot {
         return compositionRoot.getRssFeedApi();
     }
 
-    private LayoutInflater getLayoutInflater(){
+    private LayoutInflater getLayoutInflater() {
         return LayoutInflater.from(activity);
     }
 
-    public ViewMvcFactory getViewMvcFactory(){ return new ViewMvcFactory(getLayoutInflater()); }
+    public ViewMvcFactory getViewMvcFactory() {
+        return new ViewMvcFactory(getLayoutInflater());
+    }
 
-    public ToastsHelper getToastsHelper(){
+    public ToastsHelper getToastsHelper() {
         return new ToastsHelper(getContext());
     }
 }
