@@ -24,14 +24,9 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
     private final CardView cardView;
     private final Group constraintGroup;
 
-
-
-    private int previousExpandedPosition = -1;
-
     private FeedItem feedItem;
 
     private int position;
-
 
     public FeedItemViewMvcImpl(LayoutInflater inflater, ViewGroup parent) {
         setRootView(inflater.inflate(R.layout.item_row_rss, parent, false));

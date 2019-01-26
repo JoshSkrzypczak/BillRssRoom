@@ -5,8 +5,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 
+import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.R;
+import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.ViewMvcFactory;
 import com.josh.billrssroom.screens.feed.feedlistitems.FeedItemViewMvc;
@@ -35,20 +38,18 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
 
     public interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
-
         void onBrowserBtnClicked(FeedItem feedItem, int position);
-
         void onSaveBtnClicked(FeedItem feedItem, int position);
     }
 
     public static class FeedViewHolderMvc extends RecyclerView.ViewHolder {
         private final FeedItemViewMvc feedItemViewMvc;
-        private final Group constraintGroup;
+        public ImageView heartSaveImage;
 
         public FeedViewHolderMvc(FeedItemViewMvc feedItemViewMvc) {
             super(feedItemViewMvc.getRootView());
             this.feedItemViewMvc = feedItemViewMvc;
-            constraintGroup = feedItemViewMvc.getRootView().findViewById(R.id.group);
+            heartSaveImage = feedItemViewMvc.getRootView().findViewById(R.id.btn_save);
         }
     }
 
@@ -56,17 +57,13 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
     private Context context;
     private ViewMvcFactory viewMvcFactory;
     private List<FeedItem> feedItems;
-    private int previousPosition = -1;
-    private int mExpandedPosition = -1;
-    private int expandedPosition = -1;
-    private int previousExpandedPosition = -1;
-    private RecyclerView recyclerView = null;
 
 
     public FeedAdapterMvc(Context context, Listener listener, ViewMvcFactory viewMvcFactory) {
         this.listener = listener;
         this.context = context;
         this.viewMvcFactory = viewMvcFactory;
+        setHasStableIds(true);
     }
 
     public void setFeedItems(List<FeedItem> feedItems) {
@@ -80,49 +77,11 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
         FeedItemViewMvc feedItemViewMvc = viewMvcFactory.getFeedItemViewMvc(parent);
         feedItemViewMvc.registerListener(this);
         return new FeedViewHolderMvc(feedItemViewMvc);
-
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolderMvc holder, int position) {
         holder.feedItemViewMvc.bindItem(feedItems.get(position), holder.getAdapterPosition());
-
-        final boolean isExpanded = position == mExpandedPosition;
-        holder.constraintGroup.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.itemView.setActivated(isExpanded);
-
-        if (isExpanded)
-            previousExpandedPosition = position;
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mExpandedPosition = isExpanded ? -1 : position;
-                notifyItemChanged(previousExpandedPosition);
-                notifyItemChanged(position);
-            }
-        });
-
-//        holder.itemView.setOnClickListener(v -> {
-//            final boolean visibility = holder.constraintGroup.getVisibility() == View.VISIBLE;
-//            if (!visibility){
-//                holder.itemView.setActivated(true);
-//                holder.constraintGroup.setVisibility(View.VISIBLE);
-//                if (previousPosition != -1 && previousPosition != position){
-//                    recyclerView.findViewHolderForLayoutPosition(previousPosition)
-//                            .itemView.setActivated(false);
-//                    recyclerView.findViewHolderForLayoutPosition(previousPosition)
-//                            .itemView.findViewById(R.id.group).setVisibility(View.GONE);
-//                }
-//                previousPosition = position;
-//            } else {
-//                holder.itemView.setActivated(false);
-//                holder.constraintGroup.setVisibility(View.GONE);
-//            }
-//            TransitionManager.beginDelayedTransition(recyclerView);
-//        });
-
 
         /*
          * Get the boolean value of each row and setImageResource of the save button:
@@ -159,6 +118,12 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
     }
 
     @Override
+    public long getItemId(int position) {
+        FeedItem feedItem = feedItems.get(position);
+        return feedItem.getTitle().hashCode();
+    }
+
+    @Override
     public void onShareBtnClicked(FeedItem feedItem, int position) {
         listener.onShareBtnClicked(feedItem, position);
     }
@@ -170,12 +135,7 @@ public class FeedAdapterMvc extends RecyclerView.Adapter<FeedAdapterMvc.FeedView
 
     @Override
     public void onSaveBtnClicked(FeedItem feedItem, int position) {
+        notifyDataSetChanged();
         listener.onSaveBtnClicked(feedItem, position);
     }
-
-//    @Override
-//    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-//        super.onAttachedToRecyclerView(recyclerView);
-//        this.recyclerView = recyclerView;
-//    }
 }

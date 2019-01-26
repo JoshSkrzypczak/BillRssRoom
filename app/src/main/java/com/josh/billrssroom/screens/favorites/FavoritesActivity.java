@@ -1,6 +1,7 @@
 package com.josh.billrssroom.screens.favorites;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,6 +22,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener,
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+
+    private static final String TAG = "FavoritesActivity";
 
     private FavoriteListViewMvc favoriteViewMvc;
 
@@ -60,6 +63,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     }
 
     private void subscribeUiFavorites(LiveData<List<FeedItem>> liveData) {
+        Log.i(TAG, "subscribeUiFavorites: ");
         liveData.observe(this, feedItems -> {
             if (feedItems != null){
                 favoriteViewMvc.bindFavoriteItems(feedItems);
@@ -97,6 +101,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
+        Log.d(TAG, "onDeleteBtnClicked: " + feedItem.getTitle() + " pos: " + position);
         feedViewModel.removeItemFromFavorites(feedItem);
     }
 
@@ -117,16 +122,26 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
         if (query == null || query.isEmpty()){
+            Log.d(TAG, "query == null || query is empty");
             subscribeUiFavorites(feedViewModel.getFavorites());
         } else {
             subscribeUiFavorites(feedViewModel.searchFavorites("*" + query + "*"));
         }
         return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        return false;
+    }
+
+    private void subscribeSearchFavorites(LiveData<List<FeedItem>> searchFavorites) {
+        Log.i(TAG, "subscribeSearchFavorites: ");
+        searchFavorites.observe(this, feedItems -> {
+            if (feedItems != null){
+                favoriteViewMvc.bindSearchFavorites(feedItems);
+            }
+        });
     }
 }

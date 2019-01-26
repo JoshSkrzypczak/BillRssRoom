@@ -12,6 +12,8 @@ public interface FavoriteListViewMvc extends ObservableViewMvc<FavoriteListViewM
 
     int getFavoriteCount();
 
+    void notifyDataChange();
+
     public interface Listener {
         void onDeleteBtnClicked(FeedItem feedItem, int position);
         void onShareBtnClicked(FeedItem feedItem, int position);
@@ -19,4 +21,6 @@ public interface FavoriteListViewMvc extends ObservableViewMvc<FavoriteListViewM
     }
 
     void bindFavoriteItems(List<FeedItem> data);
+
+    void bindSearchFavorites(List<FeedItem> data);
 }

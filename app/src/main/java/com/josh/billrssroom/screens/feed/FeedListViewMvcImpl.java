@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.Listener>
         implements FeedListViewMvc, FeedAdapterMvc.Listener {
 
-
     private final RecyclerView recyclerView;
     private final FeedAdapterMvc feedAdapterMvc;
 
@@ -29,6 +28,7 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         feedAdapterMvc = new FeedAdapterMvc(getContext(), this, viewMvcFactory);
+        recyclerView.setItemAnimator(new BillItemAnimator());
         recyclerView.setAdapter(feedAdapterMvc);
     }
 
@@ -62,6 +62,5 @@ public class FeedListViewMvcImpl extends BaseObservableViewMvc<FeedListViewMvc.L
             listener.onSaveBtnClicked(feedItem, position);
             System.out.println(":::onSaveBtnClicked::: " + feedItem.getTitle() + " pos: " + position);
         }
-
     }
 }

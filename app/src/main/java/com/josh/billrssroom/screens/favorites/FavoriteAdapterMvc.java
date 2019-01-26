@@ -56,7 +56,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
         notifyDataSetChanged();
         if (favoriteItems == null) {
             favoriteItems = itemList;
-            notifyItemRangeInserted(0, itemList.size());
+            notifyDataSetChanged();
         } else {
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
@@ -87,6 +87,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
                 }
             });
             favoriteItems = itemList;
+            System.out.println("itemList: " + itemList);
             result.dispatchUpdatesTo(this);
         }
     }
@@ -112,7 +113,9 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
+        notifyDataSetChanged();
         listener.onDeleteBtnClicked(feedItem, position);
+//        notifyItemRemoved(position); Don't call this after listener call. Or don't call at all?
     }
 
     @Override
