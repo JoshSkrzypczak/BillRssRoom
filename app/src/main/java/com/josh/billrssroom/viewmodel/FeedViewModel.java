@@ -25,8 +25,6 @@ public class FeedViewModel extends AndroidViewModel {
 
     private FeedRepository feedRepository;
 
-    private final MediatorLiveData<List<FeedItem>> mObservableFavorites;
-
     private final LiveData<Resource<List<FeedItem>>> liveDataFeedItems;
 
 
@@ -39,40 +37,10 @@ public class FeedViewModel extends AndroidViewModel {
         feedRepository = ((BasicApp) application).getFeedRepository();
 
         liveDataFeedItems = feedRepository.loadBillItems();
-
-        mObservableFavorites = new MediatorLiveData<>();
-        mObservableFavorites.setValue(null);
-        LiveData<List<FeedItem>> favorites = ((BasicApp) application).getFeedRepository().getFavorites();
-        mObservableFavorites.addSource(favorites, mObservableFavorites::setValue);
-
     }
 
     public LiveData<Resource<List<FeedItem>>> getLiveDataFeedItems() {
         Log.d(TAG, "getLiveDataFeedItems: ");
         return liveDataFeedItems;
-    }
-
-    public LiveData<List<FeedItem>> getFavorites() {
-        Log.d(TAG, "getFavorites: ");
-        return mObservableFavorites;
-    }
-
-    public void deleteAllFavorites() {
-        Log.d(TAG, "deleteAllFavorites: ");
-        feedRepository.deleteAllFavorites();
-    }
-
-    public void updateItemAsFavorite(FeedItem feedItem) {
-        Log.d(TAG, "updateItemAsFavorite: " + feedItem.getTitle());
-        feedRepository.updateFeedItemAsFavorite(feedItem);
-    }
-
-    public void removeItemFromFavorites(FeedItem feedItem) {
-        Log.d(TAG, "removeItemFromFavorites: " + feedItem.getTitle());
-        feedRepository.removeItemFromFavorites(feedItem);
-    }
-
-    public LiveData<List<FeedItem>> searchFavorites(String query){
-        return feedRepository.searchFavorites(query);
     }
 }

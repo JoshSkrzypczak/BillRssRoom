@@ -114,6 +114,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         notifyDataSetChanged();
+//        notifyItemRemoved(position);
         listener.onDeleteBtnClicked(feedItem, position);
 //        notifyItemRemoved(position); Don't call this after listener call. Or don't call at all?
     }

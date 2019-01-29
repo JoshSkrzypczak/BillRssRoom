@@ -10,6 +10,7 @@ import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.screens.common.toastshelper.ToastsHelper;
 import com.josh.billrssroom.utilities.Utils;
+import com.josh.billrssroom.viewmodel.FavoritesViewModel;
 import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     private FavoriteListViewMvc favoriteViewMvc;
 
-    private FeedViewModel feedViewModel;
 
+    private FavoritesViewModel favoritesViewModel;
     private ToastsHelper toastsHelper;
 
     @Override
@@ -37,9 +38,9 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         favoriteViewMvc = getCompositionRoot().getViewMvcFactory().getFavoriteListViewMvc(null);
         toastsHelper = getCompositionRoot().getToastsHelper();
 
-        feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
+        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        subscribeUiFavorites(feedViewModel.getFavorites());
+        subscribeUiFavorites(favoritesViewModel.getFavorites());
 
         setContentView(favoriteViewMvc.getRootView());
 
@@ -88,8 +89,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 this.onBackPressed();
                 return true;
             case R.id.clear_data:
-                toastsHelper.showClearingFavoritesToast();
-                feedViewModel.deleteAllFavorites();
+                favoritesViewModel.deleteAllFavorites();
                 return true;
             case R.id.action_get_count:
                 int favoriteCount = favoriteViewMvc.getFavoriteCount();
@@ -102,7 +102,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         Log.d(TAG, "onDeleteBtnClicked: " + feedItem.getTitle() + " pos: " + position);
-        feedViewModel.removeItemFromFavorites(feedItem);
+        favoritesViewModel.removeItemFromFavorites(feedItem);
     }
 
     @Override
@@ -117,6 +117,8 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public boolean onClose() {
+        // TODO: 1/28/2019 Search results aren't cleared on close
+        subscribeUiFavorites(favoritesViewModel.getFavorites());
         return false;
     }
 
@@ -124,9 +126,9 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     public boolean onQueryTextSubmit(String query) {
         if (query == null || query.isEmpty()){
             Log.d(TAG, "query == null || query is empty");
-            subscribeUiFavorites(feedViewModel.getFavorites());
+            subscribeUiFavorites(favoritesViewModel.getFavorites());
         } else {
-            subscribeUiFavorites(feedViewModel.searchFavorites("*" + query + "*"));
+            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
         }
         return false;
     }
