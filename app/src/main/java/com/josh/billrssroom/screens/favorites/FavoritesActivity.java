@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
@@ -11,7 +12,6 @@ import com.josh.billrssroom.screens.common.controllers.BaseActivity;
 import com.josh.billrssroom.screens.common.toastshelper.ToastsHelper;
 import com.josh.billrssroom.utilities.Utils;
 import com.josh.billrssroom.viewmodel.FavoritesViewModel;
-import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
 
@@ -22,12 +22,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
 public class FavoritesActivity extends BaseActivity implements FavoriteListViewMvcImpl.Listener,
-        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+        SearchView.OnQueryTextListener {
 
     private static final String TAG = "FavoritesActivity";
 
     private FavoriteListViewMvc favoriteViewMvc;
-
 
     private FavoritesViewModel favoritesViewModel;
     private ToastsHelper toastsHelper;
@@ -77,8 +76,14 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         getMenuInflater().inflate(R.menu.menu_favorites, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
         searchView.setQueryHint("Search");
+
+//        searchView.setOnCloseListener(() -> {
+//            subscribeUiFavorites(favoritesViewModel.getFavorites());
+//            return false;
+//        });
+
+
         return true;
     }
 
@@ -116,34 +121,17 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     }
 
     @Override
-    public boolean onClose() {
-        // TODO: 1/28/2019 Search results aren't cleared on close
-        subscribeUiFavorites(favoritesViewModel.getFavorites());
-        return false;
-    }
-
-    @Override
     public boolean onQueryTextSubmit(String query) {
-        if (query == null || query.isEmpty()){
-            Log.d(TAG, "query == null || query is empty");
-            subscribeUiFavorites(favoritesViewModel.getFavorites());
-        } else {
-            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
-        }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
+        if (query == null || query.isEmpty()){
+            subscribeUiFavorites(favoritesViewModel.getFavorites());
+        } else {
+            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
+        }
         return false;
-    }
-
-    private void subscribeSearchFavorites(LiveData<List<FeedItem>> searchFavorites) {
-        Log.i(TAG, "subscribeSearchFavorites: ");
-        searchFavorites.observe(this, feedItems -> {
-            if (feedItems != null){
-                favoriteViewMvc.bindSearchFavorites(feedItems);
-            }
-        });
     }
 }

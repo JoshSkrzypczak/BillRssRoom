@@ -47,16 +47,12 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
         this.context = context;
     }
 
-    public void setFavoriteItems(List<FeedItem> favoriteItems) {
-        this.favoriteItems = favoriteItems;
-        notifyDataSetChanged();
-    }
-
     public void setFavoriteItemList(final List<FeedItem> itemList) {
         notifyDataSetChanged();
         if (favoriteItems == null) {
             favoriteItems = itemList;
             notifyDataSetChanged();
+//            notifyItemRangeInserted(0, itemList.size());
         } else {
             DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
                 @Override
@@ -113,10 +109,11 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
-        notifyDataSetChanged();
-//        notifyItemRemoved(position);
+//        notifyDataSetChanged();
         listener.onDeleteBtnClicked(feedItem, position);
-//        notifyItemRemoved(position); Don't call this after listener call. Or don't call at all?
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+
     }
 
     @Override
