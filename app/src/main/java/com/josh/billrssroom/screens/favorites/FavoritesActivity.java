@@ -78,11 +78,10 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
 
-//        searchView.setOnCloseListener(() -> {
-//            subscribeUiFavorites(favoritesViewModel.getFavorites());
-//            return false;
-//        });
-
+        searchView.setOnCloseListener(() -> {
+            subscribeUiFavorites(favoritesViewModel.getFavorites());
+            return false;
+        });
 
         return true;
     }
@@ -122,16 +121,16 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
         if (query == null || query.isEmpty()){
             subscribeUiFavorites(favoritesViewModel.getFavorites());
         } else {
             subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
         }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
         return false;
     }
 }

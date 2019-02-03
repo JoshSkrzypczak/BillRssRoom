@@ -75,11 +75,12 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    FeedItem newProduct = itemList.get(newItemPosition);
-                    FeedItem oldProduct = favoriteItems.get(oldItemPosition);
-                    return newProduct.getTitle().equals(oldProduct.getTitle())
-                            && Objects.equals(newProduct.getDescription(), oldProduct.getDescription())
-                            && Objects.equals(newProduct.getLink(), oldProduct.getLink());
+                    FeedItem oldItem = favoriteItems.get(oldItemPosition);
+                    FeedItem newItem = itemList.get(newItemPosition);
+
+                    return oldItem.getTitle().equals(newItem.getTitle())
+                            && Objects.equals(oldItem.getDescription(), newItem.getDescription())
+                            && Objects.equals(oldItem.getLink(), newItem.getLink());
                 }
             });
             favoriteItems = itemList;
@@ -98,7 +99,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteViewHolderMvc holder, int position) {
-        holder.favoriteItemViewMvc.bindItem(favoriteItems.get(position), holder.getAdapterPosition());
+        holder.favoriteItemViewMvc.bindItem(favoriteItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
     }
 
     @Override
@@ -106,14 +107,10 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
         return favoriteItems == null ? 0 : favoriteItems.size();
     }
 
-
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
-//        notifyDataSetChanged();
         listener.onDeleteBtnClicked(feedItem, position);
         notifyItemRemoved(position);
-        notifyDataSetChanged();
-
     }
 
     @Override
