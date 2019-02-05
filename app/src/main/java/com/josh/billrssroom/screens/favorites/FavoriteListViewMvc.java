@@ -17,6 +17,4 @@ public interface FavoriteListViewMvc extends ObservableViewMvc<FavoriteListViewM
     }
 
     void bindFavoriteItems(List<FeedItem> data);
-
-    int getFavoriteCount();
 }

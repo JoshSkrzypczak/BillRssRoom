@@ -11,6 +11,7 @@ import com.josh.billrssroom.screens.common.views.BaseObservableViewMvc;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,19 +32,14 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
 
         recyclerView = findViewById(R.id.favorites_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        favoriteAdapterMvc = new FavoriteAdapterMvc(getContext(), this, viewMvcFactory);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        favoriteAdapterMvc = new FavoriteAdapterMvc(this, viewMvcFactory);
         recyclerView.setAdapter(favoriteAdapterMvc);
-    }
-
-    @Override
-    public int getFavoriteCount() {
-        return favoriteAdapterMvc.getItemCount();
     }
 
     @Override
     public void bindFavoriteItems(List<FeedItem> data) {
         favoriteAdapterMvc.setFavoriteItemList(data);
-//        favoriteAdapterMvc.notifyDataSetChanged();
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,7 +28,6 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     }
 
     static class FavoriteViewHolderMvc extends RecyclerView.ViewHolder {
-
         private final FavoriteItemViewMvc favoriteItemViewMvc;
 
         public FavoriteViewHolderMvc(FavoriteItemViewMvc favoriteItemViewMvc) {
@@ -37,55 +37,26 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     }
 
     private final Listener listener;
-    private Context context;
     private ViewMvcFactory viewMvcFactory;
     private List<FeedItem> favoriteItems;
 
-    public FavoriteAdapterMvc(Context context, Listener listener, ViewMvcFactory viewMvcFactory) {
+    public FavoriteAdapterMvc(Listener listener, ViewMvcFactory viewMvcFactory) {
         this.viewMvcFactory = viewMvcFactory;
         this.listener = listener;
-        this.context = context;
     }
 
     public void setFavoriteItemList(final List<FeedItem> itemList) {
-        notifyDataSetChanged();
-        if (favoriteItems == null) {
+//        notifyDataSetChanged();
+
+        if (favoriteItems == null){
             favoriteItems = itemList;
             notifyDataSetChanged();
-//            notifyItemRangeInserted(0, itemList.size());
         } else {
-            DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                @Override
-                public int getOldListSize() {
-                    Log.d(TAG, "getOldListSize: " + favoriteItems.size());
-                    return favoriteItems.size();
-                }
+            FeedDiffCallback feedDiffCallback = new FeedDiffCallback(favoriteItems, itemList);
+            DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(feedDiffCallback);
 
-                @Override
-                public int getNewListSize() {
-                    Log.d(TAG, "getNewListSize: " + itemList.size());
-                    return itemList.size();
-                }
-
-                @Override
-                public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return favoriteItems.get(oldItemPosition).getTitle()
-                            .equals(itemList.get(newItemPosition).getTitle());
-                }
-
-                @Override
-                public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    FeedItem oldItem = favoriteItems.get(oldItemPosition);
-                    FeedItem newItem = itemList.get(newItemPosition);
-
-                    return oldItem.getTitle().equals(newItem.getTitle())
-                            && Objects.equals(oldItem.getDescription(), newItem.getDescription())
-                            && Objects.equals(oldItem.getLink(), newItem.getLink());
-                }
-            });
             favoriteItems = itemList;
-            System.out.println("itemList: " + itemList);
-            result.dispatchUpdatesTo(this);
+            diffResult.dispatchUpdatesTo(this);
         }
     }
 
@@ -99,18 +70,20 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
 
     @Override
     public void onBindViewHolder(@NonNull FavoriteViewHolderMvc holder, int position) {
-        holder.favoriteItemViewMvc.bindItem(favoriteItems.get(holder.getAdapterPosition()), holder.getAdapterPosition());
+        holder.favoriteItemViewMvc.bindItem(favoriteItems.get(position), holder.getAdapterPosition());
     }
 
     @Override
     public int getItemCount() {
-        return favoriteItems == null ? 0 : favoriteItems.size();
+        if (favoriteItems != null)
+            return favoriteItems.size();
+        else return 0;
     }
 
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
+        Log.d(TAG, "onDeleteBtnClicked: " + position);
         listener.onDeleteBtnClicked(feedItem, position);
-        notifyItemRemoved(position);
     }
 
     @Override
@@ -122,5 +95,44 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     @Override
     public void onBrowserBtnClicked(FeedItem feedItem) {
         listener.onBrowserBtnClicked(feedItem);
+    }
+
+    class FeedDiffCallback extends DiffUtil.Callback {
+
+        private final List<FeedItem> oldItems, newItems;
+
+        public FeedDiffCallback(List<FeedItem> oldItems, List<FeedItem> newItems) {
+            this.oldItems = oldItems;
+            this.newItems = newItems;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldItems.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newItems.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldItems.get(oldItemPosition).getTitle()
+                    .equals(newItems.get(newItemPosition).getTitle());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            FeedItem newFeedItem = newItems.get(newItemPosition);
+            FeedItem oldFeedItem = oldItems.get(oldItemPosition);
+            return newFeedItem.getTitle().equals(oldFeedItem.getTitle());
+        }
+
+        @Nullable
+        @Override
+        public Object getChangePayload(int oldItemPosition, int newItemPosition) {
+            return super.getChangePayload(oldItemPosition, newItemPosition);
+        }
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.josh.billrssroom.R;
 import com.josh.billrssroom.model.FeedItem;
@@ -39,7 +38,10 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-        subscribeUiFavorites(favoritesViewModel.getFavorites());
+//        subscribeUiFavorites(favoritesViewModel.getFavorites());
+
+        subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
+
 
         setContentView(favoriteViewMvc.getRootView());
 
@@ -79,7 +81,8 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         searchView.setQueryHint("Search");
 
         searchView.setOnCloseListener(() -> {
-            subscribeUiFavorites(favoritesViewModel.getFavorites());
+            // TODO: 2/4/2019 Issues with UI reflecting database
+//            subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
             return false;
         });
 
@@ -96,8 +99,8 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 favoritesViewModel.deleteAllFavorites();
                 return true;
             case R.id.action_get_count:
-                int favoriteCount = favoriteViewMvc.getFavoriteCount();
-                toastsHelper.showListCountToast(favoriteCount);
+                int favoriteCount = favoritesViewModel.getNumFavCount();
+                toastsHelper.showFavoriteListCount(favoriteCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -106,7 +109,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public void onDeleteBtnClicked(FeedItem feedItem, int position) {
         Log.d(TAG, "onDeleteBtnClicked: " + feedItem.getTitle() + " pos: " + position);
-        favoritesViewModel.removeItemFromFavorites(feedItem);
+        favoritesViewModel.updateRemoveItemFromFavorites(feedItem);
     }
 
     @Override
@@ -122,7 +125,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
     @Override
     public boolean onQueryTextSubmit(String query) {
         if (query == null || query.isEmpty()){
-            subscribeUiFavorites(favoritesViewModel.getFavorites());
+            subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
         } else {
             subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
         }

@@ -1,7 +1,6 @@
 package com.josh.billrssroom.db.dao;
 
 import com.josh.billrssroom.model.FeedItem;
-import com.josh.billrssroom.networking.Resource;
 
 import java.util.List;
 
@@ -11,9 +10,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.RawQuery;
 import androidx.room.Update;
-import androidx.sqlite.db.SupportSQLiteQuery;
 
 @Dao
 public interface ItemDao {
@@ -23,6 +20,9 @@ public interface ItemDao {
 
     @Query("SELECT * FROM items WHERE isFav = 1")
     LiveData<List<FeedItem>> loadFavorites();
+
+    @Query("SELECT * FROM items WHERE isFav = 1")
+    List<FeedItem> loadMutableFavorites();
 
     @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
     int getIntBoolean(String billTitle);
@@ -51,6 +51,10 @@ public interface ItemDao {
             + " AND itemsFts MATCH :query")
     LiveData<List<FeedItem>> searchFavorites(String query);
 
+    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.title = itemsFts.title) "
+            + " AND itemsFts MATCH :query")
+    LiveData<List<FeedItem>> searchFeedItems(String query);
+
 
     @Query("SELECT title FROM items WHERE title LIKE :billTitle")
     String getItemTitle(String billTitle);
@@ -61,9 +65,12 @@ public interface ItemDao {
     String getItemLikeTitle(String billTitle);
 
 
+    @Query("SELECT COUNT(title) FROM items WHERE isFav = 1")
+    int getFavoriteCount();
 
 
-
+    @Query("SELECT COUNT(title) FROM items")
+    int getFeedCount();
 
 
 

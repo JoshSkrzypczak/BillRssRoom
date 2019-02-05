@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class FeedRepository {
     public static final String TAG = FeedRepository.class.getSimpleName();
@@ -34,9 +35,10 @@ public class FeedRepository {
 
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
-//    private final LiveData<List<FeedItem>> favorites;
-
     private MediatorLiveData<List<FeedItem>> mObservableFavorites;
+
+    private MutableLiveData<List<FeedItem>> mutableLiveData;
+
 
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
@@ -47,7 +49,6 @@ public class FeedRepository {
 
         apiService = RetrofitClient.getInstance().getRestApi();
 
-//        favorites = itemDao.loadFavorites();
 
         mObservableFavorites = new MediatorLiveData<>();
         mObservableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
@@ -55,8 +56,24 @@ public class FeedRepository {
         });
     }
 
+    public MutableLiveData<List<FeedItem>> getMutableLiveData(){
+        final MutableLiveData<List<FeedItem>> data = new MutableLiveData<>();
+
+        data.setValue(itemDao.loadMutableFavorites());
+
+        return data;
+    }
+
     public LiveData<List<FeedItem>> getFavorites() {
         return mObservableFavorites;
+    }
+
+    public int getNumFavCount(){
+        return feedDatabase.feedDao().getFavoriteCount();
+    }
+
+    public int getNumFeedItems(){
+        return itemDao.getFeedCount();
     }
 
     public LiveData<List<FeedItem>> searchFavorites(String query){
@@ -70,7 +87,6 @@ public class FeedRepository {
             protected void saveCallResult(@NonNull RssResult item) {
                 Log.d(TAG, "saveCallResult: ");
 //                feedDatabase.feedDao().insertData(item.getChannel().getItems());
-
 
                 for (FeedItem feedItem : item.getChannel().getItems()) {
                     String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
@@ -111,10 +127,11 @@ public class FeedRepository {
         new deleteAllFavoritesAsyncTask(itemDao).execute();
     }
 
+
     public void removeItemFromFavorites(FeedItem feedItem) {
         new removeItemFromFavoritesAsync(itemDao).execute(feedItem);
     }
-
+    // TODO: 2/4/2019  Which is better to use? remove or the if else updateFeedItemFavoriteAsync?
     public void updateFeedItemAsFavorite(FeedItem item) {
         new updateFeedItemFavoriteAsync(itemDao).execute(item);
     }

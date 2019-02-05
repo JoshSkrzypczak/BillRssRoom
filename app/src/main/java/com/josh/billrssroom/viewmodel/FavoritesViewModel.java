@@ -1,7 +1,6 @@
 package com.josh.billrssroom.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.model.FeedItem;
@@ -13,24 +12,35 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
 
 public class FavoritesViewModel extends AndroidViewModel {
 
     private FeedRepository feedRepository;
 
-    // MediatorLiveData can observe other LiveData objects and react on their emissions.
     private final MediatorLiveData<List<FeedItem>> observableFavorites;
+
+
+    private MutableLiveData<List<FeedItem>> mutableLiveData;
+
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
 
         feedRepository = ((BasicApp) application).getFeedRepository();
 
+
+        mutableLiveData = feedRepository.getMutableLiveData();
+
+
         observableFavorites = new MediatorLiveData<>();
         observableFavorites.setValue(null);
         LiveData<List<FeedItem>> favorites = ((BasicApp) application).getFeedRepository().getFavorites();
-        // observe the changes of the items from the database and forward them
         observableFavorites.addSource(favorites, observableFavorites::setValue);
+    }
+
+    public LiveData<List<FeedItem>> getMutableLiveData(){
+        return this.mutableLiveData;
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
@@ -45,7 +55,15 @@ public class FavoritesViewModel extends AndroidViewModel {
         feedRepository.removeItemFromFavorites(feedItem);
     }
 
+    public void updateRemoveItemFromFavorites(FeedItem feedItem){
+        feedRepository.updateFeedItemAsFavorite(feedItem);
+    }
+
     public LiveData<List<FeedItem>> searchFavorites(String query){
         return feedRepository.searchFavorites(query);
+    }
+
+    public int getNumFavCount(){
+        return feedRepository.getNumFavCount();
     }
 }
