@@ -30,9 +30,10 @@ public abstract class FeedDatabase extends RoomDatabase {
     }
 
     private static FeedDatabase create(Context context) {
+        // TODO: 2/3/2019 Remove allowMainThreadQueries
         RoomDatabase.Builder<FeedDatabase> b =
                 Room.databaseBuilder(context.getApplicationContext(), FeedDatabase.class,
-                        DB_NAME);
+                        DB_NAME).allowMainThreadQueries();
         return b.addCallback(new Callback() {
             @Override
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
