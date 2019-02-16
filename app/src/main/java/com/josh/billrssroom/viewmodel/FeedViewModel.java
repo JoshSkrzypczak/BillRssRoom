@@ -15,7 +15,6 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 
 public class FeedViewModel extends AndroidViewModel {
 
@@ -26,7 +25,6 @@ public class FeedViewModel extends AndroidViewModel {
     private FeedRepository feedRepository;
 
     private final LiveData<Resource<List<FeedItem>>> liveDataFeedItems;
-
 
 
     public FeedViewModel(@NonNull Application application) {
@@ -42,5 +40,9 @@ public class FeedViewModel extends AndroidViewModel {
     public LiveData<Resource<List<FeedItem>>> getLiveDataFeedItems() {
         Log.d(TAG, "getLiveDataFeedItems: ");
         return liveDataFeedItems;
+    }
+
+    public int getNumFeedItems(){
+        return feedRepository.getNumFeedItems();
     }
 }
