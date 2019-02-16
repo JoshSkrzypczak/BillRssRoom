@@ -8,22 +8,12 @@
         android:orderInCategory="100"
         android:title="Get count"
         android:icon="@drawable/ic_rss_feed_black_24dp"
-        app:showAsAction="always"/>
-
-    <item
-        android:id="@+id/action_search"
-        android:orderInCategory="200"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="@string/action_search"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/favorite"
-        android:orderInCategory="300"
+        android:orderInCategory="200"
         android:title="@string/action_favorites"
         app:showAsAction="never"/>
-
-
 
 </menu>

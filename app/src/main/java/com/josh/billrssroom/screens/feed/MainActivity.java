@@ -19,13 +19,11 @@ import com.josh.billrssroom.viewmodel.FeedViewModel;
 
 import java.util.List;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProviders;
 
-public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener,
-        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Listener {
 
     private static final String TAG = "MainActivity";
 
@@ -44,7 +42,7 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
         toastsHelper = getCompositionRoot().getToastsHelper();
         feedViewModel = ViewModelProviders.of(this).get(FeedViewModel.class);
 
-        subscribeFeedUi(feedViewModel);
+        subscribeFeedUi(feedViewModel.getLiveDataFeedItems());
 
         setContentView(viewMvc.getRootView());
 
@@ -66,9 +64,9 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
         viewMvc.unregisterListener(this);
     }
 
-    private void subscribeFeedUi(FeedViewModel feedViewModel) {
+    private void subscribeFeedUi(LiveData<Resource<List<FeedItem>>> liveData) {
         Log.d(TAG, "subscribeFeedUi: ");
-        feedViewModel.getLiveDataFeedItems().observe(this, listResource -> {
+        liveData.observe(this, listResource -> {
             if (listResource != null && listResource.data != null) {
                 viewMvc.bindFeedItems(listResource.data);
             }
@@ -78,10 +76,6 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-        searchView.setQueryHint("Search");
         return true;
     }
 
@@ -93,8 +87,8 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
                 return true;
             // TODO: 11/29/2018 Remove later
             case R.id.action_get_count:
-                int feedCount = viewMvc.getFeedCount();
-                toastsHelper.showListCountToast(feedCount);
+                int feedCount = feedViewModel.getNumFeedItems();
+                toastsHelper.showFeedListCount(feedCount);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -134,20 +128,5 @@ public class MainActivity extends BaseActivity implements FeedListViewMvcImpl.Li
                     }
                 });
         asyncTask.execute(taskParams);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onClose() {
-        return false;
     }
 }
