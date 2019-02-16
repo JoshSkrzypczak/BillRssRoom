@@ -5,14 +5,19 @@ import android.app.Application;
 import com.josh.billrssroom.BasicApp;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.repository.FeedRepository;
+import com.josh.billrssroom.utilities.Objects;
 
 import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Nonnull;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 public class FavoritesViewModel extends AndroidViewModel {
 
@@ -20,8 +25,9 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     private final MediatorLiveData<List<FeedItem>> observableFavorites;
 
-
-    private MutableLiveData<List<FeedItem>> mutableLiveData;
+    private LiveData<List<FeedItem>> allFavorites;
+    private LiveData<List<FeedItem>> results;
+    private MutableLiveData<String> query = new MutableLiveData<>();
 
 
     public FavoritesViewModel(@NonNull Application application) {
@@ -29,8 +35,10 @@ public class FavoritesViewModel extends AndroidViewModel {
 
         feedRepository = ((BasicApp) application).getFeedRepository();
 
+        allFavorites = feedRepository.getFavorites();
+        results = Transformations.switchMap(query,
+                input -> feedRepository.searchFavorites(input));
 
-        mutableLiveData = feedRepository.getMutableLiveData();
 
 
         observableFavorites = new MediatorLiveData<>();
@@ -39,9 +47,27 @@ public class FavoritesViewModel extends AndroidViewModel {
         observableFavorites.addSource(favorites, observableFavorites::setValue);
     }
 
-    public LiveData<List<FeedItem>> getMutableLiveData(){
-        return this.mutableLiveData;
+
+    public LiveData<List<FeedItem>> getResults(){
+        return results;
     }
+
+//    public void setQuery(String filter){
+//        query.postValue(filter);
+//    }
+
+    public void setQuery(@Nonnull String originalInput){
+        String input = originalInput.toLowerCase(Locale.getDefault()).trim();
+        if (Objects.equals(input, query.getValue())){
+            return;
+        }
+        query.setValue(input);
+    }
+
+    public LiveData<List<FeedItem>> getAllFavorites(){
+        return allFavorites;
+    }
+
 
     public LiveData<List<FeedItem>> getFavorites() {
         return observableFavorites;
@@ -64,6 +90,6 @@ public class FavoritesViewModel extends AndroidViewModel {
     }
 
     public int getNumFavCount(){
-        return feedRepository.getNumFavCount();
+        return feedRepository.getNumFavoriteItems();
     }
 }

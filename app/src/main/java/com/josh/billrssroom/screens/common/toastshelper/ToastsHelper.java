@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import com.josh.billrssroom.model.FeedItem;
 
+import androidx.lifecycle.LiveData;
+
 public class ToastsHelper {
 
     private final Context context;
@@ -20,8 +22,12 @@ public class ToastsHelper {
                 + position, Toast.LENGTH_SHORT).show();
     }
 
-    public void showListCountToast(int feedCount){
-        Toast.makeText(context, "Count: " + feedCount, Toast.LENGTH_SHORT).show();
+    public void showFavoriteListCount(Integer feedCount){
+        Toast.makeText(context, "Favorite Db Count: " + feedCount, Toast.LENGTH_LONG).show();
+    }
+
+    public void showFeedListCount(Integer feedCount){
+        Toast.makeText(context, "Feed Db Count: " + feedCount, Toast.LENGTH_LONG).show();
     }
 
     public void showClearingFavoritesToast() {

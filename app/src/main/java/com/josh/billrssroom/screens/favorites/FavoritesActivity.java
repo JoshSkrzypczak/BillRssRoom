@@ -38,10 +38,9 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
-//        subscribeUiFavorites(favoritesViewModel.getFavorites());
+        subscribeUiFavorites(favoritesViewModel.getAllFavorites());
 
-        subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
-
+//        subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
 
         setContentView(favoriteViewMvc.getRootView());
 
@@ -50,6 +49,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
     }
 
     @Override
@@ -80,11 +80,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
 
-        searchView.setOnCloseListener(() -> {
-            // TODO: 2/4/2019 Issues with UI reflecting database
-//            subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
-            return false;
-        });
+
 
         return true;
     }
@@ -124,16 +120,38 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+
         if (query == null || query.isEmpty()){
-            subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
+            subscribeUiFavorites(favoritesViewModel.getAllFavorites());
         } else {
-            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
+
+            favoritesViewModel.setQuery("*" + query + "*");
+            favoritesViewModel.getResults().observe(this, feedItems -> {
+                if (feedItems != null){
+                    favoriteViewMvc.bindFavoriteItems(feedItems);
+                }
+            });
+//
+////            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
         }
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
+//        if (query == null || query.isEmpty()){
+//            subscribeUiFavorites(favoritesViewModel.getAllFavorites());
+//        } else {
+//
+//            favoritesViewModel.setQuery("*" + query + "*");
+//            favoritesViewModel.getResults().observe(this, feedItems -> {
+//                if (feedItems != null){
+//                    favoriteViewMvc.bindFavoriteItems(feedItems);
+//                }
+//            });
+//
+////            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
+//        }
         return false;
     }
 }

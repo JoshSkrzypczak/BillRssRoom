@@ -13,6 +13,7 @@ import com.josh.billrssroom.db.FeedDatabase;
 import com.josh.billrssroom.db.dao.ItemDao;
 import com.josh.billrssroom.model.FeedItem;
 import com.josh.billrssroom.model.RssResult;
+import com.josh.billrssroom.utilities.AbsentLiveData;
 import com.josh.billrssroom.utilities.RateLimiter;
 
 import java.util.List;
@@ -23,23 +24,25 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 public class FeedRepository {
+
     public static final String TAG = FeedRepository.class.getSimpleName();
 
-    private static FeedRepository INSTANCE;
-    private ItemDao itemDao;
-    private final AppExecutors appExecutors;
     private final FeedDatabase feedDatabase;
+
+    private static FeedRepository INSTANCE;
+
+    private ItemDao itemDao;
+
+    private final AppExecutors appExecutors;
+
     private final DataService apiService;
 
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
     private MediatorLiveData<List<FeedItem>> mObservableFavorites;
-
-    private MutableLiveData<List<FeedItem>> mutableLiveData;
-
-
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
         this.feedDatabase = feedDatabase;
@@ -56,19 +59,55 @@ public class FeedRepository {
         });
     }
 
-    public MutableLiveData<List<FeedItem>> getMutableLiveData(){
-        final MutableLiveData<List<FeedItem>> data = new MutableLiveData<>();
+    public LiveData<Resource<List<FeedItem>>> loadBillItems() {
+        return new NetworkBoundResource<List<FeedItem>, RssResult>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull RssResult item) {
+//                feedDatabase.feedDao().insertData(item.getChannel().getItems());
 
-        data.setValue(itemDao.loadMutableFavorites());
+                for (FeedItem feedItem : item.getChannel().getItems()) {
+                    String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
 
-        return data;
+                    if (billTitle == null ){
+                        feedDatabase.feedDao().insertItem(feedItem);
+                    } else if (feedItem.getTitle().contains(billTitle)){
+                        feedDatabase.feedDao().updateItem(
+                                feedItem.pubDate,
+                                feedItem.description,
+                                feedItem.title);
+                    } else {
+                        feedDatabase.feedDao().updateItem(
+                                feedItem.pubDate,
+                                feedItem.description,
+                                feedItem.title);
+                    }
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<FeedItem> data) {
+                return data == null || data.isEmpty() || billFeedRateLimit.shouldFetch(data.toString());
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<FeedItem>> loadFromDb() {
+                return feedDatabase.feedDao().loadFeedDbItems();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<RssResult>> createCall() {
+                return apiService.getMyService();
+            }
+        }.asLiveData();
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
         return mObservableFavorites;
     }
 
-    public int getNumFavCount(){
+    public int getNumFavoriteItems(){
         return feedDatabase.feedDao().getFavoriteCount();
     }
 
@@ -80,47 +119,14 @@ public class FeedRepository {
         return feedDatabase.feedDao().searchFavorites(query);
     }
 
-
-    public LiveData<Resource<List<FeedItem>>> loadBillItems() {
-        return new NetworkBoundResource<List<FeedItem>, RssResult>(appExecutors) {
-            @Override
-            protected void saveCallResult(@NonNull RssResult item) {
-                Log.d(TAG, "saveCallResult: ");
-//                feedDatabase.feedDao().insertData(item.getChannel().getItems());
-
-                for (FeedItem feedItem : item.getChannel().getItems()) {
-                    String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
-
-                    if (billTitle == null ){
-                        feedDatabase.feedDao().insertItem(feedItem);
-                    } else if (feedItem.getTitle().contains(billTitle)){
-                        feedDatabase.feedDao().updateItem(feedItem.pubDate, feedItem.description, feedItem.title);
-                    } else {
-                        feedDatabase.feedDao().updateItem(feedItem.pubDate, feedItem.description, feedItem.title);
-                    }
-                }
+    public LiveData<List<FeedItem>> search(String query){
+        return Transformations.switchMap(itemDao.searchFavorites(query), searchData -> {
+            if (searchData == null){
+                return AbsentLiveData.create();
+            } else {
+                return itemDao.searchFavorites(query);
             }
-
-            @Override
-            protected boolean shouldFetch(@Nullable List<FeedItem> data) {
-                Log.d(TAG, "shouldFetch: ");
-                return data == null || data.isEmpty() || billFeedRateLimit.shouldFetch(data.toString());
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<List<FeedItem>> loadFromDb() {
-                Log.d(TAG, "loadFromDb: ");
-                return feedDatabase.feedDao().loadFeedDbItems();
-            }
-
-            @NonNull
-            @Override
-            protected LiveData<ApiResponse<RssResult>> createCall() {
-                Log.d(TAG, "createCall: ");
-                return apiService.getMyService();
-            }
-        }.asLiveData();
+        });
     }
 
     public void deleteAllFavorites() {
@@ -135,6 +141,8 @@ public class FeedRepository {
     public void updateFeedItemAsFavorite(FeedItem item) {
         new updateFeedItemFavoriteAsync(itemDao).execute(item);
     }
+
+
 
     private static class updateFeedItemFavoriteAsync extends AsyncTask<FeedItem, Void, Void> {
 
