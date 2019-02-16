@@ -3,6 +3,8 @@ package com.josh.billrssroom.model;
 import android.os.Build;
 import android.text.Html;
 
+import com.josh.billrssroom.utilities.DateTypeConverter;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -13,9 +15,12 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 @Root(name = "item", strict = false)
 @Entity(tableName = "items")
@@ -32,9 +37,12 @@ public class FeedItem {
     @ColumnInfo(name = "description")
     @Element(name = "description")
     public String description;
+
+    @TypeConverters({DateTypeConverter.class})
     @ColumnInfo(name = "pubDate")
     @Element(name = "pubDate")
     public String pubDate;
+
     @ColumnInfo(name = "guid")
     @Element(name = "guid")
     public String guid;
