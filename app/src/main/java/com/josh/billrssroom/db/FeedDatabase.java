@@ -39,8 +39,8 @@ public abstract class FeedDatabase extends RoomDatabase {
             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                 super.onCreate(db);
 
-                db.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS `itemsFts` USING FTS4("
-                        + "`title` TEXT, `description` TEXT, `pubDate` TEXT, content=`items`)");
+                db.execSQL("CREATE VIRTUAL TABLE IF NOT EXISTS `itemsFts` USING FTS4(" +
+                        "`title` TEXT, `description` TEXT, `pubDate` TEXT, content=`items`)");
 
                 db.execSQL("INSERT INTO itemsFts (`title`, `description`, `pubDate`) "
                         + "SELECT `title`, `description`, `pubDate` FROM items");

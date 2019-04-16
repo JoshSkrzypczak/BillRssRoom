@@ -21,14 +21,8 @@ public interface ItemDao {
     @Query("SELECT * FROM items WHERE isFav = 1")
     LiveData<List<FeedItem>> loadFavorites();
 
-    @Query("SELECT * FROM items WHERE isFav = 1")
-    List<FeedItem> loadMutableFavorites();
-
     @Query("SELECT isFav FROM items WHERE title = :billTitle LIMIT 1")
     int getIntBoolean(String billTitle);
-
-    @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertData(List<FeedItem> item);
 
     @Query("SELECT * FROM items ORDER BY pubDate DESC") //ORDER BY pubDate DESC
     LiveData<List<FeedItem>> loadFeedDbItems();
@@ -51,19 +45,8 @@ public interface ItemDao {
             + " AND itemsFts MATCH :query")
     LiveData<List<FeedItem>> searchFavorites(String query);
 
-    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.title = itemsFts.title) "
-            + " AND itemsFts MATCH :query")
-    LiveData<List<FeedItem>> searchFeedItems(String query);
-
-
     @Query("SELECT title FROM items WHERE title LIKE :billTitle")
     String getItemTitle(String billTitle);
-
-
-
-    @Query("SELECT title FROM items WHERE title LIKE :billTitle || '%'")
-    String getItemLikeTitle(String billTitle);
-
 
     @Query("SELECT COUNT(title) FROM items WHERE isFav = 1")
     int getFavoriteCount();
@@ -74,6 +57,22 @@ public interface ItemDao {
 
 
 
+
+
+
+
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    void insertData(List<FeedItem> item);
+
+    @Query("SELECT * FROM items WHERE isFav = 1")
+    List<FeedItem> loadMutableFavorites();
+
+    @Query("SELECT items.* FROM items JOIN itemsFts ON (items.title = itemsFts.title) "
+            + " AND itemsFts MATCH :query")
+    LiveData<List<FeedItem>> searchFeedItems(String query);
+
+    @Query("SELECT title FROM items WHERE title LIKE :billTitle || '%'")
+    String getItemLikeTitle(String billTitle);
 
     @Query("SELECT description FROM items WHERE description = :billDescription LIMIT 1")
     String getItemDescription(String billDescription);

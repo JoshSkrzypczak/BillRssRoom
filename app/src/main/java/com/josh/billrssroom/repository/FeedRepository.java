@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 public class FeedRepository {
@@ -42,7 +41,8 @@ public class FeedRepository {
 
     private RateLimiter<String> billFeedRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
 
-    private MediatorLiveData<List<FeedItem>> mObservableFavorites;
+    private MediatorLiveData<List<FeedItem>> observableFavorites;
+
 
     public FeedRepository(final FeedDatabase feedDatabase, AppExecutors appExecutors) {
         this.feedDatabase = feedDatabase;
@@ -53,9 +53,9 @@ public class FeedRepository {
         apiService = RetrofitClient.getInstance().getRestApi();
 
 
-        mObservableFavorites = new MediatorLiveData<>();
-        mObservableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
-            mObservableFavorites.postValue(favorites);
+        observableFavorites = new MediatorLiveData<>();
+        observableFavorites.addSource(feedDatabase.feedDao().loadFavorites(), favorites -> {
+            observableFavorites.postValue(favorites);
         });
     }
 
@@ -63,7 +63,6 @@ public class FeedRepository {
         return new NetworkBoundResource<List<FeedItem>, RssResult>(appExecutors) {
             @Override
             protected void saveCallResult(@NonNull RssResult item) {
-//                feedDatabase.feedDao().insertData(item.getChannel().getItems());
 
                 for (FeedItem feedItem : item.getChannel().getItems()) {
                     String billTitle = feedDatabase.feedDao().getItemTitle(feedItem.getTitle());
@@ -104,35 +103,29 @@ public class FeedRepository {
     }
 
     public LiveData<List<FeedItem>> getFavorites() {
-        return mObservableFavorites;
+        return observableFavorites;
     }
 
-    public int getNumFavoriteItems(){
+    public int getFavoritesCount(){
         return feedDatabase.feedDao().getFavoriteCount();
     }
 
-    public int getNumFeedItems(){
+    public LiveData<List<FeedItem>> getFilteredData(String input) {
+        return feedDatabase.feedDao().searchFavorites(input);
+    }
+
+    public int getFeedCount(){
         return itemDao.getFeedCount();
     }
 
-    public LiveData<List<FeedItem>> searchFavorites(String query){
-        return feedDatabase.feedDao().searchFavorites(query);
-    }
 
-    public LiveData<List<FeedItem>> search(String query){
-        return Transformations.switchMap(itemDao.searchFavorites(query), searchData -> {
-            if (searchData == null){
-                return AbsentLiveData.create();
-            } else {
-                return itemDao.searchFavorites(query);
-            }
-        });
-    }
+
+
+
 
     public void deleteAllFavorites() {
         new deleteAllFavoritesAsyncTask(itemDao).execute();
     }
-
 
     public void removeItemFromFavorites(FeedItem feedItem) {
         new removeItemFromFavoritesAsync(itemDao).execute(feedItem);
@@ -141,6 +134,7 @@ public class FeedRepository {
     public void updateFeedItemAsFavorite(FeedItem item) {
         new updateFeedItemFavoriteAsync(itemDao).execute(item);
     }
+
 
 
 

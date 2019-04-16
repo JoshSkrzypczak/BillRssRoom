@@ -8,6 +8,7 @@ import androidx.room.Fts4;
 @Entity(tableName = "itemsFts")
 @Fts4(contentEntity = FeedItem.class)
 public class FeedItemFtsEntity {
+
     private String title;
     private String description;
     private String pubDate;

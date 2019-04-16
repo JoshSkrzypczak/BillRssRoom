@@ -12,8 +12,7 @@ public class BaseActivity extends AppCompatActivity {
     protected ControllerCompositionRoot getCompositionRoot(){
         if (controllerCompositionRoot == null){
             controllerCompositionRoot = new ControllerCompositionRoot(
-                    ((BasicApp)getApplication()).getCompositionRoot(), this
-            );
+                    ((BasicApp)getApplication()).getCompositionRoot(), this);
         }
 
         return controllerCompositionRoot;

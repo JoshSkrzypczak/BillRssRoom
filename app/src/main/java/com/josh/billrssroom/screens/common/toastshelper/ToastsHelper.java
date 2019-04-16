@@ -23,11 +23,11 @@ public class ToastsHelper {
     }
 
     public void showFavoriteListCount(Integer feedCount){
-        Toast.makeText(context, "Favorite Db Count: " + feedCount, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Favorite Db Count: " + feedCount, Toast.LENGTH_SHORT).show();
     }
 
     public void showFeedListCount(Integer feedCount){
-        Toast.makeText(context, "Feed Db Count: " + feedCount, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Feed Db Count: " + feedCount, Toast.LENGTH_SHORT).show();
     }
 
     public void showClearingFavoritesToast() {
