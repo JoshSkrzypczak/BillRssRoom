@@ -8,7 +8,7 @@ Once complete, I'll likely move this over into the production app, [Michigan Leg
 * Lifecycle Extensions
 
 // TODO
-* FTS
+* ~~FTS~~
 * Unit tests
 
 Bill Feed | Favorites
