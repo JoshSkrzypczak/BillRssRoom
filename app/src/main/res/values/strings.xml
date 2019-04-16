@@ -5,9 +5,9 @@
     <string name="bill_description">Bill Description</string>
     <string name="publication_date">Publication Date</string>
     <string name="empty_list_message">No Recent Bill Activity</string>
-    <string name="loading_bills">Loading bills...</string>
+    <string name="loading_bills">Loading bills…</string>
     <string name="activity_favorites">Favorites</string>
-    <string name="action_search">Search</string>
+    <string name="action_search">Search Favorites…</string>
     <string name="action_settings">Settings</string>
     <string name="action_favorites">Favorites</string>
     <string name="clear_all_data">Remove all</string>
