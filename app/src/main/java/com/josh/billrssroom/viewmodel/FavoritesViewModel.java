@@ -25,9 +25,16 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     private final MediatorLiveData<List<FeedItem>> observableFavorites;
 
+
     private LiveData<List<FeedItem>> allFavorites;
+
     private LiveData<List<FeedItem>> results;
-    private MutableLiveData<String> query = new MutableLiveData<>();
+
+
+
+    private MutableLiveData<String> filterText = new MutableLiveData<>();
+
+
 
 
     public FavoritesViewModel(@NonNull Application application) {
@@ -36,8 +43,17 @@ public class FavoritesViewModel extends AndroidViewModel {
         feedRepository = ((BasicApp) application).getFeedRepository();
 
         allFavorites = feedRepository.getFavorites();
-        results = Transformations.switchMap(query,
-                input -> feedRepository.searchFavorites(input));
+
+        // Trying to mirror this SO question:
+        // https://stackoverflow.com/questions/49192540/paging-library-filter-search
+        results = Transformations.switchMap(
+                filterText, input -> {
+                    if (input == null || input.equals("")){
+                        return feedRepository.getFavorites();
+                    } else {
+                        return feedRepository.getFilteredData(input);
+                    }
+                });
 
 
 
@@ -52,44 +68,27 @@ public class FavoritesViewModel extends AndroidViewModel {
         return results;
     }
 
-//    public void setQuery(String filter){
-//        query.postValue(filter);
-//    }
-
-    public void setQuery(@Nonnull String originalInput){
+    public void setFilterText(@Nonnull String originalInput){
         String input = originalInput.toLowerCase(Locale.getDefault()).trim();
-        if (Objects.equals(input, query.getValue())){
+        if (Objects.equals(input, filterText.getValue())){
             return;
         }
-        query.setValue(input);
+        filterText.postValue(input);
     }
 
     public LiveData<List<FeedItem>> getAllFavorites(){
         return allFavorites;
     }
 
-
-    public LiveData<List<FeedItem>> getFavorites() {
-        return observableFavorites;
-    }
-
     public void deleteAllFavorites() {
         feedRepository.deleteAllFavorites();
-    }
-
-    public void removeItemFromFavorites(FeedItem feedItem) {
-        feedRepository.removeItemFromFavorites(feedItem);
     }
 
     public void updateRemoveItemFromFavorites(FeedItem feedItem){
         feedRepository.updateFeedItemAsFavorite(feedItem);
     }
 
-    public LiveData<List<FeedItem>> searchFavorites(String query){
-        return feedRepository.searchFavorites(query);
-    }
-
-    public int getNumFavCount(){
-        return feedRepository.getNumFavoriteItems();
+    public int getFavoriteCount(){
+        return feedRepository.getFavoritesCount();
     }
 }

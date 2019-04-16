@@ -37,10 +37,8 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         toastsHelper = getCompositionRoot().getToastsHelper();
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-
         subscribeUiFavorites(favoritesViewModel.getAllFavorites());
 
-//        subscribeUiFavorites(favoritesViewModel.getMutableLiveData());
 
         setContentView(favoriteViewMvc.getRootView());
 
@@ -49,7 +47,6 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
     }
 
     @Override
@@ -80,8 +77,6 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
         searchView.setOnQueryTextListener(this);
         searchView.setQueryHint("Search");
 
-
-
         return true;
     }
 
@@ -95,7 +90,7 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
                 favoritesViewModel.deleteAllFavorites();
                 return true;
             case R.id.action_get_count:
-                int favoriteCount = favoritesViewModel.getNumFavCount();
+                int favoriteCount = favoritesViewModel.getFavoriteCount();
                 toastsHelper.showFavoriteListCount(favoriteCount);
             default:
                 return super.onOptionsItemSelected(item);
@@ -120,38 +115,25 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-        if (query == null || query.isEmpty()){
+    @Override
+    public boolean onQueryTextChange(String input) {
+        if (input == null || input.isEmpty()){
+            Log.d(TAG, "onQueryTextChange: Input is null or empty");
             subscribeUiFavorites(favoritesViewModel.getAllFavorites());
         } else {
-
-            favoritesViewModel.setQuery("*" + query + "*");
+            Log.d(TAG, "onQueryTextChange: input: " + input);
+            favoritesViewModel.setFilterText("*" + input + "*");
             favoritesViewModel.getResults().observe(this, feedItems -> {
                 if (feedItems != null){
                     favoriteViewMvc.bindFavoriteItems(feedItems);
                 }
             });
-//
-////            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
         }
-        return false;
-    }
 
-    @Override
-    public boolean onQueryTextChange(String query) {
-//        if (query == null || query.isEmpty()){
-//            subscribeUiFavorites(favoritesViewModel.getAllFavorites());
-//        } else {
-//
-//            favoritesViewModel.setQuery("*" + query + "*");
-//            favoritesViewModel.getResults().observe(this, feedItems -> {
-//                if (feedItems != null){
-//                    favoriteViewMvc.bindFavoriteItems(feedItems);
-//                }
-//            });
-//
-////            subscribeUiFavorites(favoritesViewModel.searchFavorites("*" + query + "*"));
-//        }
+
         return false;
     }
 }

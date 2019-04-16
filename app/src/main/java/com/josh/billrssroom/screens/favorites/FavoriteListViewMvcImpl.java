@@ -25,6 +25,8 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
     private RecyclerView recyclerView;
     private FavoriteAdapterMvc favoriteAdapterMvc;
 
+
+
     public FavoriteListViewMvcImpl(LayoutInflater inflater,
                                    @Nullable ViewGroup parent,
                                    ViewMvcFactory viewMvcFactory) {
@@ -33,6 +35,7 @@ public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListV
         recyclerView = findViewById(R.id.favorites_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
 
         favoriteAdapterMvc = new FavoriteAdapterMvc(this, viewMvcFactory);

@@ -46,8 +46,7 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
     }
 
     public void setFavoriteItemList(final List<FeedItem> itemList) {
-//        notifyDataSetChanged(); // Calling this here will prevent animations
-
+//        notifyDataSetChanged(); // calling this here blocks animation
         if (favoriteItems == null){
             favoriteItems = itemList;
             notifyDataSetChanged();
@@ -55,10 +54,12 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
             FeedDiffCallback feedDiffCallback = new FeedDiffCallback(favoriteItems, itemList);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(feedDiffCallback);
 
-            this.favoriteItems.clear();
-            this.favoriteItems.addAll(itemList);
+            /* Calling this clears the list when closing the searchview */
+//            this.favoriteItems.clear();
+//            this.favoriteItems.addAll(itemList);
 
-//            favoriteItems = itemList;
+
+            favoriteItems = itemList;
             diffResult.dispatchUpdatesTo(this);
         }
     }

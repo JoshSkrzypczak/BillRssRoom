@@ -43,6 +43,6 @@ public class FeedViewModel extends AndroidViewModel {
     }
 
     public int getNumFeedItems(){
-        return feedRepository.getNumFeedItems();
+        return feedRepository.getFeedCount();
     }
 }
