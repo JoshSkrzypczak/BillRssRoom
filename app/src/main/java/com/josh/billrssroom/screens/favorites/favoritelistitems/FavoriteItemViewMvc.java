@@ -5,7 +5,7 @@ import com.josh.billrssroom.model.FeedItem;
 
 public interface FavoriteItemViewMvc extends ObservableViewMvc<FavoriteItemViewMvc.Listener> {
 
-    public interface Listener {
+    interface Listener {
         void onDeleteBtnClicked(FeedItem feedItem, int position);
         void onShareBtnClicked(FeedItem feedItem, int position);
         void onBrowserBtnClicked(FeedItem feedItem);

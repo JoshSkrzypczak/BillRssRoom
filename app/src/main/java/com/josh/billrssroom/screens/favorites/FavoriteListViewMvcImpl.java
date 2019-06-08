@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
  * Implemented in {@link FavoritesActivity}
  */
 public class FavoriteListViewMvcImpl extends BaseObservableViewMvc<FavoriteListViewMvc.Listener>
-        implements FavoriteListViewMvc, FavoriteAdapterMvc.Listener, FilterableFavoriteAdapter.Listener {
+        implements FavoriteListViewMvc, FavoriteAdapterMvc.Listener {
 
     private RecyclerView recyclerView;
     private FavoriteAdapterMvc favoriteAdapterMvc;

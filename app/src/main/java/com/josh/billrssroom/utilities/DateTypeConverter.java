@@ -46,7 +46,5 @@ public class DateTypeConverter {
 
         Log.d(TAG, "toDate: " + calendar.getTimeInMillis()/1000);
         return "" + calendar.getTimeInMillis()/1000;
-
-
     }
 }

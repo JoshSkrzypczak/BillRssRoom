@@ -21,8 +21,6 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
     public final ImageView btnSave;
     private final ImageView btnShare;
     private final ImageView btnBrowser;
-    private final CardView cardView;
-    private final Group constraintGroup;
 
     private FeedItem feedItem;
 
@@ -36,8 +34,6 @@ public class FeedItemViewMvcImpl extends BaseObservableViewMvc<FeedItemViewMvc.L
         btnSave = findViewById(R.id.btn_save);
         btnShare = findViewById(R.id.btn_share);
         btnBrowser = findViewById(R.id.btn_browser);
-        cardView = findViewById(R.id.card_view_item_row);
-        constraintGroup = findViewById(R.id.group);
 
         btnBrowser.setOnClickListener(v -> {
             for (Listener listener : getListeners()) {

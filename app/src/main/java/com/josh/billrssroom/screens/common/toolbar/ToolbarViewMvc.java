@@ -10,8 +10,8 @@ import com.josh.billrssroom.R;
 import com.josh.billrssroom.screens.common.views.BaseViewMvc;
 
 /**
- * This would be a good way to separate Toolbar logic.
- * Todo: Explore how this might work with a SearchView
+ * Worthwhile separating this logic?
+ * Todo: Explore compatibility with SearchView
  */
 public class ToolbarViewMvc extends BaseViewMvc {
 

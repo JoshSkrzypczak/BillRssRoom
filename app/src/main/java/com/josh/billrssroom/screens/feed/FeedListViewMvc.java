@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FeedListViewMvc extends ObservableViewMvc<FeedListViewMvc.Listener> {
 
-    public interface Listener {
+    interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
         void onBrowserBtnClicked(FeedItem feedItem, int position);
         void onSaveBtnClicked(FeedItem feedItem, int position);

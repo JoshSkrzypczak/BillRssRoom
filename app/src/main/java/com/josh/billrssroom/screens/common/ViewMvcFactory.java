@@ -39,7 +39,8 @@ public class ViewMvcFactory {
         return new FavoriteItemViewMvcImpl(layoutInflater, parent);
     }
 
-    public ToolbarViewMvc getToolbarViewMvc(@Nullable ViewGroup parent) {
-        return new ToolbarViewMvc(layoutInflater, parent);
-    }
+//    public ToolbarViewMvc getToolbarViewMvc(@Nullable ViewGroup parent) {
+//        return new ToolbarViewMvc(layoutInflater, parent);
+//    }
+
 }

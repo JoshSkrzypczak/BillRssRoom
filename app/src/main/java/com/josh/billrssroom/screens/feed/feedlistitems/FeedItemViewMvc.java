@@ -8,7 +8,7 @@ import com.josh.billrssroom.screens.common.views.ObservableViewMvc;
  */
 public interface FeedItemViewMvc extends ObservableViewMvc<FeedItemViewMvc.Listener> {
 
-    public interface Listener {
+    interface Listener {
         void onShareBtnClicked(FeedItem feedItem, int position);
         void onBrowserBtnClicked(FeedItem feedItem, int position);
         void onSaveBtnClicked(FeedItem feedItem, int position);

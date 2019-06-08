@@ -133,7 +133,6 @@ public class FavoritesActivity extends BaseActivity implements FavoriteListViewM
             });
         }
 
-
         return false;
     }
 }

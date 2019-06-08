@@ -54,10 +54,9 @@ public class FavoriteAdapterMvc extends RecyclerView.Adapter<FavoriteAdapterMvc.
             FeedDiffCallback feedDiffCallback = new FeedDiffCallback(favoriteItems, itemList);
             DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(feedDiffCallback);
 
-            /* Calling this clears the list when closing the searchview */
+            /* Calling this causes the list to clear entirely after closing the SearchView */
 //            this.favoriteItems.clear();
 //            this.favoriteItems.addAll(itemList);
-
 
             favoriteItems = itemList;
             diffResult.dispatchUpdatesTo(this);

@@ -25,15 +25,11 @@ public class FavoritesViewModel extends AndroidViewModel {
 
     private final MediatorLiveData<List<FeedItem>> observableFavorites;
 
-
     private LiveData<List<FeedItem>> allFavorites;
 
     private LiveData<List<FeedItem>> results;
 
-
-
     private MutableLiveData<String> filterText = new MutableLiveData<>();
-
 
 
 
@@ -54,7 +50,6 @@ public class FavoritesViewModel extends AndroidViewModel {
                         return feedRepository.getFilteredData(input);
                     }
                 });
-
 
 
         observableFavorites = new MediatorLiveData<>();

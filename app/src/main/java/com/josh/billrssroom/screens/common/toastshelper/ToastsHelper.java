@@ -29,8 +29,4 @@ public class ToastsHelper {
     public void showFeedListCount(Integer feedCount){
         Toast.makeText(context, "Feed Db Count: " + feedCount, Toast.LENGTH_SHORT).show();
     }
-
-    public void showClearingFavoritesToast() {
-        Toast.makeText(context, "Clearing favorites...", Toast.LENGTH_SHORT).show();
-    }
 }

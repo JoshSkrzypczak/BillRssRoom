@@ -118,11 +118,6 @@ public class FeedRepository {
         return itemDao.getFeedCount();
     }
 
-
-
-
-
-
     public void deleteAllFavorites() {
         new deleteAllFavoritesAsyncTask(itemDao).execute();
     }
@@ -134,9 +129,6 @@ public class FeedRepository {
     public void updateFeedItemAsFavorite(FeedItem item) {
         new updateFeedItemFavoriteAsync(itemDao).execute(item);
     }
-
-
-
 
     private static class updateFeedItemFavoriteAsync extends AsyncTask<FeedItem, Void, Void> {
 
